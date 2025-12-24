@@ -1,0 +1,56 @@
+{
+  "name": "TEST_ERR",
+  "nodes": [
+    {
+      "parameters": {
+        "jsCode": "throw new Error(\"Đây là lỗi giả lập để test hệ thống giám sát!\");"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        208,
+        0
+      ],
+      "id": "74c4b8fb-a526-4e7e-9768-1789203e0d1f",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "1e62e490-6442-4ee1-b179-f2ed424ea19a",
+      "name": "When clicking ‘Execute workflow’"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataSuccessExecution": "none",
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "RNeBVei4fXTEHRQR"
+  },
+  "versionId": "2a09bf18-0035-4220-9d7d-53edc5a8e1b1",
+  "meta": {
+    "instanceId": "df75f6d19da9532b87ea5a84541b4ccc1d0dd5baf896242962b0dfcbc492bcf4"
+  },
+  "id": "vAfvt2Y5yhmFmemz",
+  "tags": []
+}

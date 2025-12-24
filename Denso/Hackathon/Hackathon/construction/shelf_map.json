@@ -1,0 +1,79 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "description": "Shelf geometry and slot mapping for vision-guided robot arm",
+    "unit": "millimeter"
+  },
+
+  "shelf": {
+    "shelf_id": "SHELF_01",
+    "type": "planar_single_floor",
+    "dimensions_mm": {
+      "width": 260,
+      "depth": 140,
+      "height": 130
+    },
+    "origin_mm": [0, 0, 0]
+  },
+
+  "fiducial_markers": {
+    "type": "circle",
+    "marker_size_mm": 10,
+    "markers": [
+      {
+        "id": 0,
+        "name": "TOP_LEFT",
+        "position_mm": [0, 0, 0]
+      },
+      {
+        "id": 1,
+        "name": "TOP_RIGHT",
+        "position_mm": [260, 0, 0]
+      },
+      {
+        "id": 2,
+        "name": "BOTTOM_RIGHT",
+        "position_mm": [260, 130, 0]
+      },
+      {
+        "id": 3,
+        "name": "BOTTOM_LEFT",
+        "position_mm": [0, 130, 0]
+      },
+      {
+        "id": 4,
+        "name": "UPPER_MIDDLE",
+        "position_mm": [120, 0, 0]
+      },
+      {
+        "id": 5,
+        "name": "LOWER_MIDDLE",
+        "position_mm": [120, 130 , 0]
+      }
+    ]
+  },
+
+  "slots": [
+    {
+      "slot_id": "S_0_0",
+      "row": 0,
+      "col": 0,
+      "center_mm": [55, 0, 80],
+      "grasp_type": "top_pick"
+    },
+    {
+      "slot_id": "S_0_1",
+      "row": 0,
+      "col": 1,
+      "center_mm": [120, 0, 80],
+      "grasp_type": "top_pick"
+    },
+    {
+      "slot_id": "S_0_2",
+      "row": 0,
+      "col": 2,
+      "center_mm": [250, 0, 80],
+      "grasp_type": "top_pick"
+    }
+  ]
+}

@@ -1,0 +1,1576 @@
+{
+  "name": "MNG_TCH_UPD_TEST",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "b26e866c-21f6-4c72-a915-abbc40108497",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -800,
+        80
+      ],
+      "id": "3e368bb0-e7d1-4567-acdb-97a57fe28f0b",
+      "name": "Webhook",
+      "webhookId": "b26e866c-21f6-4c72-a915-abbc40108497"
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "Admin_Registry",
+        "filter": {
+          "whatToSearch": "folders"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -384,
+        80
+      ],
+      "id": "072e5d60-02e1-4948-8c0e-625e9acc631d",
+      "name": "Search files and folders",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "Fu9XdVE4G8qIVwID",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Edit Fields').first().json['Danh sách giáo viên'] }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Trang tính1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1YVq0hfeYJHWOWhCGlRifgyg0KchomqRYApVAlQaFl8A/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Mã giáo viên": "={{ $('Edit Fields').first().json.MaGiaoVien }}",
+            "Họ và tên": "={{ $('Edit Fields').first().json['Họ và tên'] }}",
+            "Môn dạy chính": "={{ $('Edit Fields').first().json['Môn dạy chính'] }}",
+            "Các lớp giảng dạy": "={{ $('Edit Fields').first().json['Các lớp giảng dạy'] }}",
+            "Giới tính": "={{ $('Edit Fields').first().json['Giới tính'] }}",
+            "Năm sinh": "={{ $('Edit Fields').first().json['Năm sinh'] }}",
+            "Số điện thoại": "={{ $('Edit Fields').first().json['Số điện thoại'] }}",
+            "Địa chỉ liên hệ": "={{ $('Edit Fields').first().json['Địa chỉ liên hệ'] }}",
+            "FolderId": "={{ $('Create folder').item.json.id }}",
+            "Địa chỉ Gmail": "={{ $('Edit Fields').first().json.Gmail }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Mã giáo viên",
+              "displayName": "Mã giáo viên",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Họ và tên",
+              "displayName": "Họ và tên",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Địa chỉ Gmail",
+              "displayName": "Địa chỉ Gmail",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Môn dạy chính",
+              "displayName": "Môn dạy chính",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Các lớp giảng dạy",
+              "displayName": "Các lớp giảng dạy",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Giới tính",
+              "displayName": "Giới tính",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Năm sinh",
+              "displayName": "Năm sinh",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Số điện thoại",
+              "displayName": "Số điện thoại",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Địa chỉ liên hệ",
+              "displayName": "Địa chỉ liên hệ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "FolderId",
+              "displayName": "FolderId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        1600,
+        80
+      ],
+      "id": "75b98f51-52f9-4565-a562-20f29a4d2a60",
+      "name": "Append row in sheet",
+      "executeOnce": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Kc5JFDPfTGzxNbNi",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a71561ac-526e-4f08-a424-27c2c89e4643",
+              "name": "MaGiaoVien",
+              "value": "={{ $json.body.MaGiaoVien.trim().toUpperCase() }}",
+              "type": "string"
+            },
+            {
+              "id": "a12c7a0d-9b40-412a-9f62-30c052f0eda4",
+              "name": "Mã giáo viên cập nhật",
+              "value": "={{ $json.body['Mã Giáo Viên (Nếu cập nhật thông tin, vui lòng nhập mã của bạn tại đây)'].toUpperCase().trim() }}",
+              "type": "string"
+            },
+            {
+              "id": "6c7758c1-4739-49fb-9a8f-64daed818d95",
+              "name": "Họ và tên",
+              "value": "={{ ($json.body['Họ và tên'] || '').toLowerCase().trim().replace(/\\s+/g, ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') }}",
+              "type": "string"
+            },
+            {
+              "id": "13092dde-e81e-4636-8943-48584cfb02a9",
+              "name": "Gmail",
+              "value": "={{ $json.body['Địa chỉ Gmail'].toLowerCase().trim() }}",
+              "type": "string"
+            },
+            {
+              "id": "1435fb15-9b2f-4139-bd99-d68ea1787907",
+              "name": "Môn dạy chính",
+              "value": "={{ $json.body['Môn dạy chính'] }}",
+              "type": "string"
+            },
+            {
+              "id": "b8cbccb7-ab77-41c0-a613-fef295fcb012",
+              "name": "Các lớp giảng dạy",
+              "value": "={{ $json.body['Các lớp giảng dạy'].toUpperCase() }}",
+              "type": "string"
+            },
+            {
+              "id": "f2d9851e-bf8b-4370-b6fe-8c669578844e",
+              "name": "Giới tính",
+              "value": "={{ $json.body['Giới tính'] }}",
+              "type": "string"
+            },
+            {
+              "id": "aa1e1faa-a4b4-41bd-af07-eb4ad56c3fbd",
+              "name": "Năm sinh",
+              "value": "={{ DateTime.fromISO($json.body['Năm sinh']).toFormat('dd/MM/yyyy') }}",
+              "type": "string"
+            },
+            {
+              "id": "b9dd2414-f1a0-465e-9550-ba7bce7a533e",
+              "name": "Số điện thoại",
+              "value": "={{ $json.body['Số điện thoại'].trim() }}",
+              "type": "string"
+            },
+            {
+              "id": "f1e54efd-cbc0-4868-9f2d-b1adb5ea3e8f",
+              "name": "Địa chỉ liên hệ",
+              "value": "={{ $json.body['Địa chỉ liên hệ'] }}",
+              "type": "string"
+            },
+            {
+              "id": "d1649734-b69f-4f82-b848-b623e9f5f9e6",
+              "name": "googleFormId",
+              "value": "={{ $json.body.formId }}",
+              "type": "string"
+            },
+            {
+              "id": "2957cdb2-66d7-430a-bff9-5af5c434e253",
+              "name": "Danh sách giáo viên",
+              "value": "={{ $json.body.spreadsheetId }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -592,
+        80
+      ],
+      "id": "dd22ce1f-55af-4fb4-be12-be83677cc803",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "operation": "share",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $('Create folder').item.json.id }}",
+          "mode": "id"
+        },
+        "permissionsUi": {
+          "permissionsValues": {
+            "role": "reader",
+            "type": "user",
+            "emailAddress": "={{ $('Edit Fields').first().json.Gmail }}"
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        2864,
+        80
+      ],
+      "id": "8c056b3c-ddd6-45c9-a29c-b459fe8d8d9b",
+      "name": "Share file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "Fu9XdVE4G8qIVwID",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "aaf29a9d-3228-4cae-9be9-2f93f4e07922",
+              "name": "Admin_Registry_folder",
+              "value": "={{ $('Search files and folders').first().json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "d39472dc-58ac-4c67-8577-f49019749e31",
+              "name": "FOLDER_Teacher",
+              "value": "={{ $('Search files and folders1').item.json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "fb02f9a2-b32c-45b4-b48c-6f3016afe16e",
+              "name": "Form(mẫu) Tạo bài tập về nhà",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "4a4afed6-ac9c-41c7-b6fb-1549d6b6fd74",
+              "name": "Folder Teacher Resources",
+              "value": "={{ $('Search files and folders2').item.json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1168,
+        80
+      ],
+      "id": "67858659-e6ad-4dd7-848a-bb14bd3105a8",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Edit Fields').first().json.Gmail }}",
+        "subject": "=Xác nhận đăng ký thông tin thành công - {{ $('Edit Fields').first().json['Họ và tên'] }}",
+        "message": "=<div style=\"font-family: Arial, sans-serif; color: #333; line-height: 1.6; max-width: 600px; margin: 0 auto; border: 1px solid #ddd;\">\n  \n  <span style=\"display:none; font-size:1px; color:#ffffff; line-height:1px; max-height:0px; max-width:0px; opacity:0; overflow:hidden;\">\n    Xác nhận thông tin thành công & hướng dẫn truy cập các chức năng.\n  </span>\n\n  <div style=\"background-color: #0056d6; color: white; padding: 20px; text-align: center;\">\n    <h2 style=\"margin: 0;\">Hệ thống Trợ lý học tập ảo</h2>\n  </div>\n\n  <div style=\"padding: 20px;\">\n    <p>Kính gửi Thầy/Cô <strong>{{ $('Edit Fields').first().json['Họ và tên'] }}</strong>,</p>\n    <p>Hệ thống xin trân trọng thông báo Thầy/Cô đã đăng ký/cập nhật thông tin cá nhân thành công. Vui lòng kiểm tra lại các thông tin đã được ghi nhận dưới đây.</p>\n    \n    <h3 style=\"color:#0056d6; border-bottom: 2px solid #0056d6; padding-bottom: 5px;\">Bảng tóm tắt thông tin</h3>\n    <table style=\"width: 100%; border-collapse: collapse; margin-top: 15px;\">\n      <tr style=\"border-bottom: 1px solid #eee;\">\n        <td style=\"padding: 10px; width: 150px;\"><strong>Họ và tên:</strong></td>\n        <td style=\"padding: 10px;\">{{ $('Edit Fields').first().json['Họ và tên'] }}</td>\n      </tr>\n      <tr style=\"border-bottom: 1px solid #eee;\">\n        <td style=\"padding: 10px;\"><strong>Mã giáo viên:</strong></td>\n        <td style=\"padding: 10px;\">{{ $('Edit Fields').first().json.MaGiaoVien }}</td>\n      </tr>\n      <tr style=\"border-bottom: 1px solid #eee;\">\n        <td style=\"padding: 10px;\"><strong>Email liên hệ:</strong></td>\n        <td style=\"padding: 10px;\">{{ $('Edit Fields').first().json.Gmail }}</td>\n      </tr>\n      <tr style=\"border-bottom: 1px solid #eee;\">\n        <td style=\"padding: 10px;\"><strong>Môn dạy chính:</strong></td>\n        <td style=\"padding: 10px;\">{{ $('Edit Fields').first().json['Môn dạy chính'] }}</td>\n      </tr>\n      <tr>\n        <td style=\"padding: 10px;\"><strong>Các lớp giảng dạy:</strong></td>\n        <td style=\"padding: 10px;\">{{ $('Edit Fields').first().json['Các lớp giảng dạy'] }}</td>\n      </tr>\n    </table>\n    \n    <div style=\"margin-top: 30px; padding: 20px; border: 1px solid #ddd; border-radius: 5px; background-color: #f9f9f9;\">\n      <h3 style=\"color:#0056d6; margin-top: 0; text-align: center; border-bottom: 2px solid #0056d6; padding-bottom: 10px;\">Bảng điều khiển Tác vụ nhanh</h3>\n      \n      <div style=\"margin-top: 15px; text-align: center;\">\n        <p style=\"margin-bottom: 12px;\">Thầy/Cô có thể xem trước form, hoặc <strong>sao chép đường dẫn</strong> dưới đây để gửi cho học sinh:</p>\n        \n        <p style=\"margin-bottom: 15px;\">\n            <code style=\"background-color: #eef1f6; padding: 10px 15px; border: 1px solid #d1d9e6; border-radius: 4px; font-family: 'Courier New', Courier, monospace; color: #333; word-break: break-all; display: inline-block; text-align: left;\">https://docs.google.com/forms/d/{{ $('Create googleForm đăng ký thông tin học sinh').item.json.formId }}/viewform</code>\n        </p>\n\n        <a href=\"https://docs.google.com/forms/d/{{ $('Create googleForm đăng ký thông tin học sinh').item.json.formId }}/viewform\" target=\"_blank\" style=\"display: inline-block; background-color: #28a745; color: #ffffff; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold;\">\n          XEM TRƯỚC FORM HỌC SINH\n        </a>\n      </div>\n      <div style=\"margin-top: 25px; text-align: center;\">\n        <p style=\"margin-bottom: 10px;\"><strong>Để giao bài tập về nhà mới, Thầy/Cô hãy nhấp vào nút dưới đây:</strong></p>\n        <a href=\"https://docs.google.com/forms/d/{{ $('Create googleForm bài tập về nhà').item.json.formId }}/viewform\" target=\"_blank\" style=\"display: inline-block; background-color: #17a2b8; color: #ffffff; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold;\">\n          GIAO BÀI TẬP MỚI\n        </a>\n      </div>\n    </div>\n        <div style=\"background-color: #fffbe6; border: 1px solid #fdec9a; padding: 15px; border-radius: 5px; text-align: center; margin-top: 30px;\">\n        <p style=\"margin-top: 0;\">Nếu có bất kỳ sai sót nào trong bảng tóm tắt thông tin, Thầy/Cô có thể nhấp vào nút dưới đây để sửa.</p>\n        <a href=\"https://docs.google.com/forms/d/{{ $('Edit Fields').first().json.googleFormId }}/viewform\" target=\"_blank\" style=\"display: inline-block; background-color: #0056d6; color: #ffffff; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold; margin-top: 5px;\">\n            CHỈNH SỬA THÔNG TIN\n        </a>\n      </div>\n    \n    <br>\n    <p>Trân trọng,</p>\n    <p><strong>Đội ngũ Trợ lý học tập ảo</strong></p>\n  </div>\n\n  <div style=\"background-color: #f4f4f4; padding: 10px; text-align: center; font-size: 12px; color: #666;\">\n    <p>Đây là email được gửi tự động từ hệ thống. Vui lòng không trả lời trực tiếp.</p>\n  </div>\n</div>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        3072,
+        80
+      ],
+      "id": "a63a84e8-9327-48e0-a043-e4552c9c934a",
+      "name": "Send a message",
+      "webhookId": "a74de3be-5a76-4523-8ded-73dad5850e7f",
+      "executeOnce": true,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "kngvm6WXlbqXMFKV",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "FOLDER_Teachers",
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "={{ $('Search files and folders').first().json.id }}",
+            "mode": "id"
+          },
+          "whatToSearch": "folders"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        544,
+        80
+      ],
+      "id": "a24065c3-b396-4f64-aa84-640e4c8ef87a",
+      "name": "Search files and folders1",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "Fu9XdVE4G8qIVwID",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "[Admin] Teacher Resources",
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "={{ $('Search files and folders').first().json.id }}",
+            "mode": "id"
+          },
+          "whatToSearch": "folders"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        752,
+        80
+      ],
+      "id": "ebca2b0d-bd2f-49ce-97c1-c8056e5d32b7",
+      "name": "Search files and folders2",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "Fu9XdVE4G8qIVwID",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "Tạo bài tập về nhà",
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "={{ $json.id }}",
+            "mode": "id"
+          },
+          "whatToSearch": "files",
+          "fileTypes": [
+            "application/vnd.google-apps.form"
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        960,
+        80
+      ],
+      "id": "64f914da-5295-404e-a513-0a2186ff1193",
+      "name": "Search files and folders3",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "Fu9XdVE4G8qIVwID",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://script.google.com/macros/s/AKfycbzJ4Ajx901CvDvDMIeLeOCfdCf5B0FBRaKpY3oMl-068uWifsvR8GxAfzMiyuSUvJwXtA/exec",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"destinationFolderId\": \"{{ $('Create folder').item.json.id }}\",\n  \"newFormName\": \"Bài tập về nhà - {{ $json['Môn dạy chính'] }}\",\n  \"templateFormId\": \"{{ $('Edit Fields1').item.json['Form(mẫu) Tạo bài tập về nhà'] }}\"\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1808,
+        80
+      ],
+      "id": "f658f3d7-b4b5-409f-bc47-7b215f50f5d1",
+      "name": "Create googleForm bài tập về nhà"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://script.google.com/macros/s/AKfycbxEhq6T0VGqQlEyCl4F7hmqnrATKEKu3SaTK2g9evIxWkzd3RLUwhOJBWr7MXVt4CO7/exec",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"formTitle\": \"Form Đăng Ký Học Sinh\",\n  \"folderId\": \"{{ $('Create folder').item.json.id }}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2016,
+        80
+      ],
+      "id": "a270e994-83e8-45d6-a403-9621c6083e19",
+      "name": "Create googleForm đăng ký thông tin học sinh"
+    },
+    {
+      "parameters": {
+        "resource": "folder",
+        "name": "={{ $('Edit Fields').first().json.MaGiaoVien }} - {{ $('Edit Fields').first().json['Họ và tên'] }}",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "={{ $('Edit Fields1').item.json.FOLDER_Teacher }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1376,
+        80
+      ],
+      "id": "9da3adfe-4366-4eae-8369-3f982f0e905b",
+      "name": "Create folder",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "Fu9XdVE4G8qIVwID",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Edit Fields').first().json['Danh sách giáo viên'] }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Trang tính1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1EUoCixELpOS8X8RNM1XAOC2abn6Ul_FdxTZqOU4GPU8/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Mã giáo viên": "={{ $('Edit Fields').first().json['Mã giáo viên cập nhật'] }}",
+            "Họ và tên": "={{ $('Edit Fields').first().json['Họ và tên'] }}",
+            "Các lớp giảng dạy": "={{ $('Edit Fields').first().json['Các lớp giảng dạy'] }}",
+            "Môn dạy chính": "={{ $('Edit Fields').first().json['Môn dạy chính'] }}",
+            "Giới tính": "={{ $('Edit Fields').first().json['Giới tính'] }}",
+            "Năm sinh": "={{ $('Edit Fields').first().json['Năm sinh'] }}",
+            "Số điện thoại": "={{ $('Edit Fields').first().json['Số điện thoại'] }}",
+            "Địa chỉ liên hệ": "={{ $('Edit Fields').first().json['Địa chỉ liên hệ'] }}",
+            "Địa chỉ Gmail": "={{ $('Edit Fields').first().json.Gmail }}"
+          },
+          "matchingColumns": [
+            "Mã giáo viên"
+          ],
+          "schema": [
+            {
+              "id": "Mã giáo viên",
+              "displayName": "Mã giáo viên",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Họ và tên",
+              "displayName": "Họ và tên",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Địa chỉ Gmail",
+              "displayName": "Địa chỉ Gmail",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Môn dạy chính",
+              "displayName": "Môn dạy chính",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Các lớp giảng dạy",
+              "displayName": "Các lớp giảng dạy",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Giới tính",
+              "displayName": "Giới tính",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Năm sinh",
+              "displayName": "Năm sinh",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Số điện thoại",
+              "displayName": "Số điện thoại",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Địa chỉ liên hệ",
+              "displayName": "Địa chỉ liên hệ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "FolderId",
+              "displayName": "FolderId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1168,
+        256
+      ],
+      "id": "685188ba-17da-4116-bc56-373f214e1585",
+      "name": "Update row in sheet1",
+      "executeOnce": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Kc5JFDPfTGzxNbNi",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "share",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $('Switch').first().json.existing_folder_id }}",
+          "mode": "id"
+        },
+        "permissionsUi": {
+          "permissionsValues": {
+            "role": "reader",
+            "type": "user",
+            "emailAddress": "={{ $('Edit Fields').first().json.Gmail }}"
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        2432,
+        256
+      ],
+      "id": "6cd4acf0-47de-419e-bcf6-899f024c5878",
+      "name": "Share file2",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "Fu9XdVE4G8qIVwID",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Edit Fields').first().json.Gmail }}",
+        "subject": "=Xác nhận đăng ký thông tin thành công - {{ $('Edit Fields').first().json['Họ và tên'] }}",
+        "message": "=<div style=\"font-family: Arial, sans-serif; color: #333; line-height: 1.6; max-width: 600px; margin: 0 auto; border: 1px solid #ddd;\">\n  \n  <span style=\"display:none; font-size:1px; color:#ffffff; line-height:1px; max-height:0px; max-width:0px; opacity:0; overflow:hidden;\">\n    Xác nhận thông tin thành công & hướng dẫn truy cập các chức năng.\n  </span>\n\n  <div style=\"background-color: #0056d6; color: white; padding: 20px; text-align: center;\">\n    <h2 style=\"margin: 0;\">Hệ thống Trợ lý học tập ảo</h2>\n  </div>\n\n  <div style=\"padding: 20px;\">\n    <p>Kính gửi Thầy/Cô <strong>{{ $('Edit Fields').first().json['Họ và tên'] }}</strong>,</p>\n    <p>Hệ thống xin trân trọng thông báo Thầy/Cô đã đăng ký/cập nhật thông tin cá nhân thành công. Vui lòng kiểm tra lại các thông tin đã được ghi nhận dưới đây.</p>\n    \n    <h3 style=\"color:#0056d6; border-bottom: 2px solid #0056d6; padding-bottom: 5px;\">Bảng tóm tắt thông tin</h3>\n    <table style=\"width: 100%; border-collapse: collapse; margin-top: 15px;\">\n      <tr style=\"border-bottom: 1px solid #eee;\">\n        <td style=\"padding: 10px; width: 150px;\"><strong>Họ và tên:</strong></td>\n        <td style=\"padding: 10px;\">{{ $('Edit Fields').first().json['Họ và tên'] }}</td>\n      </tr>\n      <tr style=\"border-bottom: 1px solid #eee;\">\n        <td style=\"padding: 10px;\"><strong>Mã giáo viên:</strong></td>\n        <td style=\"padding: 10px;\">{{ $('Edit Fields').first().json.MaGiaoVien }}</td>\n      </tr>\n      <tr style=\"border-bottom: 1px solid #eee;\">\n        <td style=\"padding: 10px;\"><strong>Email liên hệ:</strong></td>\n        <td style=\"padding: 10px;\">{{ $('Edit Fields').first().json.Gmail }}</td>\n      </tr>\n      <tr style=\"border-bottom: 1px solid #eee;\">\n        <td style=\"padding: 10px;\"><strong>Môn dạy chính:</strong></td>\n        <td style=\"padding: 10px;\">{{ $('Edit Fields').first().json['Môn dạy chính'] }}</td>\n      </tr>\n      <tr>\n        <td style=\"padding: 10px;\"><strong>Các lớp giảng dạy:</strong></td>\n        <td style=\"padding: 10px;\">{{ $('Edit Fields').first().json['Các lớp giảng dạy'] }}</td>\n      </tr>\n    </table>\n    \n    <div style=\"margin-top: 30px; padding: 20px; border: 1px solid #ddd; border-radius: 5px; background-color: #f9f9f9;\">\n      <h3 style=\"color:#0056d6; margin-top: 0; text-align: center; border-bottom: 2px solid #0056d6; padding-bottom: 10px;\">Bảng điều khiển Tác vụ nhanh</h3>\n      \n      <div style=\"margin-top: 15px; text-align: center;\">\n        <p style=\"margin-bottom: 12px;\">Thầy/Cô có thể xem trước form, hoặc <strong>sao chép đường dẫn</strong> dưới đây để gửi cho học sinh:</p>\n        \n        <p style=\"margin-bottom: 15px;\">\n            <code style=\"background-color: #eef1f6; padding: 10px 15px; border: 1px solid #d1d9e6; border-radius: 4px; font-family: 'Courier New', Courier, monospace; color: #333; word-break: break-all; display: inline-block; text-align: left;\">https://docs.google.com/forms/d/{{ $('Code in JavaScript').item.json.my_file_list[1].id }}/viewform</code>\n        </p>\n\n        <a href=\"https://docs.google.com/forms/d/{{ $('Code in JavaScript').item.json.my_file_list[1].id }}/viewform\" target=\"_blank\" style=\"display: inline-block; background-color: #28a745; color: #ffffff; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold;\">\n          XEM TRƯỚC FORM ĐĂNG KÝ HỌC SINH\n        </a>\n      </div>\n      <div style=\"margin-top: 25px; text-align: center;\">\n        <p style=\"margin-bottom: 10px;\"><strong>Để giao bài tập về nhà mới, Thầy/Cô hãy nhấp vào nút dưới đây:</strong></p>\n        <a href=\"https://docs.google.com/forms/d/{{ $('Code in JavaScript').item.json.my_file_list[0].id }}/viewform\" target=\"_blank\" style=\"display: inline-block; background-color: #17a2b8; color: #ffffff; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold;\">\n          GIAO BÀI TẬP MỚI\n        </a>\n      </div>\n    </div>\n        <div style=\"background-color: #fffbe6; border: 1px solid #fdec9a; padding: 15px; border-radius: 5px; text-align: center; margin-top: 30px;\">\n        <p style=\"margin-top: 0;\">Nếu có bất kỳ sai sót nào trong bảng tóm tắt thông tin, Thầy/Cô có thể nhấp vào nút dưới đây để sửa.</p>\n        <a href=\"https://docs.google.com/forms/d/{{ $('Edit Fields').first().json.googleFormId }}/viewform\" target=\"_blank\" style=\"display: inline-block; background-color: #0056d6; color: #ffffff; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold; margin-top: 5px;\">\n            CHỈNH SỬA THÔNG TIN\n        </a>\n      </div>\n    \n    <br>\n    <p>Trân trọng,</p>\n    <p><strong>Đội ngũ Trợ lý học tập ảo</strong></p>\n  </div>\n\n  <div style=\"background-color: #f4f4f4; padding: 10px; text-align: center; font-size: 12px; color: #666;\">\n    <p>Đây là email được gửi tự động từ hệ thống. Vui lòng không trả lời trực tiếp.</p>\n  </div>\n</div>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        2640,
+        256
+      ],
+      "id": "4501e0e9-d21c-41b5-86b3-2a6eb3316196",
+      "name": "Send a message1",
+      "webhookId": "a74de3be-5a76-4523-8ded-73dad5850e7f",
+      "executeOnce": true,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "kngvm6WXlbqXMFKV",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://script.google.com/macros/s/AKfycbzJ4Ajx901CvDvDMIeLeOCfdCf5B0FBRaKpY3oMl-068uWifsvR8GxAfzMiyuSUvJwXtA/exec",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"destinationFolderId\": \"{{ $('Switch').item.json.existing_folder_id }}\",\n  \"newFormName\": \"Bài tập về nhà - {{ $('Edit Fields').item.json['Môn dạy chính'] }}\",\n  \"templateFormId\": \"{{ $('Search files and folders8').first().json.id }}\" \n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1808,
+        256
+      ],
+      "id": "42089634-1392-4258-85c0-96f9b74bf914",
+      "name": "Create googleForm bài tập về nhà2"
+    },
+    {
+      "parameters": {
+        "operation": "deleteFile",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "options": {
+          "deletePermanently": false
+        }
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        960,
+        256
+      ],
+      "id": "2340cbab-16dc-4fe9-a5b9-bd7666c8ca51",
+      "name": "Delete a file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "Fu9XdVE4G8qIVwID",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Edit Fields').item.json['Danh sách giáo viên'] }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Trang tính1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1EUoCixELpOS8X8RNM1XAOC2abn6Ul_FdxTZqOU4GPU8/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -192,
+        80
+      ],
+      "id": "ac78fccf-c3cf-4c05-b745-116498745532",
+      "name": "Get row(s) in sheet",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Kc5JFDPfTGzxNbNi",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "searchMethod": "query",
+        "queryString": "=",
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "={{ $json.existing_folder_id }}",
+            "mode": "id"
+          },
+          "whatToSearch": "files",
+          "fileTypes": [
+            "application/vnd.google-apps.form"
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        544,
+        336
+      ],
+      "id": "3c3cd6bb-7a1d-436c-921a-c578d537aefc",
+      "name": "Search files and folders5",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "Fu9XdVE4G8qIVwID",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Edit Fields').first().json.Gmail }}",
+        "subject": "[HỆ THỐNG] Thông báo về yêu cầu Cập nhật/Đăng ký Giáo viên",
+        "message": "=<p>Kính gửi thầy/cô <b>{{ $('Edit Fields').first().json['Họ và tên'] }}</b>,</p>\n\n<p>Hệ thống ghi nhận thầy/cô vừa thực hiện yêu cầu Cập nhật hoặc Đăng ký thông tin giáo viên.</p>\n\n<p>Tuy nhiên, yêu cầu này <b>CHƯA THÀNH CÔNG</b> do nguyên nhân sau:</p>\n\n<blockquote style=\"background-color: #f9d7da; border-left: 5px solid #d9534f; padding: 10px; color: #721c24;\">\n    <b>{{ $json.workflow_message }}</b>\n</blockquote>\n\n<p>Để xử lý vấn đề này, thầy/cô vui lòng nhấn vào nút dưới đây để mở lại biểu mẫu và điền lại thông tin chính xác:</p>\n\n<div style=\"text-align: center; margin: 25px 0;\">\n    <a href=\"https://docs.google.com/forms/d/{{ $json.googleFormId }}/viewform\" \n       style=\"background-color: #1a73e8; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold; font-family: Arial, sans-serif; font-size: 16px;\">\n       👉 MỞ LẠI FORM ĐĂNG KÝ\n    </a>\n</div>\n\n<p><i>Lưu ý: Nếu thầy/cô đang muốn cập nhật thông tin, hãy nhớ nhập chính xác <b>Mã Giáo Viên</b> của mình.</i></p>\n\n<p>Trân trọng,<br>\n<b>Admin System</b></p>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        544,
+        -128
+      ],
+      "id": "10b37728-f63f-4f1c-bc68-d586c3970ff7",
+      "name": "Send a message3",
+      "webhookId": "13b7c630-d5df-4102-b58e-dcb031825a6f",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "kngvm6WXlbqXMFKV",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "[ADMIN] Master Control Sheet",
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "={{ $('Search files and folders').first().json.id }}",
+            "mode": "id"
+          },
+          "whatToSearch": "files",
+          "fileTypes": [
+            "application/vnd.google-apps.spreadsheet"
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        2224,
+        80
+      ],
+      "id": "d70962b2-7bc1-4f4e-81bb-340cb0450deb",
+      "name": "Search files and folders6",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "Fu9XdVE4G8qIVwID",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Search files and folders6').item.json.id }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Teachers",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "TeacherID": "={{ $json.TeacherID }}",
+            "TeacherName": "={{ $json.TeacherName }}",
+            "TeacherFolderID": "={{ $json.TeacherFolderID }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "TeacherID",
+              "displayName": "TeacherID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "TeacherName",
+              "displayName": "TeacherName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "TeacherFolderID",
+              "displayName": "TeacherFolderID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2640,
+        80
+      ],
+      "id": "c14ab7eb-7d25-47d4-a3c0-106ad8282793",
+      "name": "Append row in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Kc5JFDPfTGzxNbNi",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// ===== 1. LẤY DỮ LIỆU TỪ CÁC BƯỚC TRƯỚC =====\n\n// Lấy thông tin chi tiết của giáo viên từ node Edit Fields\n// Hãy đổi 'Edit Fields' thành tên node thực tế của anh\nconst teacherInfo = $('Edit Fields').first().json;\n\n// Lấy thông tin của thư mục vừa được tạo\n// Hãy đổi 'Create folder' thành tên node thực tế của anh\nconst folderInfo = $('Create folder').first().json;\n\n\n// ===== 2. TẠO ĐỐI TƯỢNG DỮ LIỆU MỚI =====\n// Đối tượng này có các trường khớp chính xác với tên cột trong Sheet\n\nconst newRow = {\n  TeacherID: teacherInfo.MaGiaoVien,\n  TeacherName: teacherInfo['Họ và tên'], // Dùng dấu ngoặc vì có khoảng trắng\n  TeacherFolderID: folderInfo.id\n};\n\n\n// ===== 3. TRẢ VỀ KẾT QUẢ =====\n// Trả về một item duy nhất chứa dữ liệu đã được chuẩn hóa\nreturn [{\n  json: newRow\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2432,
+        80
+      ],
+      "id": "453cd76a-cb57-4285-83fb-55be29b8043a",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ============================================================\n// PHẦN 1: LẤY DỮ LIỆU ĐẦU VÀO\n// ============================================================\n\n// 1. Lấy dữ liệu đã được xử lý từ node Edit Fields\nconst inputData = $('Edit Fields').first().json; \n\n// 2. Lấy dữ liệu từ Sheet (Node Get row(s))\nconst allTeachers = $('Get row(s) in sheet').all().map(item => item.json);\n\n\n// ============================================================\n// PHẦN 2: CHUẨN HÓA DỮ LIỆU (LẤY TRỰC TIẾP TỪ NODE SET)\n// ============================================================\n\n// --- SỬA TẠI ĐÂY: Lấy đúng tên trường anh đặt trong Edit Fields ---\nconst rawUserCode = inputData['Mã giáo viên cập nhật'];\n\n// Lấy \"Mã tự sinh\" (NAD...)\nconst autoGeneratedCode = inputData['MaGiaoVien']; \n\n// Lấy Email\nconst rawEmail = inputData['Gmail'];\n\n// Xử lý chuỗi (Xóa khoảng trắng, về chữ thường)\nconst inputID = rawUserCode ? rawUserCode.toString().trim() : \"\";\nconst inputEmail = rawEmail ? rawEmail.toString().trim().toLowerCase() : \"\";\n\n// Khởi tạo biến kết quả\nlet action = '';      \nlet message = '';       \nlet targetRow = null; \nlet finalID = autoGeneratedCode; \nlet currentFolderId = null; \n\n\n// ============================================================\n// PHẦN 3: LOGIC XỬ LÝ CHÍNH\n// ============================================================\n\n// [TRƯỜNG HỢP A]: inputID có dữ liệu (NAD00009) -> UPDATE\nif (inputID !== \"\") {\n    \n    // Tìm trong Sheet xem có mã NAD00009 không\n    const foundTeacher = allTeachers.find(t => t['Mã giáo viên'] == inputID); \n\n    if (foundTeacher) {\n        // Có mã -> Check Email\n        const ownerEmail = foundTeacher['Địa chỉ Gmail'] ? foundTeacher['Địa chỉ Gmail'].toString().trim().toLowerCase() : \"\";\n\n        if (ownerEmail === inputEmail) {\n            // Email khớp -> UPDATE\n            action = 'UPDATE';\n            targetRow = foundTeacher['row_number']; \n            finalID = inputID; \n            currentFolderId = foundTeacher['FolderId']; \n            \n            message = `Xác thực thành công. Đang cập nhật cho mã ${inputID}.`;\n        } else {\n            // Email lệch -> Lỗi bảo mật\n            action = 'ERROR';\n            message = `Lỗi bảo mật: Mã \"${inputID}\" thuộc về email khác (${ownerEmail}).`;\n        }\n    } else {\n        // Không tìm thấy mã trong Sheet -> Báo lỗi\n        action = 'ERROR';\n        message = `Lỗi: Mã giáo viên \"${inputID}\" không tồn tại trong hệ thống.`;\n    }\n\n} \n// [TRƯỜNG HỢP B]: inputID rỗng -> CREATE\nelse {\n    // Check trùng Email\n    const duplicateEmail = allTeachers.find(t => {\n        const sheetEmail = t['Địa chỉ Gmail'] ? t['Địa chỉ Gmail'].toString().trim().toLowerCase() : \"\";\n        return sheetEmail === inputEmail;\n    });\n\n    if (duplicateEmail) {\n        action = 'ERROR';\n        message = `Lỗi: Email \"${inputEmail}\" đã tồn tại.`;\n    } else {\n        action = 'CREATE';\n        message = 'Dữ liệu hợp lệ. Tạo hồ sơ mới.';\n    }\n}\n\n// ============================================================\n// PHẦN 4: OUTPUT\n// ============================================================\nreturn {\n    json: {\n        ...inputData,              \n        workflow_action: action,       \n        workflow_message: message,     \n        target_row_number: targetRow,  \n        final_teacher_id: finalID,\n        existing_folder_id: currentFolderId,\n        \n        // Debug: Anh xem dòng này output ra gì là biết ngay\n        debug_check_code: inputID \n    }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        16,
+        80
+      ],
+      "id": "6f4e88cf-2817-4fc8-b455-5d72fbe960e9",
+      "name": "Code in JavaScript2",
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.workflow_action.trim() }}",
+                    "rightValue": "ERROR",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "a2706d59-4f7f-4fea-b614-7535194ef596"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "afc9d5b4-3adb-432c-bcde-4ba95aa24790",
+                    "leftValue": "={{ $json.workflow_action.trim() }}",
+                    "rightValue": "CREATE",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "59b46602-cc65-4c08-a719-b3d60687718e",
+                    "leftValue": "={{ $json.workflow_action.trim() }}",
+                    "rightValue": "UPDATE",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        224,
+        64
+      ],
+      "id": "a3845364-4708-443e-a117-cce112cd241b",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "2abc6da1-5ce4-4491-9c2b-644496f307fe",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": "Form Đăng Ký Học Sinh",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        752,
+        336
+      ],
+      "id": "4580e78b-3eb0-421e-a359-1e94ce39c549",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "[Admin] Teacher Resources",
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "={{ $('Search files and folders').first().json.id }}",
+            "mode": "id"
+          },
+          "whatToSearch": "folders"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1376,
+        256
+      ],
+      "id": "9fc1d816-1fb8-4b2f-87e6-4284edf7d976",
+      "name": "Search files and folders7",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "Fu9XdVE4G8qIVwID",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "Tạo bài tập về nhà",
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "={{ $json.id }}",
+            "mode": "id"
+          },
+          "whatToSearch": "files",
+          "fileTypes": [
+            "application/vnd.google-apps.form"
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1600,
+        256
+      ],
+      "id": "af5e0786-bdf8-4ee8-983a-7bb686a59ae0",
+      "name": "Search files and folders8",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "Fu9XdVE4G8qIVwID",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "searchMethod": "query",
+        "queryString": "=",
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "={{ $('Switch').item.json.existing_folder_id }}",
+            "mode": "id"
+          },
+          "whatToSearch": "files",
+          "fileTypes": [
+            "application/vnd.google-apps.form"
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        2016,
+        256
+      ],
+      "id": "e79ff6b6-cf43-49f5-b3ce-6f457d213e30",
+      "name": "Search files and folders9",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "Fu9XdVE4G8qIVwID",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. Lấy tất cả các items từ node trước (thay vì chạy từng cái)\nconst allItems = $input.all();\n\n// 2. Trích xuất phần dữ liệu JSON ra thành một mảng (Array)\n// Map là hàm duyệt qua từng phần tử để lấy cái mình cần\nconst fileList = allItems.map(item => item.json);\n\n// 3. Trả về 1 item duy nhất chứa danh sách đó\nreturn {\n  json: {\n    total_count: fileList.length, // Đếm tổng số file tìm được\n    my_file_list: fileList        // Danh sách chi tiết các file\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2224,
+        256
+      ],
+      "id": "3ba278b1-4bde-4bcb-89a2-11d7f159c20c",
+      "name": "Code in JavaScript"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Create googleForm bài tập về nhà",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Share file": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Create folder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders1": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders2": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders3": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create googleForm bài tập về nhà": {
+      "main": [
+        [
+          {
+            "node": "Create googleForm đăng ký thông tin học sinh",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create googleForm đăng ký thông tin học sinh": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create folder": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Share file2": {
+      "main": [
+        [
+          {
+            "node": "Send a message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create googleForm bài tập về nhà2": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row in sheet1": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete a file": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders5": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders6": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet1": {
+      "main": [
+        [
+          {
+            "node": "Share file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript2": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Send a message3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Search files and folders1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Search files and folders5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Delete a file",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Search files and folders7": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders8": {
+      "main": [
+        [
+          {
+            "node": "Create googleForm bài tập về nhà2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders9": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Share file2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "c6881350-1530-4e8e-8adc-1bb387166ca6",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "df75f6d19da9532b87ea5a84541b4ccc1d0dd5baf896242962b0dfcbc492bcf4"
+  },
+  "id": "u8W2Dt4NA8LM50Z9",
+  "tags": []
+}

@@ -1,0 +1,630 @@
+{
+  "name": "[PROJECT1] - Phản hồi Giáo viên",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "simple": false,
+        "filters": {
+          "labelIds": [
+            "Label_8113168846680445201"
+          ],
+          "readStatus": "unread"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        16,
+        0
+      ],
+      "id": "f28bcd86-5e27-4c39-8383-a025b2e086fc",
+      "name": "Gmail Trigger",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "qNXnwDJCjJF60qrq",
+          "name": "Phan Ngọc Hân"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6638d5b7-c3d2-46c9-94d0-ddf7ceef424a",
+              "name": "Nhận xét của giáo viên",
+              "value": "={{ $('Gmail Trigger').item.json.text.trim() }}",
+              "type": "string"
+            },
+            {
+              "id": "a33775b4-9de6-4094-aaeb-5bf2707bebe8",
+              "name": "ID Gmail đã chấm",
+              "value": "={{ $('Gmail Trigger').item.json.subject.split(' - ').pop().trim() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        416,
+        0
+      ],
+      "id": "598c8794-bec6-4a36-ad75-c64ce378e627",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "Cô giáo Mini - Học sinh",
+        "filter": {
+          "folderId": {
+            "mode": "list",
+            "value": "root",
+            "cachedResultName": "/ (Root folder)"
+          },
+          "whatToSearch": "folders"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        608,
+        0
+      ],
+      "id": "08ce4872-0adf-4356-8050-b68594a865ea",
+      "name": "Search files and folders",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "zLDXn0hJUcHCmClV",
+          "name": "Phan Ngọc Hân"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "Thông tin học sinh",
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "={{ $json.id }}",
+            "mode": "id"
+          },
+          "whatToSearch": "files",
+          "fileTypes": [
+            "application/vnd.google-apps.spreadsheet"
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        816,
+        0
+      ],
+      "id": "ee34a349-8e21-434d-aa2b-aebcd48897f7",
+      "name": "Search files and folders1",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "zLDXn0hJUcHCmClV",
+          "name": "Phan Ngọc Hân"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "messageId": "={{ $('Edit Fields').item.json['ID Gmail đã chấm'] }}"
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1008,
+        0
+      ],
+      "id": "a85723ac-61c7-490e-899c-80d7b4c717bc",
+      "name": "Get a message",
+      "webhookId": "e568f444-98f8-40d1-b7a0-1992cafc79d2",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "qNXnwDJCjJF60qrq",
+          "name": "Phan Ngọc Hân"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Search files and folders1').item.json.id }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Trang tính1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pJCFleHmmZYkCXNTYdVAHIFzKaUwizLuiaxAiYjvuDc/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Gmail",
+              "lookupValue": "={{ $json.From.split('<')[1].split('>')[0] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1200,
+        0
+      ],
+      "id": "6250c525-b7d8-4d10-a5c4-3297c77ebf58",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "2cXkUqIFSIHamxSV",
+          "name": "Phan Ngọc Hân"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "=Đã chấm bài tập {{ $now.toFormat('dd/MM/yyyy') }}",
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "={{ $json.FolderID.split('/').pop() }}",
+            "mode": ""
+          },
+          "whatToSearch": "folders"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1408,
+        0
+      ],
+      "id": "340efb58-ca56-482c-80c2-f513b0fd251b",
+      "name": "Search files and folders2",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "zLDXn0hJUcHCmClV",
+          "name": "Phan Ngọc Hân"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "73e23fbc-f2a1-4552-96ed-e3a49ba2468a",
+              "leftValue": "={{ $json.id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notExists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1616,
+        0
+      ],
+      "id": "5e761394-444f-412b-b1dd-6d1c9e064849",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "resource": "folder",
+        "name": "=Đã chấm bài tập {{ $now.toFormat('dd/MM/yyyy') }}",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "={{ $('Get row(s) in sheet').item.json.FolderID.split('/').pop() }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1808,
+        -80
+      ],
+      "id": "8a50de84-5e81-4d88-96c5-323be0a5ba0b",
+      "name": "Create folder",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "zLDXn0hJUcHCmClV",
+          "name": "Phan Ngọc Hân"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b9d42c5f-5d43-4838-aec5-7a3cc5745d03",
+              "name": "Chấm bài tập ID",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1984,
+        16
+      ],
+      "id": "6fbe7612-ef52-40e3-96d2-56398d4d6a47",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "folderId": "={{ $json['Chấm bài tập ID'] }}",
+        "title": "Nhận xét của giáo viên"
+      },
+      "type": "n8n-nodes-base.googleDocs",
+      "typeVersion": 2,
+      "position": [
+        2400,
+        16
+      ],
+      "id": "01a2ae95-b4db-4caf-aa2b-f136c1fa8c85",
+      "name": "Create a document",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "ujJqC2ogiXHUOf2D",
+          "name": "Phạm Ngọc Hân"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentURL": "={{ $json.id }}",
+        "actionsUi": {
+          "actionFields": [
+            {
+              "action": "insert",
+              "text": "={{ $('Code in JavaScript').item.json.noiDungCapNhat }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.googleDocs",
+      "typeVersion": 2,
+      "position": [
+        2608,
+        16
+      ],
+      "id": "fdb83685-b1df-497c-9b00-cee9be378434",
+      "name": "Update a document",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "ujJqC2ogiXHUOf2D",
+          "name": "Phạm Ngọc Hân"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. Lấy tất cả item đầu vào (sẽ chỉ có 1 item)\nconst allItems = $input.all();\n\n// 2. Lấy dữ liệu từ các node trước đó (bên ngoài vòng lặp)\n// Dữ liệu học sinh từ Google Sheet\nconst nodeHocSinh = $('Get row(s) in sheet');\nconst tenHocSinh = nodeHocSinh.item.json['Họ và tên học sinh'];\nconst lopHoc = nodeHocSinh.item.json['Lớp'];\n\n// Dữ liệu nhận xét từ node Edit Fields\nconst nodeNhanXet = $('Edit Fields');\nconst nhanXetGiaoVien = nodeNhanXet.item.json['Nhận xét của giáo viên'];\n\n// 3. Tạo nội dung văn bản hoàn chỉnh\n// \\n là ký tự xuống dòng\nlet noiDungHoanChinh = `Chào em ${tenHocSinh} (Lớp ${lopHoc}),\\n\\n`;\nnoiDungHoanChinh += `Bộ phận học vụ xin gửi em nhận xét chi tiết từ giáo viên về bài làm của mình:\\n\\n`;\nnoiDungHoanChinh += `---\n${nhanXetGiaoVien}\n---\n\\n`;\nnoiDungHoanChinh += `Trân trọng,\\n`;\nnoiDungHoanChinh += `Cô giáo Mini.`;\n\n// 4. Gán nội dung này vào một trường mới cho item\nfor (const item of allItems) {\n  item.json.noiDungCapNhat = noiDungHoanChinh;\n}\n\n// 5. Trả về item đã được cập nhật\nreturn allItems;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2192,
+        16
+      ],
+      "id": "63518d7f-466f-4c60-aed0-3cd8588ebcff",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "messageId": "={{ $('Edit Fields').item.json['ID Gmail đã chấm'] }}",
+        "simple": false,
+        "options": {
+          "downloadAttachments": true
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        2816,
+        16
+      ],
+      "id": "f93734b9-382d-4ece-9cb6-34df21182ec1",
+      "name": "Get a message1",
+      "webhookId": "f4483a69-1f28-4de9-9391-3c847b8641e2",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "qNXnwDJCjJF60qrq",
+          "name": "Phan Ngọc Hân"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "inputDataFieldName": "attachment_0",
+        "name": "Ảnh bài tập",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "={{ $('Edit Fields1').item.json['Chấm bài tập ID'] }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        3024,
+        16
+      ],
+      "id": "1609719e-c257-4947-9f1b-e8bf312ead91",
+      "name": "Upload file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "zLDXn0hJUcHCmClV",
+          "name": "Phan Ngọc Hân"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "markAsRead",
+        "messageId": "={{ $json.id }}"
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        224,
+        0
+      ],
+      "id": "42849f2b-73fb-41b9-b299-e14551bcee98",
+      "name": "Mark a message as read",
+      "webhookId": "fc000376-85d0-4975-acb1-a3724397ffb9",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "qNXnwDJCjJF60qrq",
+          "name": "Phan Ngọc Hân"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "Mark a message as read",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders1": {
+      "main": [
+        [
+          {
+            "node": "Get a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a message": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders2": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Create folder",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create folder": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a document": {
+      "main": [
+        [
+          {
+            "node": "Update a document",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Create a document",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update a document": {
+      "main": [
+        [
+          {
+            "node": "Get a message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a message1": {
+      "main": [
+        [
+          {
+            "node": "Upload file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark a message as read": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "f9c72473-2149-406b-a3b6-7364c0429116",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "df75f6d19da9532b87ea5a84541b4ccc1d0dd5baf896242962b0dfcbc492bcf4"
+  },
+  "id": "eI3Tw8LcTvN1RDtF",
+  "tags": []
+}

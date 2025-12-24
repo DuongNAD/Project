@@ -1,0 +1,1544 @@
+{
+  "name": "[PROJECT1] - Đăng ký thông tin giáo viên",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "a29d6856-7934-4a92-a57d-7b8003294ffb",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "0ec7e28a-41c4-477d-b071-272c47226306",
+      "name": "Webhook",
+      "webhookId": "a29d6856-7934-4a92-a57d-7b8003294ffb"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Tạo một mảng mới để chứa kết quả đầu ra\nconst results = [];\n\n// Lấy tất cả các mục đầu vào\nconst items = $input.all();\n\n// Lặp qua từng mục để xử lý\nfor (const item of items) {\n  // Truy cập vào đối tượng 'body' chứa dữ liệu gốc\n  const data = item.json.body;\n\n  // --- PHẦN CHUẨN HÓA DỮ LIỆU ---\n\n  // Chuẩn hóa 'hoTen' sang dạng Chữ Cái Đầu Viết Hoa\n  if (data.hoTen) {\n    data.hoTen = data.hoTen\n      .toLowerCase()\n      .split(' ')\n      .map(word => word.charAt(0).toUpperCase() + word.slice(1))\n      .join(' ');\n  }\n  \n  // Chuẩn hóa 'gmail' sang dạng chữ thường\n  if (data.gmail) {\n    data.gmail = data.gmail.toLowerCase();\n  }\n\n  // Chuẩn hóa 'soDienThoai' bằng cách loại bỏ khoảng trắng\n  if (data.soDienThoai) {\n    data.soDienThoai = String(data.soDienThoai).replace(/\\s+/g, '');\n  }\n\n  // --- CẬP NHẬT MỚI THEO YÊU CẦU ---\n\n  // 1. Định dạng 'namSinh' từ \"YYYY-MM-DD\" sang \"DD/MM/YYYY\"\n  if (data.namSinh && data.namSinh.includes('-')) {\n    const parts = data.namSinh.split('-'); // Tách chuỗi thành [YYYY, MM, DD]\n    data.namSinh = `${parts[2]}/${parts[1]}/${parts[0]}`; // Ghép lại theo thứ tự mới\n  }\n\n  // 2. Chuyển mảng 'cacLopDay' thành một chuỗi duy nhất, cách nhau bởi \", \"\n  if (data.cacLopDay && Array.isArray(data.cacLopDay)) {\n    // Chuyển các phần tử thành chữ hoa rồi nối lại\n    data.cacLopDay = data.cacLopDay.map(lop => lop.toUpperCase().trim()).join(', ');\n  }\n  \n  // Cắt bỏ khoảng trắng thừa ở các trường văn bản khác\n  if (data.truongCongTac) data.truongCongTac = data.truongCongTac.trim();\n  if (data.monDayChinh) data.monDayChinh = data.monDayChinh.trim();\n  if (data.gioiTinh) data.gioiTinh = data.gioiTinh.trim();\n  if (data.diaChiLienHe) data.diaChiLienHe = data.diaChiLienHe.trim();\n\n  // Tạo một mục đầu ra mới, trong đó thuộc tính 'json' chính là đối tượng 'data' đã được làm sạch\n  results.push({\n    json: data\n  });\n}\n\n// Trả về mảng kết quả mới đã được đơn giản hóa\nreturn results;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        208,
+        0
+      ],
+      "id": "1f12b7e1-fd06-4832-bb8c-5d989db9cf62",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "Cô giáo Mini - Giáo viên",
+        "filter": {
+          "folderId": {
+            "mode": "list",
+            "value": "root",
+            "cachedResultName": "/ (Root folder)"
+          },
+          "whatToSearch": "folders"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        416,
+        0
+      ],
+      "id": "b729f174-6da4-49a4-bda8-53019c93adce",
+      "name": "Search files and folders",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "zLDXn0hJUcHCmClV",
+          "name": "Phan Ngọc Hân"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "78c5d2ce-9405-442e-92b4-f36bb254ab63",
+              "leftValue": "={{ $json.id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notExists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        624,
+        0
+      ],
+      "id": "a1d240b7-c33d-4adf-8fa6-8e7d3c47870a",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "resource": "folder",
+        "name": "Cô giáo Mini - Giáo viên",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "root",
+          "cachedResultName": "/ (Root folder)"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        832,
+        -96
+      ],
+      "id": "159e4cad-052a-4d99-bb00-e6eadbe6d271",
+      "name": "Create folder",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "zLDXn0hJUcHCmClV",
+          "name": "Phan Ngọc Hân"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "spreadsheet",
+        "title": "Thông tin giáo viên",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        1632,
+        -112
+      ],
+      "id": "511e728e-41a4-42b4-abd3-7c5e4de95c69",
+      "name": "Create spreadsheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "2cXkUqIFSIHamxSV",
+          "name": "Phan Ngọc Hân"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Create spreadsheet').item.json.spreadsheetId }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Trang tính1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1s6gTgeII9ue6A_6jbdJ11-U_htnYNjIuv1qvbmEslFA/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        2080,
+        -112
+      ],
+      "id": "2baf9e23-7f48-4629-b535-cf0416058647",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "2cXkUqIFSIHamxSV",
+          "name": "Phan Ngọc Hân"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "move",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $('Create spreadsheet').item.json.spreadsheetId }}",
+          "mode": "id"
+        },
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "={{ $('Cô giáo mini').item.json['Folder_Cô_giáo_Mini'] }}",
+          "mode": "id"
+        }
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        2304,
+        -112
+      ],
+      "id": "e0797fe5-adfb-49f8-a305-c3d2b8fd5517",
+      "name": "Move file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "zLDXn0hJUcHCmClV",
+          "name": "Phan Ngọc Hân"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f164c355-74be-4922-858e-15f7333102d2",
+              "leftValue": "={{ $json.id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notExists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1424,
+        16
+      ],
+      "id": "e97c9615-f6c9-4b8b-a9cd-216189352173",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "Thông tin giáo viên",
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "={{ $json['Folder_Cô_giáo_Mini'] }}",
+            "mode": ""
+          },
+          "whatToSearch": "files",
+          "fileTypes": [
+            "application/vnd.google-apps.spreadsheet"
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1216,
+        16
+      ],
+      "id": "b7d1a425-62f5-4bba-a494-597ee7fe5c63",
+      "name": "Search files and folders1",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "zLDXn0hJUcHCmClV",
+          "name": "Phan Ngọc Hân"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3b67989c-1524-49c1-b89b-8372f5a5bb64",
+              "name": "Tên trường",
+              "value": "={{ $('Code in JavaScript').item.json.truongCongTac }}",
+              "type": "string"
+            },
+            {
+              "id": "8391d13d-1e42-471c-8f9c-74019ae8c19e",
+              "name": "Mã giáo viên",
+              "value": "={{ $('Code in JavaScript').item.json.maGiaoVien }}",
+              "type": "string"
+            },
+            {
+              "id": "697e2d21-4bb9-4ded-a8dc-c90f43256756",
+              "name": "Họ và tên học sinh",
+              "value": "={{ $('Code in JavaScript').item.json.hoTen }}",
+              "type": "string"
+            },
+            {
+              "id": "566a7ed4-cf3e-4540-b233-b712f1f152d2",
+              "name": "Lớp",
+              "value": "={{ $('Code in JavaScript').item.json.cacLopDay }}",
+              "type": "string"
+            },
+            {
+              "id": "941c3ea4-4291-4ce3-90cb-6e6ae129fbfd",
+              "name": "Ngày tháng năm sinh",
+              "value": "={{ $('Code in JavaScript').item.json.namSinh }}",
+              "type": "string"
+            },
+            {
+              "id": "7b81740a-1bb2-4825-83f9-4fd9ef15faea",
+              "name": "Giới tính",
+              "value": "={{ $('Code in JavaScript').item.json.gioiTinh }}",
+              "type": "string"
+            },
+            {
+              "id": "dfde9ab3-d06d-4f0b-baa5-e6e4dba58eb7",
+              "name": "Môn dạy chính",
+              "value": "={{ $('Code in JavaScript').item.json.monDayChinh }}",
+              "type": "string"
+            },
+            {
+              "id": "4c5e67c4-1acf-4b77-8a5e-aa20f672a26e",
+              "name": "Gmail",
+              "value": "={{ $('Code in JavaScript').item.json.gmail }}",
+              "type": "string"
+            },
+            {
+              "id": "5624c74f-8ddc-43bc-bce9-56b0ff186714",
+              "name": "Số điện thoại",
+              "value": "={{ $('Code in JavaScript').item.json.soDienThoai }}",
+              "type": "string"
+            },
+            {
+              "id": "e6ad28f1-21c3-4262-820b-2d9913238362",
+              "name": "Địa chỉ liên hệ",
+              "value": "={{ $('Code in JavaScript').item.json.diaChiLienHe }}",
+              "type": "string"
+            },
+            {
+              "id": "6d2552f4-364c-48f0-bdc7-6e249c3528e2",
+              "name": "FolderID",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1856,
+        -112
+      ],
+      "id": "7691fa31-b1b8-47d3-88b2-59fec03adf03",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4965c3e9-74d4-4276-b90c-0892e9a90ae9",
+              "name": "Folder_Cô_giáo_Mini",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1024,
+        16
+      ],
+      "id": "6c21ec38-36a5-4d2b-8f8d-8eb849c78420",
+      "name": "Cô giáo mini"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "7f459c39-c3a5-4c70-a911-76fbd74fee5b",
+              "leftValue": "={{ $('Code in JavaScript').item.json.maGiaoVienCapNhat === null }}",
+              "rightValue": "0",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1632,
+        144
+      ],
+      "id": "c0fa2856-d032-4feb-91d2-cbc44440308b",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Search files and folders1').item.json.id }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Trang tính1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1_gD350FYQubYzCMztFVzwsqx-MJKEZD5p9jOs7JYAr0/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Họ và tên học sinh": "={{ $('Code in JavaScript').item.json.hoTen }}",
+            "Tên trường": "={{ $('Code in JavaScript').item.json.truongCongTac }}",
+            "Giới tính": "={{ $('Code in JavaScript').item.json.gioiTinh }}",
+            "Gmail": "={{ $('Code in JavaScript').item.json.gmail }}",
+            "Số điện thoại": "={{ $('Code in JavaScript').item.json.soDienThoai }}",
+            "Ngày tháng năm sinh": "={{ $('Code in JavaScript').item.json.namSinh }}",
+            "Lớp": "={{ $('Code in JavaScript').item.json.cacLopDay }}",
+            "Mã giáo viên": "={{ $('Code in JavaScript').item.json.maGiaoVien }}",
+            "Môn dạy chính": "={{ $('Code in JavaScript').item.json.monDayChinh }}",
+            "Địa chỉ liên hệ": "={{ $('Code in JavaScript').item.json.diaChiLienHe }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Tên trường",
+              "displayName": "Tên trường",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Mã giáo viên",
+              "displayName": "Mã giáo viên",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Họ và tên học sinh",
+              "displayName": "Họ và tên học sinh",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Lớp",
+              "displayName": "Lớp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Ngày tháng năm sinh",
+              "displayName": "Ngày tháng năm sinh",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Giới tính",
+              "displayName": "Giới tính",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Môn dạy chính",
+              "displayName": "Môn dạy chính",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Gmail",
+              "displayName": "Gmail",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Số điện thoại",
+              "displayName": "Số điện thoại",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Địa chỉ liên hệ",
+              "displayName": "Địa chỉ liên hệ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "FolderID",
+              "displayName": "FolderID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1856,
+        48
+      ],
+      "id": "b4f4a37b-82b7-4420-9ef4-fbbeb534ded8",
+      "name": "Append row in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "2cXkUqIFSIHamxSV",
+          "name": "Phan Ngọc Hân"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Search files and folders1').item.json.id }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Trang tính1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14YUVnvvVFBHpDWVyOf0FTmgXEr2MkThDfyu1kfT3NaI/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Tên trường": "={{ $('Code in JavaScript').item.json.truongCongTac }}",
+            "Họ và tên học sinh": "={{ $('Code in JavaScript').item.json.hoTen }}",
+            "Lớp": "={{ $('Code in JavaScript').item.json.cacLopDay }}",
+            "Ngày tháng năm sinh": "={{ $('Code in JavaScript').item.json.namSinh }}",
+            "Giới tính": "={{ $('Code in JavaScript').item.json.gioiTinh }}",
+            "Gmail": "={{ $('Code in JavaScript').item.json.gmail }}",
+            "Số điện thoại": "={{ $('Code in JavaScript').item.json.soDienThoai }}",
+            "Mã giáo viên": "={{ $('Code in JavaScript').item.json.maGiaoVien }}",
+            "Môn dạy chính": "={{ $('Code in JavaScript').item.json.monDayChinh }}",
+            "Địa chỉ liên hệ": "={{ $('Code in JavaScript').item.json.diaChiLienHe }}"
+          },
+          "matchingColumns": [
+            "Mã giáo viên"
+          ],
+          "schema": [
+            {
+              "id": "Tên trường",
+              "displayName": "Tên trường",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Mã giáo viên",
+              "displayName": "Mã giáo viên",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Họ và tên học sinh",
+              "displayName": "Họ và tên học sinh",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Lớp",
+              "displayName": "Lớp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Ngày tháng năm sinh",
+              "displayName": "Ngày tháng năm sinh",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Giới tính",
+              "displayName": "Giới tính",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Môn dạy chính",
+              "displayName": "Môn dạy chính",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Gmail",
+              "displayName": "Gmail",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Số điện thoại",
+              "displayName": "Số điện thoại",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Địa chỉ liên hệ",
+              "displayName": "Địa chỉ liên hệ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "FolderID",
+              "displayName": "FolderID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1856,
+        240
+      ],
+      "id": "3464508b-89f9-4911-8622-b6d14f3a9609",
+      "name": "Update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "2cXkUqIFSIHamxSV",
+          "name": "Phan Ngọc Hân"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Code in JavaScript').item.json.gmail }}",
+        "subject": "Xác nhận cập nhật thông tin học sinh thành công",
+        "message": "=<!DOCTYPE html>\n<html lang=\"vi\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Xác nhận Cập nhật Thông tin Giáo viên</title>\n</head>\n<body style=\"margin: 0; padding: 0; background-color: #f4f7f6; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';\">\n    <span style=\"display:none;font-size:1px;color:#ffffff;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;\">\n        Thông tin của bạn đã được cập nhật thành công!\n    </span>\n\n    <table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" style=\"background-color: #f4f7f6;\">\n        <tr>\n            <td align=\"center\" style=\"padding: 20px 0;\">\n                <div style=\"max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.07); overflow: hidden;\">\n                    <div style=\"padding: 40px;\">\n                        <h1 style=\"font-size: 24px; font-weight: 600; color: #2a9d8f; margin-top: 0; margin-bottom: 20px; text-align: center;\">\n                            &#9989; Cập Nhật Thành Công\n                        </h1>\n                        \n                        <p style=\"font-size: 16px; color: #333; line-height: 1.7;\">\n                            Xin chào <strong>{{ $('Code in JavaScript').item.json.hoTen }}</strong>,\n                        </p>\n                        \n                        <p style=\"font-size: 16px; color: #333; line-height: 1.7;\">\n                            Hệ thống xác nhận thông tin của bạn đã được cập nhật thành công. Dưới đây là chi tiết đã được ghi nhận:\n                        </p>\n\n                        <table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" style=\"margin: 30px 0; font-size: 15px;\">\n                            <tr style=\"border-bottom: 1px solid #eeeeee;\">\n                                <td style=\"padding: 12px 0; color: #555555; font-weight: 500;\">Họ và Tên</td>\n                                <td style=\"padding: 12px 0; color: #111111; text-align: right;\">{{ $('Code in JavaScript').item.json.hoTen }}</td>\n                            </tr>\n                            <tr style=\"border-bottom: 1px solid #eeeeee;\">\n                                <td style=\"padding: 12px 0; color: #555555; font-weight: 500;\">Mã Giáo Viên</td>\n                                <td style=\"padding: 12px 0; color: #111111; text-align: right;\">{{ $('Code in JavaScript').item.json.maGiaoVienCapNhat }}</td>\n                            </tr>\n                            <tr style=\"border-bottom: 1px solid #eeeeee;\">\n                                <td style=\"padding: 12px 0; color: #555555; font-weight: 500;\">Ngày sinh</td>\n                                <td style=\"padding: 12px 0; color: #111111; text-align: right;\">{{ $('Code in JavaScript').item.json.namSinh }}</td>\n                            </tr>\n                            <tr style=\"border-bottom: 1px solid #eeeeee;\">\n                                <td style=\"padding: 12px 0; color: #555555; font-weight: 500;\">Môn dạy chính</td>\n                                <td style=\"padding: 12px 0; color: #111111; text-align: right;\">{{ $('Code in JavaScript').item.json.monDayChinh }}</td>\n                            </tr>\n                            <tr style=\"border-bottom: 1px solid #eeeeee;\">\n                                <td style=\"padding: 12px 0; color: #555555; font-weight: 500;\">Các lớp giảng dạy</td>\n                                <td style=\"padding: 12px 0; color: #111111; text-align: right;\">{{ $('Code in JavaScript').item.json.cacLopDay }}</td>\n                            </tr>\n                            <tr style=\"border-bottom: 1px solid #eeeeee;\">\n                                <td style=\"padding: 12px 0; color: #555555; font-weight: 500;\">Trường công tác</td>\n                                <td style=\"padding: 12px 0; color: #111111; text-align: right;\">{{ $('Code in JavaScript').item.json.truongCongTac }}</td>\n                            </tr>\n                            <tr style=\"border-bottom: 1px solid #eeeeee;\">\n                                <td style=\"padding: 12px 0; color: #555555; font-weight: 500;\">Email</td>\n                                <td style=\"padding: 12px 0; color: #111111; text-align: right;\">{{ $('Code in JavaScript').item.json.gmail }}</td>\n                            </tr>\n                             <tr style=\"border-bottom: 1px solid #eeeeee;\">\n                                <td style=\"padding: 12px 0; color: #555555; font-weight: 500;\">Số điện thoại</td>\n                                <td style=\"padding: 12px 0; color: #111111; text-align: right;\">{{ $('Code in JavaScript').item.json.soDienThoai }}</td>\n                            </tr>\n                            <tr>\n                                <td style=\"padding: 12px 0; color: #555555; font-weight: 500;\">Địa chỉ liên hệ</td>\n                                <td style=\"padding: 12px 0; color: #111111; text-align: right;\">{{ $('Code in JavaScript').item.json.diaChiLienHe }}</td>\n                            </tr>\n                        </table>\n\n                        <p style=\"font-size: 16px; color: #333; line-height: 1.7;\">\n                            Nếu có bất kỳ thông tin nào chưa chính xác, vui lòng phản hồi lại email này để được hướng dẫn hoặc điền lại Form để cập nhật.\n                        </p>\n\n                        <hr style=\"border: none; border-top: 1px solid #eeeeee; margin: 30px 0;\">\n                        <p style=\"font-size: 14px; color: #888888; text-align: center;\">\n                            Trân trọng,<br>\n                            <strong>Hệ thống Trợ lý học tập ảo</strong>\n                        </p>\n                    </div>\n                </div>\n            </td>\n        </tr>\n    </table>\n</body>\n</html>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        2080,
+        240
+      ],
+      "id": "77aa656d-0fae-4bd6-9a2a-ac6eb226430b",
+      "name": "Send a message1",
+      "webhookId": "f7508843-c2eb-49c0-821d-33f063843a6a",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "qNXnwDJCjJF60qrq",
+          "name": "Phan Ngọc Hân"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "folder",
+        "name": "={{ $('Code in JavaScript').item.json.maGiaoVien }} - {{ $('Code in JavaScript').item.json.hoTen }}",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "={{ $('Cô giáo mini').item.json['Folder_Cô_giáo_Mini'] }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        2080,
+        48
+      ],
+      "id": "8df7e6d7-b40c-40e3-a9b4-0244ae93f7cb",
+      "name": "Create folder1",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "zLDXn0hJUcHCmClV",
+          "name": "Phan Ngọc Hân"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "folder",
+        "operation": "share",
+        "folderNoRootId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "permissionsUi": {
+          "permissionsValues": {
+            "role": "reader",
+            "type": "user",
+            "emailAddress": "={{ $('Code in JavaScript').item.json.gmail }}"
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        2304,
+        48
+      ],
+      "id": "52f459b8-2d26-46c4-89a9-8228f9db1563",
+      "name": "Share folder",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "zLDXn0hJUcHCmClV",
+          "name": "Phan Ngọc Hân"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Search files and folders1').item.json.id }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Trang tính1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14YUVnvvVFBHpDWVyOf0FTmgXEr2MkThDfyu1kfT3NaI/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": 0,
+            "FolderID": "={{ $('Create folder1').item.json.id }}",
+            "Mã giáo viên": "={{ $('Code in JavaScript').item.json.maGiaoVien }}"
+          },
+          "matchingColumns": [
+            "Mã giáo viên"
+          ],
+          "schema": [
+            {
+              "id": "Tên trường",
+              "displayName": "Tên trường",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Mã giáo viên",
+              "displayName": "Mã giáo viên",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Họ và tên học sinh",
+              "displayName": "Họ và tên học sinh",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Lớp",
+              "displayName": "Lớp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Ngày tháng năm sinh",
+              "displayName": "Ngày tháng năm sinh",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Giới tính",
+              "displayName": "Giới tính",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Môn dạy chính",
+              "displayName": "Môn dạy chính",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Gmail",
+              "displayName": "Gmail",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Số điện thoại",
+              "displayName": "Số điện thoại",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Địa chỉ liên hệ",
+              "displayName": "Địa chỉ liên hệ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "FolderID",
+              "displayName": "FolderID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2512,
+        48
+      ],
+      "id": "556bd48a-5286-4303-904e-e25692e24c48",
+      "name": "Update row in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "2cXkUqIFSIHamxSV",
+          "name": "Phan Ngọc Hân"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Code in JavaScript').item.json.gmail }}",
+        "subject": "Xác nhận đăng ký thông tin học sinh thành công",
+        "message": "=<!DOCTYPE html>\n<html lang=\"vi\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Xác nhận Đăng ký Thông tin Giáo viên</title>\n</head>\n<body style=\"margin: 0; padding: 0; background-color: #f4f7f6; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';\">\n    <span style=\"display:none;font-size:1px;color:#ffffff;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;\">\n        Bạn đã đăng ký thông tin giáo viên thành công!\n    </span>\n\n    <table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" style=\"background-color: #f4f7f6;\">\n        <tr>\n            <td align=\"center\" style=\"padding: 20px 0;\">\n                <div style=\"max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.07); overflow: hidden;\">\n                    <div style=\"padding: 40px;\">\n                        <h1 style=\"font-size: 24px; font-weight: 600; color: #2a9d8f; margin-top: 0; margin-bottom: 20px; text-align: center;\">\n                            &#127881; Xác Nhận Thông Tin Giáo Viên\n                        </h1>\n                        \n                        <p style=\"font-size: 16px; color: #333; line-height: 1.7;\">\n                            Xin chào <strong>{{ $('Code in JavaScript').item.json.hoTen }}</strong>,\n                        </p>\n                        \n                        <p style=\"font-size: 16px; color: #333; line-height: 1.7;\">\n                            Hệ thống đã ghi nhận thông tin đăng ký của bạn thành công. Dưới đây là chi tiết đã được lưu trữ:\n                        </p>\n\n                        <table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" style=\"margin: 30px 0; font-size: 15px;\">\n                            <tr style=\"border-bottom: 1px solid #eeeeee;\">\n                                <td style=\"padding: 12px 0; color: #555555; font-weight: 500;\">Họ và Tên</td>\n                                <td style=\"padding: 12px 0; color: #111111; text-align: right;\">{{ $('Code in JavaScript').item.json.hoTen }}</td>\n                            </tr>\n                            <tr style=\"border-bottom: 1px solid #eeeeee;\">\n                                <td style=\"padding: 12px 0; color: #555555; font-weight: 500;\">Mã Giáo Viên</td>\n                                <td style=\"padding: 12px 0; color: #111111; text-align: right;\">{{ $('Code in JavaScript').item.json.maGiaoVien }}</td>\n                            </tr>\n                            <tr style=\"border-bottom: 1px solid #eeeeee;\">\n                                <td style=\"padding: 12px 0; color: #555555; font-weight: 500;\">Ngày sinh</td>\n                                <td style=\"padding: 12px 0; color: #111111; text-align: right;\">{{ $('Code in JavaScript').item.json.namSinh }}</td>\n                            </tr>\n                             <tr style=\"border-bottom: 1px solid #eeeeee;\">\n                                <td style=\"padding: 12px 0; color: #555555; font-weight: 500;\">Môn dạy chính</td>\n                                <td style=\"padding: 12px 0; color: #111111; text-align: right;\">{{ $('Code in JavaScript').item.json.monDayChinh }}</td>\n                            </tr>\n                            <tr style=\"border-bottom: 1px solid #eeeeee;\">\n                                <td style=\"padding: 12px 0; color: #555555; font-weight: 500;\">Các lớp giảng dạy</td>\n                                <td style=\"padding: 12px 0; color: #111111; text-align: right;\">{{ $('Code in JavaScript').item.json.cacLopDay }}</td>\n                            </tr>\n                            <tr style=\"border-bottom: 1px solid #eeeeee;\">\n                                <td style=\"padding: 12px 0; color: #555555; font-weight: 500;\">Trường công tác</td>\n                                <td style=\"padding: 12px 0; color: #111111; text-align: right;\">{{ $('Code in JavaScript').item.json.truongCongTac }}</td>\n                            </tr>\n                            <tr style=\"border-bottom: 1px solid #eeeeee;\">\n                                <td style=\"padding: 12px 0; color: #555555; font-weight: 500;\">Email</td>\n                                <td style=\"padding: 12px 0; color: #111111; text-align: right;\">{{ $('Code in JavaScript').item.json.gmail }}</td>\n                            </tr>\n                            <tr style=\"border-bottom: 1px solid #eeeeee;\">\n                                <td style=\"padding: 12px 0; color: #555555; font-weight: 500;\">Số điện thoại</td>\n                                <td style=\"padding: 12px 0; color: #111111; text-align: right;\">{{ $('Code in JavaScript').item.json.soDienThoai }}</td>\n                            </tr>\n                            \n                            <tr>\n                                <td style=\"padding: 12px 0; color: #555555; font-weight: 500;\">Địa chỉ liên hệ</td>\n                                <td style=\"padding: 12px 0; color: #111111; text-align: right;\">{{ $('Code in JavaScript').item.json.diaChiLienHe }}</td>\n                            </tr>\n                            </table>\n\n                        <p style=\"font-size: 16px; color: #333; line-height: 1.7;\">\n                            Vui lòng kiểm tra lại các thông tin trên. Nếu có sai sót, bạn có thể phản hồi lại email này để được hỗ trợ.\n                        </p>\n\n                        <hr style=\"border: none; border-top: 1px solid #eeeeee; margin: 30px 0;\">\n                        <p style=\"font-size: 14px; color: #888888; text-align: center;\">\n                            Trân trọng,<br>\n                            <strong>Hệ thống Trợ lý học tập ảo</strong>\n                        </p>\n                    </div>\n                </div>\n            </td>\n        </tr>\n    </table>\n</body>\n</html>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        3136,
+        -112
+      ],
+      "id": "a16c810d-1c06-4199-8a07-af678f436e6f",
+      "name": "Send a message",
+      "webhookId": "f7508843-c2eb-49c0-821d-33f063843a6a",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "qNXnwDJCjJF60qrq",
+          "name": "Phan Ngọc Hân"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "folder",
+        "name": "={{ $('Code in JavaScript').item.json.maGiaoVien }} - {{ $('Code in JavaScript').item.json.hoTen }}",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "={{ $('Cô giáo mini').item.json['Folder_Cô_giáo_Mini'] }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        2512,
+        -112
+      ],
+      "id": "54689198-f1e2-4c0a-a4ef-dfc60ec63a63",
+      "name": "Create folder2",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "zLDXn0hJUcHCmClV",
+          "name": "Phan Ngọc Hân"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "folder",
+        "operation": "share",
+        "folderNoRootId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "permissionsUi": {
+          "permissionsValues": {
+            "role": "reader",
+            "type": "user",
+            "emailAddress": "={{ $('Code in JavaScript').item.json.gmail }}"
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        2720,
+        -112
+      ],
+      "id": "fa6fe3f1-e34d-4055-b118-c88384a1c97c",
+      "name": "Share folder1",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "zLDXn0hJUcHCmClV",
+          "name": "Phan Ngọc Hân"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Create spreadsheet').item.json.spreadsheetId }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Trang tính1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1sa30XCH8QsM2WnSqu9C0Qt1iTig0b6UktlSiJjd-uKk/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "FolderID": "={{ $('Create folder2').item.json.id }}",
+            "Mã giáo viên": "={{ $('Code in JavaScript').item.json.maGiaoVien }}"
+          },
+          "matchingColumns": [
+            "Mã giáo viên"
+          ],
+          "schema": [
+            {
+              "id": "Tên trường",
+              "displayName": "Tên trường",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Mã giáo viên",
+              "displayName": "Mã giáo viên",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Họ và tên học sinh",
+              "displayName": "Họ và tên học sinh",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Lớp",
+              "displayName": "Lớp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Ngày tháng năm sinh",
+              "displayName": "Ngày tháng năm sinh",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Giới tính",
+              "displayName": "Giới tính",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Môn dạy chính",
+              "displayName": "Môn dạy chính",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Gmail",
+              "displayName": "Gmail",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Số điện thoại",
+              "displayName": "Số điện thoại",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Địa chỉ liên hệ",
+              "displayName": "Địa chỉ liên hệ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "FolderID",
+              "displayName": "FolderID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2928,
+        -112
+      ],
+      "id": "15161aca-049a-477d-856e-7c15eb9d114e",
+      "name": "Update row in sheet2",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "2cXkUqIFSIHamxSV",
+          "name": "Phan Ngọc Hân"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Code in JavaScript').item.json.gmail }}",
+        "subject": "Xác nhận đăng ký thông tin học sinh thành công",
+        "message": "=<!DOCTYPE html>\n<html lang=\"vi\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Xác nhận Đăng ký Thông tin Giáo viên</title>\n</head>\n<body style=\"margin: 0; padding: 0; background-color: #f4f7f6; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';\">\n    <span style=\"display:none;font-size:1px;color:#ffffff;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;\">\n        Bạn đã đăng ký thông tin giáo viên thành công!\n    </span>\n\n    <table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" style=\"background-color: #f4f7f6;\">\n        <tr>\n            <td align=\"center\" style=\"padding: 20px 0;\">\n                <div style=\"max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.07); overflow: hidden;\">\n                    <div style=\"padding: 40px;\">\n                        <h1 style=\"font-size: 24px; font-weight: 600; color: #2a9d8f; margin-top: 0; margin-bottom: 20px; text-align: center;\">\n                            &#127881; Xác Nhận Thông Tin Giáo Viên\n                        </h1>\n                        \n                        <p style=\"font-size: 16px; color: #333; line-height: 1.7;\">\n                            Xin chào <strong>{{ $('Code in JavaScript').item.json.hoTen }}</strong>,\n                        </p>\n                        \n                        <p style=\"font-size: 16px; color: #333; line-height: 1.7;\">\n                            Hệ thống đã ghi nhận thông tin đăng ký của bạn thành công. Dưới đây là chi tiết đã được lưu trữ:\n                        </p>\n\n                        <table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" style=\"margin: 30px 0; font-size: 15px;\">\n                            <tr style=\"border-bottom: 1px solid #eeeeee;\">\n                                <td style=\"padding: 12px 0; color: #555555; font-weight: 500;\">Họ và Tên</td>\n                                <td style=\"padding: 12px 0; color: #111111; text-align: right;\">{{ $('Code in JavaScript').item.json.hoTen }}</td>\n                            </tr>\n                            <tr style=\"border-bottom: 1px solid #eeeeee;\">\n                                <td style=\"padding: 12px 0; color: #555555; font-weight: 500;\">Mã Giáo Viên</td>\n                                <td style=\"padding: 12px 0; color: #111111; text-align: right;\">{{ $('Code in JavaScript').item.json.maGiaoVien }}</td>\n                            </tr>\n                            <tr style=\"border-bottom: 1px solid #eeeeee;\">\n                                <td style=\"padding: 12px 0; color: #555555; font-weight: 500;\">Ngày sinh</td>\n                                <td style=\"padding: 12px 0; color: #111111; text-align: right;\">{{ $('Code in JavaScript').item.json.namSinh }}</td>\n                            </tr>\n                             <tr style=\"border-bottom: 1px solid #eeeeee;\">\n                                <td style=\"padding: 12px 0; color: #555555; font-weight: 500;\">Môn dạy chính</td>\n                                <td style=\"padding: 12px 0; color: #111111; text-align: right;\">{{ $('Code in JavaScript').item.json.monDayChinh }}</td>\n                            </tr>\n                            <tr style=\"border-bottom: 1px solid #eeeeee;\">\n                                <td style=\"padding: 12px 0; color: #555555; font-weight: 500;\">Các lớp giảng dạy</td>\n                                <td style=\"padding: 12px 0; color: #111111; text-align: right;\">{{ $('Code in JavaScript').item.json.cacLopDay }}</td>\n                            </tr>\n                            <tr style=\"border-bottom: 1px solid #eeeeee;\">\n                                <td style=\"padding: 12px 0; color: #555555; font-weight: 500;\">Trường công tác</td>\n                                <td style=\"padding: 12px 0; color: #111111; text-align: right;\">{{ $('Code in JavaScript').item.json.truongCongTac }}</td>\n                            </tr>\n                            <tr style=\"border-bottom: 1px solid #eeeeee;\">\n                                <td style=\"padding: 12px 0; color: #555555; font-weight: 500;\">Email</td>\n                                <td style=\"padding: 12px 0; color: #111111; text-align: right;\">{{ $('Code in JavaScript').item.json.gmail }}</td>\n                            </tr>\n                            <tr style=\"border-bottom: 1px solid #eeeeee;\">\n                                <td style=\"padding: 12px 0; color: #555555; font-weight: 500;\">Số điện thoại</td>\n                                <td style=\"padding: 12px 0; color: #111111; text-align: right;\">{{ $('Code in JavaScript').item.json.soDienThoai }}</td>\n                            </tr>\n                            \n                            <tr>\n                                <td style=\"padding: 12px 0; color: #555555; font-weight: 500;\">Địa chỉ liên hệ</td>\n                                <td style=\"padding: 12px 0; color: #111111; text-align: right;\">{{ $('Code in JavaScript').item.json.diaChiLienHe }}</td>\n                            </tr>\n                            </table>\n\n                        <p style=\"font-size: 16px; color: #333; line-height: 1.7;\">\n                            Vui lòng kiểm tra lại các thông tin trên. Nếu có sai sót, bạn có thể phản hồi lại email này để được hỗ trợ.\n                        </p>\n\n                        <hr style=\"border: none; border-top: 1px solid #eeeeee; margin: 30px 0;\">\n                        <p style=\"font-size: 14px; color: #888888; text-align: center;\">\n                            Trân trọng,<br>\n                            <strong>Hệ thống Trợ lý học tập ảo</strong>\n                        </p>\n                    </div>\n                </div>\n            </td>\n        </tr>\n    </table>\n</body>\n</html>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        2720,
+        48
+      ],
+      "id": "47467903-e37f-4a24-a9c7-22b86cd62c51",
+      "name": "Send a message2",
+      "webhookId": "f7508843-c2eb-49c0-821d-33f063843a6a",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "qNXnwDJCjJF60qrq",
+          "name": "Phan Ngọc Hân"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Create folder",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Cô giáo mini",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create folder": {
+      "main": [
+        [
+          {
+            "node": "Cô giáo mini",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create spreadsheet": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Move file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Move file": {
+      "main": [
+        [
+          {
+            "node": "Create folder2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Create spreadsheet",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders1": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cô giáo mini": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet1": {
+      "main": [
+        [
+          {
+            "node": "Create folder1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Send a message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create folder1": {
+      "main": [
+        [
+          {
+            "node": "Share folder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Share folder": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row in sheet1": {
+      "main": [
+        [
+          {
+            "node": "Send a message2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create folder2": {
+      "main": [
+        [
+          {
+            "node": "Share folder1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Share folder1": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row in sheet2": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "633af80b-d505-4ff3-a7ee-59a23898e0c8",
+  "meta": {
+    "instanceId": "df75f6d19da9532b87ea5a84541b4ccc1d0dd5baf896242962b0dfcbc492bcf4"
+  },
+  "id": "eGzysO0ybPDib7hT",
+  "tags": []
+}

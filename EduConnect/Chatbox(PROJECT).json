@@ -1,0 +1,377 @@
+{
+  "name": "Chatbox(PROJECT)",
+  "nodes": [
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8ea28481-a1f4-42d5-8768-5647838d2576",
+              "name": "sessionId",
+              "value": "={{ $json.body.sessionId }}",
+              "type": "string"
+            },
+            {
+              "id": "7aa25617-01f4-4500-ab95-06e15caaf6ae",
+              "name": "latitude",
+              "value": "={{ $json.body.latitude }}",
+              "type": "string"
+            },
+            {
+              "id": "e50d5204-18a8-4a4b-84b9-142f642c7cbb",
+              "name": "longitude",
+              "value": "={{ $json.body.longitude }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        416,
+        -176
+      ],
+      "id": "fc2b4fa4-3911-4615-ab3f-4c445c1313f7",
+      "name": "Set SessionID"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "dd2cc16b-22c3-403e-a487-3c98dad2c66a",
+        "responseMode": "responseNode",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        224,
+        -176
+      ],
+      "id": "26afffc7-4dc8-4458-aa9a-23cbd51c0daf",
+      "name": "Webhook",
+      "webhookId": "dd2cc16b-22c3-403e-a487-3c98dad2c66a"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=[BỐI CẢNH & VAI TRÒ]\nBạn là \"AI Chuyên gia Dữ liệu Du lịch Biển\". Vai trò của bạn là một API thông tin, chuyên truy xuất và trình bày dữ liệu về các bãi biển Việt Nam một cách chính xác, có cấu trúc và đi thẳng vào vấn đề.\n\n[NHIỆM VỤ CỐT LÕI]\nThực thi yêu cầu của người dùng dựa trên ý định đã được phân loại. Ưu tiên hàng đầu là tốc độ, sự chính xác và tính hữu ích của thông tin.\n\n[ĐẦU VÀO & NGỮ CẢNH]\n- Ý định của người dùng (đã được phân loại): \"{{ $json.output }}\"\n- Lịch sử trò chuyện trước đó: {{ $('Format History2').item.json.formattedHistory }}\n- Tin nhắn của người dùng: \"{{ $('Webhook').first().json.body.message }}\"\n- Tọa độ vị trí của người dùng (Latitude, Longitude): \"{{ $('Webhook').first().json.body.latitude }}, {{ $('Webhook').first().json.body.longitude }}\"\n\n[LOGIC PHẢN HỒI BẮT BUỘC]\nDựa vào \"Ý định của người dùng\" đã được cung cấp, hãy hành động ngay lập tức theo kịch bản tương ứng:\n\n* **KỊCH BẢN \"greeting\":**\n    Nếu ý định là chào hỏi, hãy chào lại một cách thân thiện và hỏi xem người dùng cần giúp gì liên quan đến thông tin bãi biển.\n    Ví dụ trả lời: \"Chào bạn, tôi là AI chuyên gia dữ liệu du lịch biển. Bạn có câu hỏi nào về một bãi biển cụ thể không?\"\n\n* **KỊCH BẢN \"specific_beach\":**\n    Nếu người dùng hỏi về một bãi biển cụ thể (ví dụ: \"Thông tin về Bãi Sao Phú Quốc\"), hãy trả lời trực tiếp bằng \"Bảng Dữ Liệu Nhanh\" cho bãi biển đó.\n\n* **KỊCH BẢN \"general_request\":**\n    Nếu ý định là yêu cầu chung chung về gợi ý bãi biển, TUYỆT ĐỐI KHÔNG HỎI LẠI. Hãy CHỦ ĐỘNG CHỌN Bãi biển Mỹ Khê - Đà Nẵng và TRÌNH BÀY TRỰC TIẾP \"Bảng Dữ Liệu Nhanh\" của bãi biển đó.\n\n* **KỊCH BẢN \"nearby_beach\":**\n    Sử dụng \"Tọa độ vị trí của người dùng\" để tìm và giới thiệu 1-2 bãi biển gần nhất bằng \"Bảng Dữ Liệu Nhanh\", kèm theo khoảng cách ước tính.\n\n* **KỊCH BẢN \"ask_location\":**\n    Sử dụng \"Tọa độ vị trí của người dùng\" để xác định địa chỉ gần đúng.\n    - Nếu có tọa độ, trả lời: \"Dựa trên tọa độ được cung cấp, vị trí gần đúng của bạn là: [Phường/Xã, Quận/Huyện, Tỉnh/Thành phố].\"\n    - Nếu không có tọa độ, trả lời: \"Tôi không thể xác định vị trí của bạn vì không nhận được tọa độ.\"\n\n[CẤU TRÚC TRẢ LỜI ƯU TIÊN]\nKhi giới thiệu về một bãi biển, bạn PHẢI tuân thủ cấu trúc \"Bảng Dữ Liệu Nhanh\":\n\n**Bảng Dữ Liệu Nhanh: [Tên Bãi Biển]**\n* **📍 Vị trí:** [Xã/Phường, Thành phố/Huyện, Tỉnh].\n* **⭐ Đặc điểm chính:** [Mô tả ngắn gọn, khách quan, ví dụ: \"Bờ cát trắng, nước biển trong, độ dốc thoải, sóng êm\"].\n* **📅 Thời gian lý tưởng:** [Tháng X - Tháng Y, lý do: ví dụ \"Mùa khô, ít mưa\"].\n* **🏄‍♂️ Hoạt động nổi bật:** [Liệt kê 3-4 hoạt động chính, ví dụ: Tắm biển, Lặn ngắm san hô, Chèo Kayak, Lướt ván].\n* **🛵 Di chuyển:** [Gợi ý phương tiện phổ biến từ trung tâm gần nhất, ví dụ: \"Xe máy hoặc taxi, khoảng 15km\"].\n* **💡 Mẹo nhỏ:** [Một lời khuyên thực tế, ví dụ: \"Nên mang theo kem chống nắng\", \"Giá dịch vụ cao hơn vào cuối tuần\"].\n\n[QUY TẮC VÀNG]\n1.  **BÁM SÁT KỊCH BẢN:** Nếu ý định là \"off_topic\", trả lời: \"Thông tin bạn yêu cầu nằm ngoài chuyên môn của tôi. Bạn có cần dữ liệu về một bãi biển hoặc vị trí hiện tại của bạn không?\"\n2.  **PHẢN HỒI THEO NGÔN NGỮ CỦA NGƯỜI DÙNG:** Nhận diện và trả lời bằng đúng ngôn ngữ người dùng sử dụng.\n3.  **ƯU TIÊN THÔNG TIN THỰC TẾ:** Cung cấp dữ liệu chính xác. Nếu không có thông tin, hãy nói rõ \"Hiện tôi chưa có dữ liệu về thông tin này.\"\n\n[PHONG CÁCH TƯƠNG TÁC]\n* **Tập trung vào dữ liệu:** Luôn bắt đầu câu trả lời bằng dữ liệu, không có lời chào hay câu dẫn (ngoại trừ kịch bản \"greeting\").\n* **Cấu trúc & Ngắn gọn:** Luôn trình bày thông tin dưới dạng gạch đầu dòng.\n* **Loại bỏ hoàn toàn tính xã giao:** Không có lời cảm ơn hay các câu dẫn dắt không cần thiết (ngoại trừ kịch bản \"greeting\").\n* **Cấm ngôn ngữ chủ quan:** Tuyệt đối không dùng các từ ngữ thể hiện quan điểm, cảm xúc hay đánh giá cá nhân. Chỉ mô tả sự thật khách quan.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        1312,
+        -176
+      ],
+      "id": "5af3c2a7-d7e4-4882-aa34-9a2548fd318a",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1312,
+        -48
+      ],
+      "id": "d9af6956-b909-4dc0-8a88-1228eee37bd9",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "eBGKSpovbaSFm4jk",
+          "name": "render_googleform2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const historyItems = $input.all();\n\n// Xử lý trường hợp không có lịch sử (danh sách rỗng)\nif (historyItems.length === 0) {\n  return [{ json: { formattedHistory: '' } }];\n}\n\nlet formattedHistory = \"\";\nfor (const item of historyItems) {\n  const sender = item.json.sender === 'user' ? 'Người dùng' : 'Trợ lý AI';\n  let messageContent = item.json.content;\n\n  // Nếu là tin nhắn của AI, thử phân tích JSON để lấy nội dung text\n  if (item.json.sender === 'ai') {\n    try {\n      const parsedContent = JSON.parse(messageContent);\n      if (parsedContent.reply) {\n        messageContent = parsedContent.reply;\n      }\n    } catch (error) {\n      // Bỏ qua nếu không phải là JSON hợp lệ, dùng nội dung gốc\n      console.log(\"Could not parse AI message content as JSON: \", messageContent);\n    }\n  }\n\n  formattedHistory += `${sender}: ${messageContent}\\n`;\n}\n\n// Trả về đối tượng theo cấu trúc chuẩn của n8n\nreturn [{ json: { formattedHistory: formattedHistory.trim() } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        784,
+        -176
+      ],
+      "id": "c55f6e37-9a32-4736-830c-d499ef90e06c",
+      "name": "Format History2"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT sender, content FROM (\n    SELECT sender, content, created_at\n    FROM chat_history\n    WHERE session_id = '{{ $('Set SessionID').first().json.sessionId }}'\n    ORDER BY created_at DESC\n    LIMIT 10\n) AS recent_messages\nORDER BY created_at ASC;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.5,
+      "position": [
+        592,
+        -176
+      ],
+      "id": "a8b878c7-0734-4816-a249-30d89bb019df",
+      "name": "Getchat hisstory2",
+      "alwaysOutputData": true,
+      "credentials": {
+        "mySql": {
+          "id": "u8KfE6jFnEBCRiqt",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO chat_history (session_id, sender, content) VALUES ('{{ $('Set SessionID').first().json.sessionId }}', 'user', '{{ $('Webhook').first().json.body.message.replace(/'/g, \"''\") }}');",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.5,
+      "position": [
+        1840,
+        -176
+      ],
+      "id": "45869ee0-f7ee-43ef-82a8-6e00ea215c99",
+      "name": "Save User Message",
+      "credentials": {
+        "mySql": {
+          "id": "u8KfE6jFnEBCRiqt",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO chat_history (session_id, sender, content) VALUES ('{{ $('Set SessionID').first().json.sessionId }}', 'ai', '{{ $('Code').item.json.text }}');",
+        "options": {
+          "queryReplacement": "={{ $('Set SessionID').first().json.sessionId }},{{ $('Webhook').first().json.body.message }}"
+        }
+      },
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.5,
+      "position": [
+        2032,
+        -176
+      ],
+      "id": "30dae296-2b36-4aee-865f-70cd31bde98b",
+      "name": "Save AI Message",
+      "credentials": {
+        "mySql": {
+          "id": "u8KfE6jFnEBCRiqt",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"reply\": {{ JSON.stringify($('Code').item.json.text) }}\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        2240,
+        -176
+      ],
+      "id": "16a42592-b9b1-4e15-8f72-68c8d22a5364",
+      "name": "Respond to Webhook8"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Lấy chuỗi dữ liệu thô từ output của node trước\nconst rawOutput = $input.first().json.output;\n\n// Nếu rawOutput không tồn tại hoặc rỗng, trả về lỗi\nif (!rawOutput) {\n  return { error: \"Input from previous node is empty.\" };\n}\n\n// Regex để tìm và trích xuất nội dung JSON bên trong ```json ... ``` hoặc json ... hoặc đứng một mình\nconst jsonRegex = /(?:```json\\s*)?({[\\s\\S]+?})(?:\\s*```)?/;\n\nconst match = rawOutput.match(jsonRegex);\n\n// Kiểm tra xem có tìm thấy đoạn JSON không\nif (match && match[1]) {\n  try {\n    // Parse chuỗi JSON đã được trích xuất để đảm bảo nó hợp lệ\n    const jsonObject = JSON.parse(match[1]);\n    \n    // Trả về đối tượng JSON sạch trong một key 'data' để dễ dàng phân biệt\n    // Đây là output cho trường hợp AI trả về dữ liệu\n    return { data: jsonObject };\n  } catch (error) {\n    // Xử lý nếu JSON tìm thấy nhưng không hợp lệ (ít khi xảy ra với AI)\n    return { error: \"Invalid JSON format in AI response\", raw: match[1] };\n  }\n}\n\n// Nếu không tìm thấy khối JSON, coi toàn bộ là văn bản thuần túy\n// Đây là output cho trường hợp AI trả lời bằng một câu chat thông thường\nreturn { text: rawOutput };"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1632,
+        -176
+      ],
+      "id": "1742c7cf-c439-4b07-83fc-292de940e185",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=[VAI TRÒ]\nBạn là một bộ phân loại ý định (intent classifier) cực kỳ hiệu quả và chỉ trả lời bằng JSON.\n\n[NHIỆM VỤ]\nDựa vào tin nhắn cuối cùng của người dùng và ngữ cảnh cuộc trò chuyện, hãy xác định ý định chính của họ thuộc một trong các loại sau:\n- \"greeting\": Người dùng chỉ chào hỏi đơn thuần (ví dụ: xin chào, hi, hello).\n- \"specific_beach\": Người dùng hỏi thông tin về một bãi biển cụ thể.\n- \"general_request\": Người dùng hỏi một câu chung chung về việc gợi ý bãi biển.\n- \"nearby_beach\": Người dùng hỏi về các bãi biển ở gần vị trí của họ.\n- \"ask_location\": Người dùng hỏi về vị trí hiện tại của chính họ.\n- \"off_topic\": Yêu cầu không liên quan đến du lịch biển hoặc vị trí.\n\n[NGỮ CẢNH]\n- Lịch sử trò chuyện: {{ $('Format History2').item.json.formattedHistory }}\n- Tin nhắn người dùng: \"{{ $('Webhook').first().json.body.message }}\"\n\n[YÊU CẦU ĐẦU RA]\nHãy chỉ trả lời bằng một đối tượng JSON duy nhất, không giải thích gì thêm, theo định dạng:\n{\"intent\": \"tên_ý_định\"}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        976,
+        -176
+      ],
+      "id": "63d7e7c0-576f-452c-a494-66a85b440a8a",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-1.5-flash-latest",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        976,
+        -64
+      ],
+      "id": "1a491e63-a280-49dc-b85a-ca5c8faa446b",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "zwXlU3zfpHceAKov",
+          "name": "render_googleform"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Set SessionID": {
+      "main": [
+        [
+          {
+            "node": "Getchat hisstory2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Set SessionID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format History2": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Getchat hisstory2": {
+      "main": [
+        [
+          {
+            "node": "Format History2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save User Message": {
+      "main": [
+        [
+          {
+            "node": "Save AI Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save AI Message": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Save User Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "5c996f9e-5ffc-4d61-b2ab-977cb347dc19",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "df75f6d19da9532b87ea5a84541b4ccc1d0dd5baf896242962b0dfcbc492bcf4"
+  },
+  "id": "zmtsM2S8TlcdzgIz",
+  "tags": []
+}

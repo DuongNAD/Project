@@ -1,0 +1,1379 @@
+{
+  "name": "Create_link (step2 - Cấp 2)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "c4dca5bb-3fbb-4040-a294-5d842b97b2e4",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -1264,
+        80
+      ],
+      "id": "bb98023f-bce9-4bcd-a9e1-f5917a9d9ebd",
+      "name": "Webhook",
+      "webhookId": "c4dca5bb-3fbb-4040-a294-5d842b97b2e4"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        576,
+        240
+      ],
+      "id": "a8adafd0-aaa3-4895-ab62-ea6d3d74d9de",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "eBGKSpovbaSFm4jk",
+          "name": "render_googleform2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=BỐI CẢNH VÀ VAI TRÒ\nAnh là một Chuyên gia Sư phạm Kỹ thuật, có nhiều năm kinh nghiệm trong việc biên soạn và thẩm định ngân hàng câu hỏi cho các hệ thống giáo dục. Chuyên môn sâu của Anh là biến một nội dung học thuật bất kỳ thành một bộ câu hỏi trắc nghiệm chuẩn hóa, có khả năng phân loại và đánh giá chính xác năng lực của người học theo 4 cấp độ tư duy.\n\nNHIỆM VỤ\nDựa trên <DỮ_LIỆU_ĐẦU_VÀO> được cung cấp, hãy tạo một bộ câu hỏi trắc nghiệm với các yêu cầu cực kỳ nghiêm ngặt sau:\n\nSố lượng chính xác: 16 câu hỏi.\n\nPhân bổ cấp độ: 5 câu \"Nhận biết\", 5 câu \"Thông hiểu\", 4 câu \"Vận dụng\", 2 câu \"Vận dụng cao\".\n\nYêu cầu quan trọng về Văn phong: Phải sử dụng thông tin <LỚP_HỌC> để điều chỉnh ngôn ngữ và bối cảnh câu hỏi cho phù hợp. Ví dụ: với <LỚP_HỌC> là 'Lớp 5', hãy dùng các ví dụ gần gũi như 'cái bánh', 'sợi dây', 'kg gạo'.\n\nDỮ_LIỆU_ĐẦU_VÀO\n<CHỦ_ĐỀ_BÀI_HỌC>\n{{ $('Edit Fields1').item.json.tenBaiHoc }}\n</CHỦ_ĐỀ_BÀI_HỌC>\n<MÔN_HỌC>\n{{ $('Edit Fields1').item.json.monHoc }}\n</MÔN_HỌC>\n<LỚP_HỌC>\n{{ $('Edit Fields1').item.json.LopHoc }}\n</LỚP_HỌC>\n<LESSON_DETAILS>\n{{ $('Edit Fields1').item.json.lessonDetails }}\n</LESSON_DETAILS>\n\nQUY TRÌNH TƯ DUY BẮT BUỘC\nTrước khi tạo ra kết quả cuối cùng, hãy thực hiện các bước tư duy sau một cách âm thầm:\n\nPhân tích Nội dung: Đọc kỹ <LESSON_DETAILS> và xác định các khối kiến thức chính.\n\nLập bản đồ Tư duy: Ánh xạ các khối kiến thức vào 4 cấp độ tư duy.\n\nSoạn thảo: Dựa trên bản đồ đã lập, bắt đầu viết 16 câu hỏi theo đúng phân bổ và các quy tắc chất lượng bên dưới.\n\nQUY TẮC VÀ TIÊU CHUẨN CHẤT LƯỢNG\n\nTính Duy nhất của Đáp án: Mỗi câu hỏi chỉ được có MỘT đáp án đúng duy nhất, không gây tranh cãi.\n\nChất lượng Phương án nhiễu: Các phương án sai phải hợp lý, có tính thuyết phục, liên quan đến bài học và có cùng dạng thức với đáp án đúng.\n\nQuy tắc về Phương án Chung (Meta-options): Hạn chế tối đa việc sử dụng các phương án như \"Tất cả các đáp án trên\", \"Không có đáp án nào đúng\". Tần suất sử dụng không được vượt quá 2/16 câu.\n\nĐịnh dạng Ký hiệu Toán học (QUY TẮC MỚI):\n4.1. BẮT BUỘC sử dụng các ký tự Unicode có sẵn cho tất cả các ký hiệu toán học.\n4.2. TUYỆT ĐỐI KHÔNG sử dụng tag LATEX[...] hoặc bất kỳ định dạng mã nào khác.\n4.3. Ví dụ về ký hiệu:\n* Số mũ: x², 10³\n* Phép toán: 15 × 2 = 30, 100 ÷ 4 = 25\n* Phân số có sẵn: ½, ¼, ¾\n4.4. Đối với các phân số không có ký tự Unicode sẵn (ví dụ 1/3, 2/5): BẮT BUỘC phải viết dưới dạng văn bản thông thường, sử dụng dấu gạch chéo / (ví dụ: 1/3, 2/5).\n\nĐịnh nghĩa Cấp độ Tư duy:\n\nNhận biết: Nhớ lại thông tin, sự thật, định nghĩa đã có trực tiếp trong <LESSON_DETAILS>.\n\nThông hiểu: Diễn giải, so sánh, giải thích các khái niệm.\n\nVận dụng: Áp dụng kiến thức vào một tình huống, bài toán cụ thể.\n\nVận dụng cao: Phân tích, đánh giá, tổng hợp thông tin để giải quyết vấn đề phức tạp.\n\nChiến lược Xử lý Dữ liệu Đầu vào Thách thức:\n\nKhi <LESSON_DETAILS> ngắn, phải nỗ lực tối đa để khai thác sâu và xây dựng các tình huống giả định để đạt mục tiêu 16 câu hỏi.\n\nChỉ sau khi đã nỗ lực tối đa mà vẫn không thể, mới được phép giảm số lượng câu hỏi.\n\nĐỊNH_DẠNG_ĐẦU_RA (CỰC KỲ NGHIÊM NGẶT)\nToàn bộ phản hồi của bạn BẮT BUỘC phải là một mảng JSON [...] hợp lệ duy nhất và được minified hoàn toàn (không có bất kỳ khoảng trắng, newline, hay tab thừa nào ngoài nội dung chuỗi). Phản hồi phải bắt đầu bằng ký tự [ và kết thúc bằng ].\n\nTUYỆT ĐỐI KHÔNG được thêm bất kỳ văn bản, ghi chú, lời giải thích, hay code fences (như ```json) nào khác. Bất kỳ sai sót nào về định dạng sẽ gây lỗi hệ thống.\n\nMỗi phần tử trong mảng là một đối tượng JSON có cấu trúc chính xác như sau:\n{\"question\":\"...\",\"options\":[\"...\",\"...\",\"...\",\"...\"],\"answer\":\"...\",\"difficulty\":\"...\"}\n\nTrường difficulty chỉ được phép nhận một trong 4 giá trị chuỗi: \"Nhận biết\", \"Thông hiểu\", \"Vận dụng\", \"Vận dụng cao\".\n\nBẮT ĐẦU THỰC THI.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        576,
+        96
+      ],
+      "id": "0d8caa98-24b8-4ad8-8473-9e1689845c93",
+      "name": "Generate_Quiz_JSON"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ==================================================================\n// === PHẦN 1: LẤY DỮ LIỆU ĐẦU VÀO CHÍNH XÁC ===\n// ==================================================================\n// Sửa lỗi tại đây: Dữ liệu từ node trước nằm trong trường 'output', không phải 'extractedJson'\nconst rawData = $input.first().json.output;\nconst topic = $('Edit Fields1').first().json.tenBaiHoc;\n\n// Kiểm tra xem dữ liệu đầu vào có tồn tại và là một chuỗi không\nif (!rawData || typeof rawData !== 'string') {\n  throw new Error(\"Dữ liệu đầu vào từ node Generate_Quiz_JSON không hợp lệ hoặc không tồn tại. Vui lòng kiểm tra lại output của node trước.\");\n}\n\n// ==================================================================\n// === PHẦN 2: HÀM PARSE JSON LINH HOẠT VÀ MẠNH MẼ ===\n// ==================================================================\n/**\n * Dọn dẹp và parse một chuỗi có khả năng là JSON không hoàn hảo.\n * - Loại bỏ markdown code fences (```json ... ```).\n * - Sửa các ký tự backslash escape không hợp lệ - nguyên nhân phổ biến gây lỗi parse.\n * - Cố gắng trích xuất mảng JSON ngay cả khi có văn bản rác xung quanh.\n * @param {string} input Chuỗi đầu vào từ AI.\n * @returns {object} Dữ liệu đã được parse.\n */\nfunction parseFlexible(input) {\n  // B1: Loại bỏ các ký tự không cần thiết và markdown fences\n  let cleanStr = input\n    .replace(/^\\uFEFF/, '') // Loại bỏ BOM\n    .replace(/```(?:json)?\\s*/gi, '') // Loại bỏ ```json và ```\n    .trim();\n\n  // B2: Sửa lỗi backslash - Dòng mã quan trọng nhất để chống lỗi parse\n  // Thay thế các dấu \\ không hợp lệ (ví dụ: \\f trong \\frac) bằng \\\\\n  cleanStr = cleanStr.replace(/\\\\(?![\"\\\\/bfnrt])/g, '\\\\\\\\');\n\n  // B3: Cố gắng parse trực tiếp\n  try {\n    return JSON.parse(cleanStr);\n  } catch (error) {\n    // B4: Nếu thất bại, thử tìm đoạn JSON hợp lệ đầu tiên trong chuỗi\n    const firstBracket = cleanStr.indexOf('[');\n    const lastBracket = cleanStr.lastIndexOf(']');\n    if (firstBracket !== -1 && lastBracket > firstBracket) {\n      const jsonCandidate = cleanStr.substring(firstBracket, lastBracket + 1);\n      try {\n        // Thử parse lại với đoạn chuỗi đã cắt\n        return JSON.parse(jsonCandidate);\n      } catch (finalError) {\n         // Nếu vẫn lỗi, báo lỗi cuối cùng\n         throw new Error(`Không thể parse JSON sau nhiều lần thử. Lỗi cuối: ${finalError.message}. Snippet chuỗi đã dọn dẹp: ${cleanStr.slice(0, 500)}`);\n      }\n    }\n    // Nếu không tìm thấy JSON, báo lỗi ban đầu\n    throw new Error(`Không thể parse JSON. Lỗi ban đầu: ${error.message}. Snippet chuỗi đã dọn dẹp: ${cleanStr.slice(0, 500)}`);\n  }\n}\n\n// ==================================================================\n// === PHẦN 3: THỰC THI, XÁC THỰC VÀ TRẢ VỀ KẾT QUẢ ===\n// ==================================================================\ntry {\n  const parsedJson = parseFlexible(rawData);\n\n  // Bắt đầu xác thực dữ liệu\n  if (!Array.isArray(parsedJson)) {\n    throw new Error(\"Dữ liệu sau khi parse không phải là một mảng (array).\");\n  }\n\n  const validDiffs = new Set(['Nhận biết', 'Thông hiểu', 'Vận dụng', 'Vận dụng cao']);\n  const diffCounts = { 'Nhận biết': 0, 'Thông hiểu': 0, 'Vận dụng': 0, 'Vận dụng cao': 0 };\n\n  parsedJson.forEach(q => {\n    if (!q.difficulty || !validDiffs.has(q.difficulty)) {\n      throw new Error(`Câu hỏi \"${q.question.slice(0,30)}...\" có giá trị difficulty không hợp lệ: \"${q.difficulty}\"`);\n    }\n    diffCounts[q.difficulty]++;\n  });\n\n  // Kiểm tra phân bổ số lượng câu hỏi\n  if (diffCounts['Nhận biết'] !== 5 || diffCounts['Thông hiểu'] !== 5 || diffCounts['Vận dụng'] !== 4 || diffCounts['Vận dụng cao'] !== 2) {\n    const currentDistribution = JSON.stringify(diffCounts);\n    // Cho phép tổng số câu hỏi ít hơn 16 nhưng phải đúng tỉ lệ (nếu có thể)\n    // Tuy nhiên, vì prompt yêu cầu chính xác 16, chúng ta sẽ báo lỗi nếu không đủ\n     if (parsedJson.length !== 16) {\n        throw new Error(`Số lượng câu hỏi không đúng (yêu cầu 16, nhận được ${parsedJson.length}).`);\n     }\n    throw new Error(`Phân bổ độ khó không chính xác. Yêu cầu {NB:5, TH:5, VD:4, VDC:2}, thực tế là ${currentDistribution}`);\n  }\n\n  // Nếu mọi thứ đều ổn, trả về kết quả\n  return [{\n    json: {\n      questions: parsedJson,\n      originalTopic: topic\n    }\n  }];\n\n} catch (err) {\n  // Bắt lỗi và trả về một output có cấu trúc để dễ gỡ lỗi ở các node sau\n  console.error(err);\n  return [{\n    json: {\n      error: true,\n      message: err.message,\n      originalDataSnippet: rawData.slice(0, 1000)\n    }\n  }];\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        912,
+        96
+      ],
+      "id": "3fe5b7b2-846c-4893-950c-e60e7538fac0",
+      "name": "Clean_AI_Output"
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "[LOG] Lịch sử Tạo bài tập",
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "={{ $('Edit Fields1').item.json['FOLDERID_Giáo_viên'] }}",
+            "mode": "id"
+          },
+          "whatToSearch": "files"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1328,
+        96
+      ],
+      "id": "30c36e10-ada3-460e-8094-899badf3de6c",
+      "name": "Search files and folders",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "xWyXN2JATmgJ7CPw",
+          "name": "Hoàng Quốc Việt"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "889a50ce-4828-46ff-bd49-9d6caa214ff4",
+              "leftValue": "={{ $json.id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notExists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1536,
+        96
+      ],
+      "id": "e43075bd-7fa4-4da6-8fb6-a259aaf53c2a",
+      "name": "If1",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "operation": "move",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $('Create spreadsheet1').item.json.spreadsheetId }}",
+          "mode": "id"
+        },
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "={{ $('Edit Fields1').item.json['FOLDERID_Giáo_viên'] }}",
+          "mode": "id"
+        }
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        2256,
+        0
+      ],
+      "id": "700e018c-40d8-4997-8778-f0653a023fc0",
+      "name": "Move file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "xWyXN2JATmgJ7CPw",
+          "name": "Hoàng Quốc Việt"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('If2').item.json['Địa chỉ Gmail'] }}",
+        "subject": "={{ $('HTTP Request').item.json.formName }} - ID: {{ $('HTTP Request').item.json.formId }}",
+        "message": "=<p>Kính gửi Thầy/Cô <strong>{{ $('If2').item.json['Họ và tên'] }}</strong>,</p>\n\n<p>Hệ thống Trợ lý học tập đã chuẩn bị xong bản nháp bài tập trắc nghiệm theo yêu cầu của Thầy/Cô.</p>\n<p>Vui lòng kiểm tra và gửi email phản hồi để hệ thống tiến hành bước tiếp theo.</p>\n<br>\n\n<p><strong>THÔNG TIN BÀI TẬP</strong></p>\n<ul>\n    <li><strong>Môn học:</strong> {{ $('Edit Fields1').item.json.monHoc }}</li>\n    <li><strong>Lớp:</strong> {{ $('Edit Fields1').item.json.LopHoc }}</li>\n    <li><strong>Chủ đề:</strong> {{ $('Edit Fields1').item.json.tenBaiHoc }}</li>\n</ul>\n\n<h3>Bước 1: Xem trước bài tập</h3>\n<p>Thầy/Cô vui lòng nhấp vào đường link dưới đây để xem trước bài tập:</p>\n<p><strong><a href=\"{{ $('HTTP Request').item.json.formUrl }}\">LINK XEM TRƯỚC BÀI TẬP (Dành cho giáo viên)</a></strong></p>\n<hr>\n\n<h3>Bước 2: Gửi Email Phản hồi cho Hệ thống</h3>\n<p>Để xác nhận hoặc yêu cầu chỉnh sửa, Thầy/Cô vui lòng <strong>tạo một email mới</strong> và điền chính xác các thông tin dưới đây.</p>\n\n<div style=\"font-family: Arial, sans-serif; border: 1px solid #e5e7eb; border-radius: 12px; margin-top: 16px;\">\n    \n    <div style=\"padding: 16px; border-bottom: 1px solid #e5e7eb;\">\n        <p style=\"margin: 0 0 8px 0; font-size: 14px; color: #374151; font-weight: bold;\">1. Gửi đến Email:</p>\n        <div style=\"background-color: #f9fafb; padding: 10px 12px; border-radius: 6px;\">\n            <code style=\"font-size: 14px; color: #111827;\">\n                {{ $json.Email }}\n            </code>\n        </div>\n    </div>\n\n    <div style=\"padding: 16px; border-bottom: 1px solid #e5e7eb;\">\n        <p style=\"margin: 0 0 8px 0; font-size: 14px; color: #374151; font-weight: bold;\">2. Sao chép chính xác Tiêu đề:</p>\n        <div style=\"background-color: #f9fafb; padding: 10px 12px; border-radius: 6px;\">\n            <code style=\"font-family: 'Courier New', Courier, monospace; font-size: 13px; color: #1f2937; word-break: break-all; line-height: 1.5;\">\n                Yêu cầu chỉnh sửa bài tập;monHoc={{ $('Edit Fields1').item.json.monHoc }};lop={{ $('Edit Fields1').item.json.LopHoc }};formId={{ $('HTTP Request').item.json.formId }};responseId={{ $('Edit Fields1').item.json.responseId }};spreadsheetId={{ $('Edit Fields1').item.json['spreadsheetId_Bài_tập'] }}\n            </code>\n        </div>\n    </div>\n    \n    <div style=\"padding: 16px;\">\n        <p style=\"margin: 0 0 8px 0; font-size: 14px; color: #374151; font-weight: bold;\">3. Soạn Nội dung Email:</p>\n        <ul style=\"margin: 0; padding-left: 20px; font-size: 14px; color: #374151;\">\n            <li><strong>Nếu bài tập đã ổn:</strong> Soạn nội dung là <code>Đồng ý</code>.</li>\n            <li><strong>Nếu cần chỉnh sửa:</strong> Liệt kê chi tiết các yêu cầu thay đổi.</li>\n        </ul>\n    </div>\n\n</div>\n<br>\n<p>Trân trọng,</p>\n<p><strong>Hệ thống Trợ lý học tập</strong></p>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        3312,
+        16
+      ],
+      "id": "dab649f0-0371-47fa-8097-c972e62c2783",
+      "name": "Send a message",
+      "webhookId": "c6106fc0-8c44-4226-95b0-792e64647cb9",
+      "executeOnce": true,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "LUIQFtEDu0GRi6Bj",
+          "name": "Hoàng Quốc Việt"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "spreadsheet",
+        "title": "[LOG] Lịch sử Tạo bài tập",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        1728,
+        0
+      ],
+      "id": "b059d155-8705-48a6-8eea-71021ea438cb",
+      "name": "Create spreadsheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "8s2aVNtUE42gqLis",
+          "name": "Hoàng Quốc Việt"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "293149c7-a3f6-4afe-bfd6-23aa81e962b0",
+              "name": "ResponseId",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "fbfebd77-00f6-4930-8551-aa1c3b6403b2",
+              "name": "Timestamp",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "a702614a-15c5-4708-a643-44a964aaa85c",
+              "name": "TeacherEmail",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "95886e8a-cbbc-4c43-a3fc-56cd158afb92",
+              "name": "OriginalTopic",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "0814348c-c232-4859-a11f-873f7f20e5ec",
+              "name": "GeneratedQuizJSON",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "6d7cfb1b-fdd9-4c57-a86a-9867336f2403",
+              "name": "FormID",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "2977d8e8-8fd1-484d-ae5b-863647559c3e",
+              "name": "FormURL",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "41915d8f-559a-4893-a471-6613100bcdca",
+              "name": "lessonDetails",
+              "value": "=",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1904,
+        0
+      ],
+      "id": "89c0d701-af25-4756-bbfe-3d466ba35a6f",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "0869a0b9-cf0b-4428-9969-bd4ddbad8abd",
+              "leftValue": "={{ $('Get row(s) in sheet').item.json['Các lớp giảng dạy'] }}",
+              "rightValue": "={{ $('Edit Fields1').item.json.LopHoc }}",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2880,
+        112
+      ],
+      "id": "4df830f7-72ad-47e3-a6f2-e348f4392523",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Create spreadsheet1').item.json.spreadsheetId }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Trang tính1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1jnx8KCz-MA8wZgIrHHcAvkTH_uQh0GoZR6HKEOlGKhw/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "ResponseId",
+              "displayName": "ResponseId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "TeacherEmail",
+              "displayName": "TeacherEmail",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "OriginalTopic",
+              "displayName": "OriginalTopic",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "GeneratedQuizJSON",
+              "displayName": "GeneratedQuizJSON",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "FormID",
+              "displayName": "FormID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "FormURL",
+              "displayName": "FormURL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        2080,
+        0
+      ],
+      "id": "90f36416-d629-4a8c-9b44-7d63491e8140",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "8s2aVNtUE42gqLis",
+          "name": "Hoàng Quốc Việt"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Edit Fields3').item.json.LOG[' Lịch sử Tạo bài tập'] }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Trang tính1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/15r5Rl6Uyi9fisW_h4OeYyRIBaSp6Fs8uryaVje82BoU/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ResponseId": "={{ $('Edit Fields1').item.json.responseId }}",
+            "Timestamp": "={{ $now }}",
+            "FormURL": "={{ $('HTTP Request').item.json.formUrl }}",
+            "FormID": "={{ $('HTTP Request').item.json.formId }}",
+            "GeneratedQuizJSON": "={{ $('Generate_Quiz_JSON').item.json.output }}",
+            "OriginalTopic": "={{ $('Edit Fields1').item.json.tenBaiHoc }}",
+            "TeacherEmail": "={{ $('Get row(s) in sheet').item.json['Địa chỉ Gmail'] }}",
+            "lessonDetails": "={{ $('Edit Fields1').item.json.lessonDetails }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "ResponseId",
+              "displayName": "ResponseId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "TeacherEmail",
+              "displayName": "TeacherEmail",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "OriginalTopic",
+              "displayName": "OriginalTopic",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "GeneratedQuizJSON",
+              "displayName": "GeneratedQuizJSON",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "FormID",
+              "displayName": "FormID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "FormURL",
+              "displayName": "FormURL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "lessonDetails",
+              "displayName": "lessonDetails",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        3520,
+        16
+      ],
+      "id": "2a2e928c-3225-48d2-b68c-c498b0c269c1",
+      "name": "Append row in sheet2",
+      "executeOnce": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "8s2aVNtUE42gqLis",
+          "name": "Hoàng Quốc Việt"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6f57011a-a33f-4185-8ec4-01fdd5d8b163",
+              "name": "spreadsheetId_Bài_tập",
+              "value": "={{ $json.body['spreadsheetId_Bài_tập'] }}",
+              "type": "string"
+            },
+            {
+              "id": "a23f18a8-d23d-43e5-8a85-58e6636170ec",
+              "name": "monHoc",
+              "value": "={{ $json.body.monHoc }}",
+              "type": "string"
+            },
+            {
+              "id": "46cdf839-5418-44d9-8f25-537089c4c6f4",
+              "name": "LopHoc",
+              "value": "={{ $json.body.LopHoc }}",
+              "type": "string"
+            },
+            {
+              "id": "daa2c968-8e2e-41dd-bab6-25e335c44c65",
+              "name": "tenBaiHoc",
+              "value": "={{ $json.body.tenBaiHoc }}",
+              "type": "string"
+            },
+            {
+              "id": "ab53190e-1993-4ac9-a4bd-47e67b47ba1f",
+              "name": "Email_giáo_viên",
+              "value": "={{ $json.body['Email_giáo_viên'] }}",
+              "type": "string"
+            },
+            {
+              "id": "f4c29706-a0ea-4364-a848-986f45deb1fe",
+              "name": "FOLDERID_Giáo_viên",
+              "value": "={{ $json.body['FOLDERID_Giáo_viên'] }}",
+              "type": "string"
+            },
+            {
+              "id": "94aff97b-be4c-4923-93b4-4201affee9df",
+              "name": "responseId",
+              "value": "={{ $json.body.responseId }}",
+              "type": "string"
+            },
+            {
+              "id": "a758f6af-5a36-4239-8a47-5691a98cef8e",
+              "name": "FOLDER_Teachers",
+              "value": "={{ $json.body.FOLDER_Teachers }}",
+              "type": "string"
+            },
+            {
+              "id": "ef1ec4f8-6ff5-44e7-a91a-fb93b3bd692d",
+              "name": "FOLDER_Students",
+              "value": "={{ $json.body.FOLDER_Students }}",
+              "type": "string"
+            },
+            {
+              "id": "bcdafeaa-c995-44c6-9826-af5f5301fdb8",
+              "name": "Danh sách giáo viên",
+              "value": "={{ $json.body['Danh sách giáo viên'] }}",
+              "type": "string"
+            },
+            {
+              "id": "cded709d-ec8a-493f-9001-6611398b7435",
+              "name": "Lớp_Students",
+              "value": "={{ $json.body['Lớp_Students'] }}",
+              "type": "string"
+            },
+            {
+              "id": "d813e152-71ac-4a03-8f43-a5a7255d5ea5",
+              "name": "Folder_Admin",
+              "value": "={{ $json.body.Folder_Admin }}",
+              "type": "string"
+            },
+            {
+              "id": "17eac760-5fd0-41aa-8d47-9972e323ca9a",
+              "name": "lessonDetails",
+              "value": "={{ $json.body.lessonDetails }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1056,
+        80
+      ],
+      "id": "19532e24-aeee-46c4-a950-d7faa8a67bcd",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "[TEMPLATE] Bài tập trắc nghiệm",
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "={{ $json.id }}",
+            "mode": "id"
+          },
+          "whatToSearch": "files",
+          "fileTypes": [
+            "application/vnd.google-apps.form"
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -624,
+        80
+      ],
+      "id": "f54cc164-81e7-47e3-8cd1-4dac98ba7f99",
+      "name": "Search files and folders7",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "xWyXN2JATmgJ7CPw",
+          "name": "Hoàng Quốc Việt"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "[Admin] Teacher Resources",
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "={{ $json.Folder_Admin }}",
+            "mode": "id"
+          },
+          "whatToSearch": "folders"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -832,
+        80
+      ],
+      "id": "10ff0078-8cd2-4855-91e3-336eeaa846bb",
+      "name": "Search files and folders1",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "xWyXN2JATmgJ7CPw",
+          "name": "Hoàng Quốc Việt"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "Lưu trữ GoogleForm_Create",
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "={{ $('Edit Fields1').item.json['FOLDERID_Giáo_viên'] }}",
+            "mode": "id"
+          },
+          "whatToSearch": "folders"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -208,
+        80
+      ],
+      "id": "79bbc4e2-361f-4551-9cbb-e740c1a1ec14",
+      "name": "Search files and folders3",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "xWyXN2JATmgJ7CPw",
+          "name": "Hoàng Quốc Việt"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f2f9798b-e682-46ee-ab28-401d50a833a0",
+              "leftValue": "={{ $json.id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notExists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        0,
+        80
+      ],
+      "id": "bb0db8b6-eeeb-4e88-b4ca-74b3c1d17e3f",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "resource": "folder",
+        "name": "Lưu trữ GoogleForm_Create",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "={{ $('Edit Fields1').item.json['FOLDERID_Giáo_viên'] }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        192,
+        -16
+      ],
+      "id": "e70cf0fe-5559-4486-9347-567ed347317a",
+      "name": "Create folder",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "xWyXN2JATmgJ7CPw",
+          "name": "Hoàng Quốc Việt"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f27c101e-beec-4123-a387-c51d62b5ac11",
+              "name": "Lưu trữ GoogleForm_Create",
+              "value": "={{ $json.id || $('Search files and folders3').item.json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        400,
+        96
+      ],
+      "id": "61c7bfe3-d64a-491a-9e59-196b7dc66094",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Edit Fields1').item.json['Danh sách giáo viên'] }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Trang tính1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1YVq0hfeYJHWOWhCGlRifgyg0KchomqRYApVAlQaFl8A/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Địa chỉ Gmail",
+              "lookupValue": "={{ $('Edit Fields1').item.json['Email_giáo_viên'] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2688,
+        112
+      ],
+      "id": "dd1c8aa5-f8cd-4169-b48d-1a8ec7026861",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "8s2aVNtUE42gqLis",
+          "name": "Hoàng Quốc Việt"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b9a0a8cc-20c9-4a2c-bab9-f81c97674d3d",
+              "name": "[LOG] Lịch sử Tạo bài tập",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2480,
+        112
+      ],
+      "id": "0d45a051-72f8-46d6-b5d3-7cecf73e81f1",
+      "name": "Edit Fields3"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://script.google.com/macros/s/AKfycbzkRBrwggBbRQJr9heo0yy1zRxlWa_QpsBuhky3MQSmhlPlz2dEaCBZSfllO2WSROc_/exec",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{\n  ({\n    \"title\": `Bài tập - ${$('Edit Fields1').item.json.tenBaiHoc}`,\n    \"exercises\": $json.questions,\n    \"templateId\": $('Search files and folders7').item.json.id,\n    \"folderId_move\": $('Edit Fields2').item.json['Lưu trữ GoogleForm_Create'],\n    \"monHoc\": $('Edit Fields1').item.json.monHoc,\n    \"lopHoc\": $('Edit Fields1').item.json.LopHoc,\n    \"responseId\": $('Edit Fields1').item.json.responseId\n  })\n}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1120,
+        96
+      ],
+      "id": "88d43cf8-20a2-42a2-b7d3-90d80427273d",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Trang tính1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1cyxW9aYbnvcD_cLtx6MA4h48KKUC58g5Tu1F1GS2TYo/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "={{ $now }}",
+            "TeacherEmail": "={{ $('If2').item.json['Địa chỉ Gmail '] }}",
+            "FormID": "={{ $('HTTP Request').item.json.formId }}",
+            "GeneratedQuizJSON": "={{ $('Generate_Quiz_JSON').item.json.output }}",
+            "FormURL": "={{ $('HTTP Request').item.json.formUrl }}",
+            "ResponseId": "={{ $('Edit Fields1').item.json.responseId }}",
+            "OriginalTopic": "={{ $('Edit Fields1').item.json.tenBaiHoc }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "ResponseId",
+              "displayName": "ResponseId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "TeacherEmail",
+              "displayName": "TeacherEmail",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "OriginalTopic",
+              "displayName": "OriginalTopic",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "GeneratedQuizJSON",
+              "displayName": "GeneratedQuizJSON",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "FormID",
+              "displayName": "FormID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "FormURL",
+              "displayName": "FormURL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ThreadID",
+              "displayName": "ThreadID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        3136,
+        256
+      ],
+      "id": "b1d703f3-ae4f-49c1-8d94-9d563650d8c7",
+      "name": "Append row in sheet3",
+      "executeOnce": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "8s2aVNtUE42gqLis",
+          "name": "Hoàng Quốc Việt"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "Admin_Registry",
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "={{ $('Edit Fields1').item.json.Folder_Admin }}",
+            "mode": "id"
+          },
+          "whatToSearch": "files",
+          "fileTypes": [
+            "application/vnd.google-apps.spreadsheet"
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -416,
+        80
+      ],
+      "id": "4c958e9f-eaf2-4755-866d-f5c0d88ee3e4",
+      "name": "Search files and folders2",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "xWyXN2JATmgJ7CPw",
+          "name": "Hoàng Quốc Việt"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Search files and folders2').item.json.id }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Trang tính1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1FG_rQkPoEQnwM0XoVMgseiB_btsy8HJ89yxyLeuGchQ/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        3088,
+        16
+      ],
+      "id": "e3a263d6-b3c4-4e42-b8ab-88bc4c048186",
+      "name": "Get row(s) in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "8s2aVNtUE42gqLis",
+          "name": "Hoàng Quốc Việt"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Generate_Quiz_JSON",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate_Quiz_JSON": {
+      "main": [
+        [
+          {
+            "node": "Clean_AI_Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clean_AI_Output": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Create spreadsheet1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Move file": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create spreadsheet1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Move file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders7": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders1": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders3": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Create folder",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create folder": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "Generate_Quiz_JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders2": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet1": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "85daaa4e-2461-412b-9d05-914b054961ff",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "df75f6d19da9532b87ea5a84541b4ccc1d0dd5baf896242962b0dfcbc492bcf4"
+  },
+  "id": "WAx7I6lCuspaW0LB",
+  "tags": []
+}

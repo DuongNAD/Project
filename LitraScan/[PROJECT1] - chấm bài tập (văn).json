@@ -1,0 +1,815 @@
+{
+  "name": "[PROJECT1] - chấm bài tập (văn)",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "simple": false,
+        "filters": {
+          "labelIds": [
+            "Label_9060861085489593330"
+          ],
+          "readStatus": "unread"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        16,
+        208
+      ],
+      "id": "7171cf98-cb09-43c4-8e82-bf8937afccea",
+      "name": "Gmail Trigger",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "qNXnwDJCjJF60qrq",
+          "name": "Phan Ngọc Hân"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=BỐI CẢNH: Bạn là một trợ lý phân tích ngôn ngữ chuyên nghiệp, được đào tạo để hoạt động như một giáo viên Ngữ văn cực kỳ cẩn thận và chi tiết. Nhiệm vụ của bạn là phân tích một bài văn được cung cấp, tìm ra tất cả các lỗi và nhận xét về bố cục, sau đó trả về kết quả dưới dạng một đối tượng JSON duy nhất, không có bất kỳ văn bản nào khác kèm theo.\n\nĐẦU VÀO:\n\nbaiVan: Một chuỗi văn bản (string) chứa toàn bộ bài văn của học sinh, ví dụ: {{ $node[\"HTTP Request1\"].json.extractedText }}.\n\nQUY TRÌNH THỰC HIỆN: Bạn BẮT BUỘC phải thực hiện theo đúng các bước sau:\n\nBước 1: Tái cấu trúc văn bản: Xử lý chuỗi baiVan để tạo một phiên bản sạch sẽ, dễ phân tích. Áp dụng quy tắc sau:\n\nNếu một dòng mới bắt đầu bằng một chữ cái viết thường, hãy tự động nối nó vào dòng trước đó.\n\nChỉ coi là bắt đầu một đoạn văn mới khi dòng đó bắt đầu bằng chữ viết hoa hoặc dấu gạch đầu dòng (-).\n\nBước 2: Phân tích toàn diện: Dựa trên văn bản sạch sẽ từ Bước 1, hãy tìm và liệt kê TẤT CẢ các lỗi và nhận xét thuộc 5 loại sau:\n\nLỗi Chính Tả: Các lỗi về dấu câu, viết hoa không đúng quy tắc, sai phụ âm (l/n, ch/tr, x/s, r/d/gi), sai vần, sai dấu thanh (hỏi/ngã).\n\nLỗi Dùng Từ: Lặp từ không cần thiết, dùng từ sai ngữ cảnh, từ ngữ nghèo nàn, diễn đạt tối nghĩa.\n\nLỗi Ngữ Pháp: Câu cụt, câu thiếu thành phần chính (chủ ngữ/vị ngữ), cấu trúc câu lủng củng, không mạch lạc.\n\nLỗi Trình Bày: Các lỗi xuống dòng không hợp lý (ví dụ: xuống dòng giữa câu).\n\nPhân tích Bố cục: Phân tích xem bài văn đã có cấu trúc 3 phần (Mở bài, Thân bài, Kết bài) rõ ràng chưa. Đánh giá sơ bộ về mức độ hoàn thiện và sự liên kết của mỗi phần.\n\nĐỊNH DẠNG KẾT QUẢ ĐẦU RA:\n\nYêu cầu: Kết quả trả về BẮT BUỘC phải là một đối tượng JSON duy nhất.\n\nRàng buộc: TUYỆT ĐỐI KHÔNG thêm bất kỳ văn bản, lời giải thích, hay ký tự nào khác bên ngoài cặp dấu {} của đối tượng JSON.\n\nCấu trúc JSON:\n\nJSON\n\n{\n  \"loiChinhTa\": [\n    {\n      \"tuSai\": \"từ viết sai\",\n      \"tuDung\": \"gợi ý sửa đúng\"\n    }\n  ],\n  \"loiDungTu\": [\n    {\n      \"tuBiLoi\": \"từ hoặc cụm từ bị dùng sai\",\n      \"phanTich\": \"phân tích tại sao sai và gợi ý thay thế\"\n    }\n  ],\n  \"loiNguPhap\": [\n    {\n      \"cauBiLoi\": \"trích dẫn nguyên văn câu bị lỗi ngữ pháp\",\n      \"phanTich\": \"phân tích lỗi và gợi ý cách viết lại câu cho đúng\"\n    }\n  ],\n  \"loiTrinhBay\": [\n    {\n      \"viTriLoi\": \"mô tả vị trí hoặc trích dẫn đoạn bị xuống dòng sai\",\n      \"phanTich\": \"phân tích lỗi, ví dụ: 'xuống dòng giữa câu không hợp lý'\"\n    }\n  ],\n  \"nhanXetBoCuc\": {\n    \"moBai\": \"Phân tích phần mở bài, đánh giá đã đủ ý và hấp dẫn chưa.\",\n    \"thanBai\": \"Phân tích phần thân bài, đánh giá cách sắp xếp ý, sự liên kết và độ chi tiết.\",\n    \"ketBai\": \"Phân tích phần kết bài, đánh giá đã tóm lược được vấn đề và nêu cảm nghĩ chưa.\",\n    \"nhanXetChung\": \"Nhận xét tổng quan về bố cục, mức độ rõ ràng và cân đối giữa các phần.\"\n  }\n}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        1488,
+        224
+      ],
+      "id": "f443f83e-eb13-4257-8e2b-cda4ace4585f",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1488,
+        352
+      ],
+      "id": "0784adf4-be56-42b6-8ba2-fa44d5b4042f",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "f8I6HVEpIjunSP4i",
+          "name": "phân loại"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://script.google.com/macros/s/AKfycbwi1WyEiIqX8DfkVJtsbOsoM8tlqEfTsn0dB5yPxvqE_-UiZ1jFGcPqpEYujs1kJEaH/exec",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"messageId\": \"{{ $('Edit Fields').item.json.messageId }}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1280,
+        224
+      ],
+      "id": "6477d01d-43b1-4d18-96fb-e77b3d817c5b",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Lặp qua tất cả các item đầu vào (thường chỉ có 1)\nfor (const item of $input.all()) {\n  \n  // 1. Lấy chuỗi văn bản thô từ đầu ra của node AI Agent\n  const rawOutputString = item.json.output;\n\n  // 2. \"Làm sạch\" chuỗi: Gỡ bỏ các ký tự markdown\n  // Sử dụng biểu thức chính quy (regex) để lấy nội dung bên trong ```json ... ```\n  const match = rawOutputString.match(/```json\\n([\\s\\S]*?)\\n```/);\n  \n  let cleanString;\n  if (match && match[1]) {\n    cleanString = match[1];\n  } else {\n    // Nếu không có markdown, giả sử nó là JSON (nhưng có thể bẩn)\n    cleanString = rawOutputString.trim();\n  }\n\n  // 3. Chuyển đổi (parse) chuỗi đã làm sạch thành đối tượng JSON\n  try {\n    const parsedData = JSON.parse(cleanString);\n    \n    // 4. Gán các loại lỗi ra thành các trường JSON cấp cao\n    // Điều này giúp Anh dễ dàng gọi chúng ở node sau\n    item.json.loiChinhTa = parsedData.loiChinhTa;\n    item.json.loiDungTu = parsedData.loiDungTu;\n    item.json.loiNguPhap = parsedData.loiNguPhap;\n    item.json.loiTrinhBay = parsedData.loiTrinhBay;\n    // BỔ SUNG DÒNG NÀY\n    item.json.nhanXetBoCuc = parsedData.nhanXetBoCuc;\n\n  } catch (error) {\n    // Nếu có lỗi, ghi lại để gỡ lỗi\n    item.json.parsingError = error.message;\n    item.json.rawStringForDebug = cleanString;\n  }\n}\n\n// Trả về dữ liệu đã được bổ sung\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1824,
+        224
+      ],
+      "id": "fa796211-542f-4cf5-9dc8-473ca4881da7",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Edit Fields').first().json.studentEmail }}",
+        "subject": "=[Thông báo] Email của bạn chưa được đăng ký thông tin học sinh",
+        "message": "=<p>Chào bạn,</p>\n<p>Email <strong>{{ $('Gmail Trigger').item.json.from.value[0].address }}</strong> mà bạn dùng để gửi bài chưa được tìm thấy trong hệ thống của chúng tôi.</p>\n<p>Vui lòng kiểm tra lại và sử dụng đúng email đã đăng ký với lớp học để nộp bài.</p>\n<p>Nếu bạn cho rằng đây là một sự nhầm lẫn, vui lòng liên hệ với giáo viên để được hỗ trợ.</p>\n<p>Trân trọng.</p>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1280,
+        80
+      ],
+      "id": "d3130fde-b58e-4166-aca7-0d2343c07fa0",
+      "name": "Send a message",
+      "webhookId": "1de50e9e-ee22-4101-a33f-e4dba28c0545",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "qNXnwDJCjJF60qrq",
+          "name": "Phan Ngọc Hân"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// --- BƯỚC 1: LẤY DỮ LIỆU TỪ NODE TRƯỚC ---\n\nconst duLieuLoi = $('Code in JavaScript').first().json;\n\n// --- BƯỚC 2: XÂY DỰNG NỘI DUNG EMAIL DẠNG HTML ---\n\nlet message = `\n  <style>\n    body { font-family: Arial, sans-serif; line-height: 1.6; }\n    h3 { color: #2c3e50; }\n    h4 { color: #34495e; border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-top: 20px;}\n    ul { list-style-type: none; padding-left: 0; }\n    li { background-color: #f8f9f9; border: 1px solid #e1e4e8; border-radius: 5px; padding: 10px; margin-bottom: 10px; }\n    b { color: #c0392b; }\n    i { color: #7f8c8d; }\n    .nhanxet-box { background-color: #eaf2f8; padding: 15px; border-left: 4px solid #3498db; margin-bottom: 20px; border-radius: 5px;}\n    .nhanxet-box p { margin: 5px 0; }\n  </style>\n  <h3>📝 Báo cáo Phân tích Bài văn của Học sinh</h3>\n`;\n\n// --- PHẦN MỚI: Nhận xét chi tiết về Bố cục ---\nif (duLieuLoi.nhanXetBoCuc) {\n    message += `<div class=\"nhanxet-box\">`;\n    message += `<h4>Nhận xét về Bố cục</h4>`;\n    if (duLieuLoi.nhanXetBoCuc.moBai) {\n        message += `<p><b>Mở bài:</b> ${duLieuLoi.nhanXetBoCuc.moBai}</p>`;\n    }\n    if (duLieuLoi.nhanXetBoCuc.thanBai) {\n        message += `<p><b>Thân bài:</b> ${duLieuLoi.nhanXetBoCuc.thanBai}</p>`;\n    }\n    if (duLieuLoi.nhanXetBoCuc.ketBai) {\n        message += `<p><b>Kết bài:</b> ${duLieuLoi.nhanXetBoCuc.ketBai}</p>`;\n    }\n    if (duLieuLoi.nhanXetBoCuc.nhanXetChung) {\n        message += `<p><b>Nhận xét chung:</b> ${duLieuLoi.nhanXetBoCuc.nhanXetChung}</p>`;\n    }\n    message += `</div>`;\n}\n\n\n// Định dạng phần lỗi chính tả\nif (duLieuLoi.loiChinhTa && duLieuLoi.loiChinhTa.length > 0) {\n    message += \"<h4>1. Lỗi Chính tả</h4><ul>\";\n    for (const loi of duLieuLoi.loiChinhTa) {\n        message += `<li>Từ sai: \"<b>${loi.tuSai}</b>\" → Sửa lại: \"<b>${loi.tuDung}</b>\"</li>`;\n    }\n    message += \"</ul>\";\n}\n\n// Định dạng phần lỗi dùng từ\nif (duLieuLoi.loiDungTu && duLieuLoi.loiDungTu.length > 0) {\n    message += \"<h4>2. Lỗi Dùng từ</h4><ul>\";\n    for (const loi of duLieuLoi.loiDungTu) {\n        message += `<li>Lỗi: \"<b>${loi.tuBiLoi}</b>\"<br><i>&nbsp;&nbsp;↳ Phân tích: ${loi.phanTich}</i></li>`;\n    }\n    message += \"</ul>\";\n}\n\n// --- PHẦN MỚI: Lỗi Ngữ pháp & Trình bày ---\n// Giả sử lỗi ngữ pháp và trình bày là một mảng các object có trường 'phanTich'\nif (duLieuLoi.loiNguPhap && duLieuLoi.loiNguPhap.length > 0) {\n    message += \"<h4>3. Lỗi Ngữ pháp</h4><ul>\";\n    for (const loi of duLieuLoi.loiNguPhap) {\n        // Thay 'loi.phanTich' bằng trường dữ liệu thực tế nếu khác\n        message += `<li>${loi.phanTich}</li>`;\n    }\n    message += \"</ul>\";\n}\n\nif (duLieuLoi.loiTrinhBay && duLieuLoi.loiTrinhBay.length > 0) {\n    message += \"<h4>4. Lỗi Trình bày</h4><ul>\";\n    for (const loi of duLieuLoi.loiTrinhBay) {\n        // Thay 'loi.phanTich' bằng trường dữ liệu thực tế nếu khác\n        message += `<li>${loi.phanTich}</li>`;\n    }\n    message += \"</ul>\";\n}\n\n\n// --- BƯỚC 3: TRẢ VỀ KẾT QUẢ CUỐI CÙNG ---\n\nreturn [{\n    json: {\n        messageContent: message\n    }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3424,
+        224
+      ],
+      "id": "54b2ef7a-d787-4fc7-80a2-8304a9f610a7",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "messageId": "={{ $('Edit Fields').first().json.messageId }}",
+        "simple": false,
+        "options": {
+          "downloadAttachments": true
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        3632,
+        224
+      ],
+      "id": "75aa1663-8eab-40a3-aae6-feb573130321",
+      "name": "Get a message",
+      "webhookId": "5874ad89-87ca-491e-a365-d4aee2207122",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "qNXnwDJCjJF60qrq",
+          "name": "Phan Ngọc Hân"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a0311829-89be-4269-b79f-79e74744d051",
+              "name": "messageId",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "fb053986-d87a-4b69-82f8-e9193f6026d8",
+              "name": "studentEmail",
+              "value": "={{ $json.from.value[0].address }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        224,
+        208
+      ],
+      "id": "b7c7f3fc-b234-47a5-af12-d3dfb76c8abb",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "Cô giáo Mini",
+        "filter": {
+          "folderId": {
+            "mode": "list",
+            "value": "root",
+            "cachedResultName": "/ (Root folder)"
+          },
+          "whatToSearch": "folders"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        432,
+        208
+      ],
+      "id": "4fda4263-ed2e-4e3f-b42c-7f040af9f9d8",
+      "name": "Search files and folders",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "zLDXn0hJUcHCmClV",
+          "name": "Phan Ngọc Hân"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "Thông tin học sinh",
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "={{ $json.id }}",
+            "mode": "id"
+          },
+          "whatToSearch": "files",
+          "fileTypes": [
+            "application/vnd.google-apps.spreadsheet"
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        624,
+        208
+      ],
+      "id": "12b8150d-c57a-43d0-89bd-848b67466ad6",
+      "name": "Search files and folders1",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "zLDXn0hJUcHCmClV",
+          "name": "Phan Ngọc Hân"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "ac56af62-cba8-4694-bf93-ce6c2317e562",
+              "leftValue": "={{ $json['Họ và tên học sinh'] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notExists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1040,
+        208
+      ],
+      "id": "0c98b4d8-5bb6-4866-9e8e-f31c213cf8bb",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Code in JavaScript3').first().json.Gmail }}",
+        "subject": "=[Tự động] Đã chấm xong bài cho học sinh: {{ $('GetStudentInfo').first().json['Họ và tên học sinh'] }} - {{ $('Edit Fields').first().json.messageId }}",
+        "message": "={{ $('Code in JavaScript1').item.json.messageContent }}",
+        "options": {
+          "attachmentsUi": {
+            "attachmentsBinary": [
+              {
+                "property": "attachment_0"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        3856,
+        224
+      ],
+      "id": "f621b2fa-88e8-4b4c-9097-3ede4daf658d",
+      "name": "Send a message1",
+      "webhookId": "1de50e9e-ee22-4101-a33f-e4dba28c0545",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "qNXnwDJCjJF60qrq",
+          "name": "Phan Ngọc Hân"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "Cô giáo Mini - Giáo viên",
+        "filter": {
+          "folderId": {
+            "mode": "list",
+            "value": "root",
+            "cachedResultName": "/ (Root folder)"
+          },
+          "whatToSearch": "folders"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        2032,
+        224
+      ],
+      "id": "82ebfa06-75f5-49a9-95a7-eae700c0144e",
+      "name": "Search files and folders2",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "zLDXn0hJUcHCmClV",
+          "name": "Phan Ngọc Hân"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Trang tính1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12Ne-u1vzB_YdbyPt7IFc0o_eYvqMQukSrZC6lEbdOZw/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2448,
+        224
+      ],
+      "id": "25294452-9656-436c-a114-c5089fe34829",
+      "name": "Get row(s) in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "2cXkUqIFSIHamxSV",
+          "name": "Phan Ngọc Hân"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "Thông tin giáo viên",
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "={{ $json.id }}",
+            "mode": "id"
+          },
+          "whatToSearch": "files",
+          "fileTypes": [
+            "application/vnd.google-apps.spreadsheet"
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        2240,
+        224
+      ],
+      "id": "7b3c674d-27d5-4022-ab7d-55152c8f42b5",
+      "name": "Search files and folders3",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "zLDXn0hJUcHCmClV",
+          "name": "Phan Ngọc Hân"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "Cô giáo Mini - Giáo viên",
+        "filter": {
+          "folderId": {
+            "mode": "list",
+            "value": "root",
+            "cachedResultName": "/ (Root folder)"
+          },
+          "whatToSearch": "folders"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        240,
+        -192
+      ],
+      "id": "10e653af-3e61-4ad3-84e1-da637e9ed611",
+      "name": "Search files and folders4",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "zLDXn0hJUcHCmClV",
+          "name": "Phan Ngọc Hân"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "Thông tin giáo viên",
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "={{ $json.id }}",
+            "mode": "id"
+          },
+          "whatToSearch": "files",
+          "fileTypes": [
+            "application/vnd.google-apps.spreadsheet"
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        448,
+        -192
+      ],
+      "id": "e3335a18-2898-4cc2-bc2d-d4ac554a266c",
+      "name": "Search files and folders5",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "zLDXn0hJUcHCmClV",
+          "name": "Phan Ngọc Hân"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// --- BƯỚC 1: LẤY DỮ LIỆU TỪ CÁC NODE TRƯỚC ---\n\n// Lấy thông tin của học sinh từ node \"GetStudentInfo\".\n// ⚠️ Đảm bảo tên node này khớp chính xác với tên Anh đã đặt.\nconst studentItem = $('GetStudentInfo').item;\n\n// Lấy toàn bộ danh sách giáo viên từ đầu vào trực tiếp của node Code này.\nconst allTeachers = $input.all();\n\n// --- BƯỚC 2: TRÍCH XUẤT THÔNG TIN CẦN THIẾT ---\n\n// Lấy tên lớp của học sinh, ví dụ: \"5A\".\nconst studentClass = studentItem.json['Lớp'];\n\n// --- BƯỚC 3: KIỂM TRA VÀ LỌC DỮ LIỆU ---\n\n// Kiểm tra xem có lấy được tên lớp của học sinh không.\nif (!studentClass) {\n  console.log(\"Lỗi: Không tìm thấy thông tin 'Lớp' của học sinh.\");\n  return []; // Dừng thực thi nếu không có lớp để tìm kiếm.\n}\n\n// Chuẩn bị một mảng rỗng để chứa kết quả.\nconst foundTeachers = [];\n\n// Duyệt qua từng giáo viên trong danh sách.\nfor (const teacherItem of allTeachers) {\n  \n  // Lấy chuỗi các lớp mà giáo viên dạy, ví dụ: \"5A, 5B\".\n  const teacherClasses = teacherItem.json['Lớp'];\n\n  // Kiểm tra xem giáo viên có dạy lớp nào không VÀ chuỗi lớp đó có chứa lớp của học sinh không.\n  if (teacherClasses && teacherClasses.includes(studentClass)) {\n    \n    // Nếu đúng, thêm giáo viên này vào danh sách kết quả.\n    foundTeachers.push(teacherItem);\n  }\n}\n\n// In ra console để gỡ lỗi (có thể xem trong Browser Console của n8n).\nconsole.log(`Đã tìm thấy ${foundTeachers.length} giáo viên dạy lớp ${studentClass}.`);\n\n// --- BƯỚC 4: TÁI CẤU TRÚC VÀ TRẢ VỀ KẾT QUẢ ---\n\n// Kiểm tra xem có tìm thấy giáo viên nào không.\nif (foundTeachers.length === 0) {\n  // Nếu không có, trả về một item duy nhất với danh sách rỗng.\n  return [{\n    json: {\n      danhSachGiaoVien: [],\n      soLuong: 0\n    }\n  }];\n}\n\n// Lấy dữ liệu json sạch từ các item giáo viên tìm được.\nconst teacherList = foundTeachers.map(item => item.json);\n\n// Trả về một MẢNG chứa MỘT ĐỐI TƯỢNG DUY NHẤT.\n// Đối tượng này chứa toàn bộ danh sách giáo viên đã được lọc.\nreturn [{\n  json: {\n    danhSachGiaoVien: teacherList,\n    soLuong: teacherList.length\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2656,
+        224
+      ],
+      "id": "a45e24aa-147a-4d9c-9108-0382b62ea9f6",
+      "name": "Code in JavaScript2"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Trang tính1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VO6phWsT8Plz_1Cu05pIoOEGyfAGO3Jx--fAVpfLWBA/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Gmail",
+              "lookupValue": "={{ $('Gmail Trigger').item.json.from.value[0].address }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        832,
+        208
+      ],
+      "id": "cf44d1ec-f579-4d94-b497-622445537abc",
+      "name": "GetStudentInfo",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "2cXkUqIFSIHamxSV",
+          "name": "Phan Ngọc Hân"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Bối cảnh: Anh là một AI chuyên gia logic và xử lý dữ liệu, hoạt động như một điều phối viên học vụ thông minh. Nhiệm vụ của Anh là tìm ra giáo viên phù hợp nhất cho một bài tập dựa trên nội dung văn bản của bài tập đó và danh sách các giáo viên có sẵn.\n\nDữ liệu đầu vào: Anh sẽ nhận được 2 mẩu thông tin:\n\nvanBan: Một chuỗi văn bản được trích xuất từ hình ảnh, chứa nội dung liên quan đến một bài tập: {{ $('HTTP Request1').first().json.extractedText }}.\n\ndanhSachGiaoVien: Một mảng (array) các đối tượng (object) JSON, mỗi đối tượng đại diện cho một giáo viên và có chứa một trường quan trọng là Môn dạy chính: {{ JSON.stringify($json.danhSachGiaoVien) }}.\n\nNhiệm vụ chính: Từ vanBan và danhSachGiaoVien, Anh phải tìm ra một và chỉ một giáo viên phù hợp nhất. Để làm điều này, Anh phải tuân thủ nghiêm ngặt quy trình suy luận theo từng bước sau đây. Đây là một quy trình ưu tiên, nghĩa là nếu tìm thấy kết quả ở bước nào thì phải dừng lại và trả về kết quả đó ngay lập tức.\n\nQUY TRÌNH SUY LUẬN BẮT BUỘC:\n\nBước 0: Phân tích và Chuẩn bị\n\nĐọc kỹ vanBan để xác định môn học của bài tập. Gọi đây là assignmentSubject.\n\nTạo phiên bản đã được chuẩn hóa của môn học này bằng cách: chuyển thành chữ thường, bỏ hết dấu tiếng Việt. Gọi đây là cleanAssignmentSubject.\n\nLặp qua danhSachGiaoVien, với mỗi giáo viên, lấy ra môn dạy của họ (teacherSubject) và cũng tạo một phiên bản chuẩn hóa tương ứng (cleanTeacherSubject).\n\nBước 1: Kiểm tra Trùng khớp tuyệt đối (Ưu tiên cao nhất)\n\nSo sánh cleanAssignmentSubject với cleanTeacherSubject của từng giáo viên.\n\nNếu tìm thấy một giáo viên có cleanTeacherSubject GIỐNG HỆT cleanAssignmentSubject, hãy chọn ngay giáo viên đó và chuyển đến Bước 6 để trả về kết quả.\n\nBước 2: Kiểm tra Bao hàm\n\nNếu không có kết quả ở Bước 1, hãy kiểm tra tiếp.\n\nVới mỗi giáo viên, xem cleanTeacherSubject có chứa cleanAssignmentSubject không, HOẶC ngược lại.\n\nNếu tìm thấy, hãy chọn giáo viên đó và chuyển đến Bước 6.\n\nBước 3: Kiểm tra Đồng nghĩa và Viết tắt\n\nNếu không có kết quả ở Bước 2, hãy sử dụng danh sách đồng nghĩa sau:\n\nNhóm 1: ['công nghệ thông tin', 'tin học', 'it']\n\nNhóm 2: ['gdcd', 'giáo dục công dân']\n\nNhóm 3: ['thể dục', 'giáo dục thể chất']\n\nNhóm 4: ['ngữ văn', 'tiếng việt']\n\nKiểm tra xem cleanAssignmentSubject và cleanTeacherSubject có cùng thuộc một nhóm hay không.\n\nNếu có, chọn giáo viên đó và chuyển đến Bước 6.\n\nBước 4: Kiểm tra Môn tổ hợp\n\nNếu không có kết quả ở Bước 3, hãy dùng teacherSubject GỐC (chưa chuẩn hóa) của giáo viên và cleanAssignmentSubject.\n\nKiểm tra xem teacherSubject có phải là môn tổ hợp chứa cleanAssignmentSubject không, dựa theo danh sách:\n\n'lịch sử và địa lý' chứa: 'lịch sử', 'địa lý'.\n\n'khoa học tự nhiên' chứa: 'vật lý', 'hóa học', 'sinh học'.\n\n'tự nhiên và xã hội' chứa: 'sinh học', 'lịch sử', 'địa lý', 'khoa học'.\n\n'nghệ thuật' chứa: 'âm nhạc', 'mỹ thuật'.\n\n'tin học và công nghệ' chứa: 'tin học', 'công nghệ'.\n\n'khoa học cơ bản' chứa: 'toán cao cấp', 'vật lý đại cương', 'toán', 'lý', 'hóa'.\n\n'khoa học xã hội & nhân văn' chứa: 'lịch sử', 'địa lý', 'giáo dục công dân', 'văn học'.\n\nNếu có, chọn giáo viên đó và chuyển đến Bước 6.\n\nBước 5: Kiểm tra Giáo viên chủ nhiệm (Ưu tiên thấp nhất)\n\nNếu không có kết quả ở Bước 4, hãy dùng teacherSubject GỐC.\n\nKiểm tra 2 điều kiện ĐỒNG THỜI:\n\nteacherSubject có chứa \"giáo viên chủ nhiệm\" hoặc \"gvcn\" KHÔNG?\n\nVÀ cleanAssignmentSubject có nằm trong danh sách các môn cấp 1 này KHÔNG: [toán, tiếng việt, tự nhiên và xã hội, đạo đức, tin học và công nghệ, giáo dục thể chất, nghệ thuật, âm nhạc, mỹ thuật, hoạt động trải nghiệm, tin học, công nghệ].\n\nNếu cả hai điều kiện đều đúng, chọn giáo viên đó và chuyển đến Bước 6.\n\nBước 6: Trả về kết quả\n\nTOÀN BỘ PHẢN HỒI CỦA ANH PHẢI LÀ ĐỐI TƯỢNG JSON CỦA GIÁO VIÊN ĐÃ TÌM THẤY.\n\nKHÔNG GIẢI THÍCH. KHÔNG THÊM BẤT KỲ DỮ LIỆU NÀO KHÁC.\n\nVí dụ nếu tìm thấy: {\"row_number\": 2, \"Tên trường\": \"TH Ngọc Thụy\", \"Môn dạy chính\": \"Giáo viên chủ nhiệm (Cấp 1)\", ...}\n\nNếu không tìm thấy, trả về một đối tượng JSON rỗng: {}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        2864,
+        224
+      ],
+      "id": "9a84eaa1-6703-4a4f-be50-daf93df93792",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        2864,
+        352
+      ],
+      "id": "34d80fa3-ac01-4718-9ea1-d50ffd57f505",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "VgBRYCD6qxvsAUYe",
+          "name": "kiểm tra"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Lấy item đầu vào\nconst item = $input.item;\n\n// Lấy toàn bộ chuỗi văn bản thô từ AI\nconst rawOutput = item.json.output;\n\n// --- BƯỚC MỚI: Dọn dẹp và trích xuất chuỗi JSON sạch ---\n// Sử dụng biểu thức chính quy (Regular Expression) để tìm chuỗi bắt đầu bằng { và kết thúc bằng }\n// Cờ 's' cho phép dấu '.' khớp với cả ký tự xuống dòng\nconst match = rawOutput.match(/{.*}/s);\n\n// Kiểm tra xem có tìm thấy chuỗi JSON hợp lệ trong output của AI không\nif (!match || !match[0]) {\n  console.log(\"Không tìm thấy chuỗi JSON hợp lệ trong output của AI.\");\n  return []; // Dừng lại nếu không tìm thấy\n}\n\n// Lấy chuỗi JSON sạch đã được trích xuất\nconst cleanJsonString = match[0];\n// --- KẾT THÚC BƯỚC MỚI ---\n\n// Sử dụng try...catch để xử lý lỗi nếu chuỗi JSON vẫn bị sai cấu trúc\ntry {\n  // Parse chuỗi JSON SẠCH\n  const parsedData = JSON.parse(cleanJsonString);\n\n  // Trả về đối tượng đã được parse nếu thành công\n  return [{\n    json: parsedData\n  }];\n} catch (error) {\n  // Nếu có lỗi xảy ra trong quá trình parse, ghi lại lỗi và trả về thông báo lỗi\n  console.error(\"Lỗi khi parse chuỗi JSON đã được dọn dẹp:\", error);\n  console.error(\"Chuỗi gây lỗi:\", cleanJsonString);\n  // Trả về một item chứa lỗi để các bước sau có thể xử lý\n  return [{ \n    json: { \n      error: \"Không thể parse chuỗi JSON từ AI\", \n      errorDetails: error.message,\n      rawData: cleanJsonString \n    } \n  }];\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3216,
+        224
+      ],
+      "id": "52c88d8c-7b74-4ca6-a08c-b666a1a26668",
+      "name": "Code in JavaScript3"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Get a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a message": {
+      "main": [
+        [
+          {
+            "node": "Send a message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders1": {
+      "main": [
+        [
+          {
+            "node": "GetStudentInfo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders2": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders3": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders4": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetStudentInfo": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript2": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript3": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "d7efaea8-9948-4d58-be5c-40d8ada47c00",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "df75f6d19da9532b87ea5a84541b4ccc1d0dd5baf896242962b0dfcbc492bcf4"
+  },
+  "id": "1qMAzqgdpLlO91sC",
+  "tags": []
+}

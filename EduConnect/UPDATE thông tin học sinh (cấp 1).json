@@ -1,0 +1,3849 @@
+{
+  "name": "UPDATE thông tin học sinh (cấp 1)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "4b110b44-9a40-4f14-925f-98e881cdf44e",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -2016,
+        80
+      ],
+      "id": "9375a6ce-2921-4d44-ab0d-469b30b926ce",
+      "name": "Webhook",
+      "webhookId": "4b110b44-9a40-4f14-925f-98e881cdf44e"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a71561ac-526e-4f08-a424-27c2c89e4643",
+              "name": "Mã học sinh",
+              "value": "={{ $json.body.StudentID.trim().toUpperCase() }}",
+              "type": "string"
+            },
+            {
+              "id": "17c55f73-dbc8-4dc8-af7e-107c1d08fbaf",
+              "name": "Tên trường",
+              "value": "={{ $json.body['Tên trường'].trim() }}",
+              "type": "string"
+            },
+            {
+              "id": "6c7758c1-4739-49fb-9a8f-64daed818d95",
+              "name": "Họ và tên",
+              "value": "={{ ($json.body['Họ và Tên'] || '').toLowerCase().trim().replace(/\\s+/g, ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') }}",
+              "type": "string"
+            },
+            {
+              "id": "13092dde-e81e-4636-8943-48584cfb02a9",
+              "name": "Gmail",
+              "value": "={{ $json.body.Email.toLowerCase().trim() }}",
+              "type": "string"
+            },
+            {
+              "id": "aa1e1faa-a4b4-41bd-af07-eb4ad56c3fbd",
+              "name": "Ngày tháng năm sinh",
+              "value": "={{ DateTime.fromISO($json.body['Ngày, tháng, năm sinh']).toFormat('dd/MM/yyyy') }}",
+              "type": "string"
+            },
+            {
+              "id": "b8cbccb7-ab77-41c0-a613-fef295fcb012",
+              "name": "Lớp học",
+              "value": "={{ $json.body['Lớp học'].toUpperCase().trim() }}",
+              "type": "string"
+            },
+            {
+              "id": "f2d9851e-bf8b-4370-b6fe-8c669578844e",
+              "name": "Giới tính",
+              "value": "={{ $json.body['Giới tính'] }}",
+              "type": "string"
+            },
+            {
+              "id": "b9dd2414-f1a0-465e-9550-ba7bce7a533e",
+              "name": "Số điện thoại",
+              "value": "={{ $json.body['Số điện thoại'].trim() }}",
+              "type": "string"
+            },
+            {
+              "id": "f6770479-ac1f-4623-89b0-e56b88bc3968",
+              "name": "FormId",
+              "value": "={{ $json.body.formId }}",
+              "type": "string"
+            },
+            {
+              "id": "7c396a7c-5177-4e50-b985-d3ca774ae059",
+              "name": "StudentId_cập_nhật",
+              "value": "={{ $json.body['Mã sinh viên (nếu cập nhật thông tin)'].toUpperCase() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1824,
+        80
+      ],
+      "id": "8a86f9c7-f604-4154-9a61-d61db8b6c4c6",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Edit Fields2').item.json['GoogleSheet_Lớp'] }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Trang tính1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1cRUJYaEtYDQeNfB6fqGUHAn7WEQhqezjsDYfQ0fg5K4/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "StudentID": "={{ $('Edit Fields').item.json['Mã học sinh'] }}",
+            "Họ và Tên": "={{ $('Edit Fields').item.json['Họ và tên'] }}",
+            "Tên trường học": "={{ $('Edit Fields').item.json['Tên trường'] }}",
+            "Giới tính": "={{ $('Edit Fields').item.json['Giới tính'] }}",
+            "Lớp học": "={{ $('Edit Fields').item.json['Lớp học'] }}",
+            "Ngày tháng năm sinh": "={{ $('Edit Fields').item.json['Ngày tháng năm sinh'] }}",
+            "Email": "={{ $('Edit Fields').item.json.Gmail }}",
+            "Số điện thoại": "={{ $('Edit Fields').item.json['Số điện thoại'] }}",
+            "FolderID": "={{ $json['FOLDER_Học_sinh'] }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "StudentID",
+              "displayName": "StudentID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Họ và Tên",
+              "displayName": "Họ và Tên",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Giới tính",
+              "displayName": "Giới tính",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Ngày tháng năm sinh",
+              "displayName": "Ngày tháng năm sinh",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Lớp học",
+              "displayName": "Lớp học",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Tên trường học",
+              "displayName": "Tên trường học",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Số điện thoại",
+              "displayName": "Số điện thoại",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "FolderID",
+              "displayName": "FolderID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        4896,
+        0
+      ],
+      "id": "a910ec02-1e67-4b0c-b738-1144f44f8777",
+      "name": "Append row in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Kc5JFDPfTGzxNbNi",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Edit Fields').first().json.Gmail }}",
+        "subject": "=Cập nhật thông tin thành công cho học sinh {{ $('Edit Fields').first().json['Họ và tên'] }} - {{ $('Edit Fields').first().json['Mã học sinh'] }}",
+        "message": "=<div style=\"font-family: Arial, sans-serif; color: #333; line-height: 1.6; max-width: 600px; margin: 0 auto; border: 1px solid #ddd;\">\n  \n  <span style=\"display:none; font-size:1px; color:#ffffff; line-height:1px; max-height:0px; max-width:0px; opacity:0; overflow:hidden;\">\n    Xác nhận đăng ký thành công! Chào mừng em đến với hệ thống.\n  </span>\n\n  <div style=\"background-color: #0056d6; color: white; padding: 20px; text-align: center;\">\n    <h2 style=\"margin: 0;\">Hệ thống Trợ lý học tập ảo</h2>\n  </div>\n\n  <div style=\"padding: 20px;\">\n    <p>Chào em <strong>{{ $('Edit Fields').first().json['Họ và tên'] }}</strong>,</p>\n    <p>Cảm ơn em đã đăng ký thông tin với Hệ thống Trợ lý học tập ảo. Dưới đây là thông tin hệ thống đã ghi nhận. Em vui lòng kiểm tra lại để đảm bảo mọi thứ đều chính xác nhé.</p>\n    \n    <h3 style=\"color:#0056d6; border-bottom: 2px solid #0056d6; padding-bottom: 5px;\">Thông tin của em</h3>\n    <table style=\"width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 15px;\">\n      <tr style=\"border-bottom: 1px solid #eee;\">\n        <td style=\"padding: 10px; width: 150px; background-color: #f9f9f9;\"><strong>Họ và tên:</strong></td>\n        <td style=\"padding: 10px;\">{{ $('Edit Fields').first().json['Họ và tên'] }}</td>\n      </tr>\n      <tr style=\"border-bottom: 1px solid #eee;\">\n        <td style=\"padding: 10px; background-color: #f9f9f9;\"><strong>Mã học sinh:</strong></td>\n        <td style=\"padding: 10px;\"><strong>{{ $('Edit Fields').first().json['Mã học sinh'] }}</strong></td>\n      </tr>\n      <tr style=\"border-bottom: 1px solid #eee;\">\n        <td style=\"padding: 10px; background-color: #f9f9f9;\"><strong>Trường:</strong></td>\n        <td style=\"padding: 10px;\">{{ $('Edit Fields').first().json['Tên trường'] }}</td>\n      </tr>\n       <tr style=\"border-bottom: 1px solid #eee;\">\n        <td style=\"padding: 10px; background-color: #f9f9f9;\"><strong>Lớp:</strong></td>\n        <td style=\"padding: 10px;\">{{ $('Edit Fields').first().json['Lớp học'] }}</td>\n      </tr>\n      <tr style=\"border-bottom: 1px solid #eee;\">\n        <td style=\"padding: 10px; background-color: #f9f9f9;\"><strong>Ngày sinh:</strong></td>\n        <td style=\"padding: 10px;\">{{ $('Edit Fields').first().json['Ngày tháng năm sinh'] }}</td>\n      </tr>\n      <tr style=\"border-bottom: 1px solid #eee;\">\n        <td style=\"padding: 10px; background-color: #f9f9f9;\"><strong>Giới tính:</strong></td>\n        <td style=\"padding: 10px;\">{{ $('Edit Fields').first().json['Giới tính'] }}</td>\n      </tr>\n      <tr style=\"border-bottom: 1px solid #eee;\">\n        <td style=\"padding: 10px; background-color: #f9f9f9;\"><strong>Email:</strong></td>\n        <td style=\"padding: 10px;\">{{ $('Edit Fields').first().json.Gmail }}</td>\n      </tr>\n      <tr>\n        <td style=\"padding: 10px; background-color: #f9f9f9;\"><strong>Số điện thoại:</strong></td>\n        <td style=\"padding: 10px;\">{{ $('Edit Fields').first().json['Số điện thoại'] }}</td>\n      </tr>\n    </table>\n    \n    <div style=\"margin-top: 25px; padding: 15px; text-align: center; background-color: #f0f5ff; border-radius: 4px; border-left: 4px solid #0056d6;\">\n      <p style=\"margin: 0; font-size: 16px;\">💡 Em hãy lưu lại <strong>Mã học sinh</strong> của mình để sử dụng cho các hoạt động sau này nhé!</p>\n    </div>\n\n    <div style=\"margin-top: 30px;\">\n        <h3 style=\"color:#0056d6; border-bottom: 2px solid #0056d6; padding-bottom: 5px;\">Không gian học tập cá nhân</h3>\n        <p>Hệ thống đã tạo một thư mục riêng trên Google Drive để lưu trữ tất cả tài liệu, bài giảng và bài tập của em. Em hãy truy cập ngay để bắt đầu nhé!</p>\n        <div style=\"text-align: center; margin: 20px 0;\">\n            <a href=\"https://drive.google.com/drive/folders/{{ $('Edit Fields3').first().json.FOLDER_Học_sinh }}\" target=\"_blank\" style=\"display: inline-block; background-color: #0056d6; color: #ffffff; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold;\">\n                TRUY CẬP THƯ MỤC HỌC TẬP\n            </a>\n        </div>\n        <p style=\"text-align: center; font-size: 14px; color: #666; margin-top: 10px;\">\n            <strong>Lưu ý:</strong> Em hãy tìm thư mục này trong mục <strong>\"Được chia sẻ với tôi\" (Shared with me)</strong> trên Google Drive của mình.\n        </p>\n    </div>\n\n    <div style=\"margin-top: 25px; padding: 15px; text-align: center; background-color: #fffbe6; border: 1px solid #fdec9a; border-radius: 5px;\">\n        <p style=\"margin-top: 0;\">Nếu phát hiện có thông tin chưa chính xác, em vui lòng nhấn vào nút bên dưới để điền lại Form.</p>\n        <a href=\"https://docs.google.com/forms/d/{{ $('Edit Fields').first().json.FormId }}/viewform\" target=\"_blank\" style=\"display: inline-block; background-color: #ffc107; color: #212529; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; margin-top: 5px;\">\n          BÁO CÁO SAI SÓT\n        </a>\n    </div>\n    \n    <br>\n    <p>Chúc em có những trải nghiệm học tập thật hiệu quả!</p>\n    <p><strong>Hệ thống Trợ lý học tập ảo</strong></p>\n  </div>\n\n  <div style=\"background-color: #f4f4f4; padding: 10px; text-align: center; font-size: 12px; color: #666;\">\n    <p>Đây là email được gửi tự động, em không cần trả lời lại email này.</p>\n  </div>\n</div>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        10896,
+        64
+      ],
+      "id": "3eba6e6f-2a52-4f30-bde9-f36d55145c55",
+      "name": "Send a message",
+      "webhookId": "9ae1a4e7-1a7d-4591-92f8-f044c489bdaa",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "kngvm6WXlbqXMFKV",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "0ab474ef-89bf-4ecb-9170-93861a9cc593",
+              "leftValue": "={{ $json.id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notExists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -1008,
+        80
+      ],
+      "id": "ddc6f5e7-3075-48aa-9e62-a5225e9a844f",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "resource": "folder",
+        "name": "={{ (()=> {   const now = DateTime.now();   const startYear = now.month >= 8 ? now.year : now.year - 1;   const endYear = startYear + 1;   return startYear + \" - \" + endYear; })() }}",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "={{ $('Search files and folders6').item.json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -816,
+        0
+      ],
+      "id": "3a029143-8d1f-45db-8d4a-5ac0315427c7",
+      "name": "Create folder",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "Fu9XdVE4G8qIVwID",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "Admin_Registry",
+        "filter": {
+          "whatToSearch": "folders"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -1616,
+        80
+      ],
+      "id": "df76e9fb-1368-461a-8cb8-b8813c5f28f8",
+      "name": "Search files and folders3",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "Fu9XdVE4G8qIVwID",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "FOLDER_Students",
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "={{ $json.id }}",
+            "mode": "id"
+          },
+          "whatToSearch": "folders"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -1408,
+        80
+      ],
+      "id": "f425ef3e-13d3-4a7a-a2bd-d9186ef131a5",
+      "name": "Search files and folders6",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "Fu9XdVE4G8qIVwID",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "={{ (()=> {   const now = DateTime.now();   const startYear = now.month >= 8 ? now.year : now.year - 1;   const endYear = startYear + 1;   return startYear + \" - \" + endYear; })() }}",
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "={{ $json.id }}",
+            "mode": "id"
+          },
+          "whatToSearch": "folders"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -1200,
+        80
+      ],
+      "id": "8c225b4f-024d-46a0-9d65-065176091712",
+      "name": "Search files and folders7",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "Fu9XdVE4G8qIVwID",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "={{ $json.folderName }}",
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "={{ $('Folder_năm').item.json['Folder_Năm'] }}",
+            "mode": "id"
+          },
+          "whatToSearch": "folders"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        752,
+        96
+      ],
+      "id": "3b6d7810-5790-4081-bea4-871c09f0a6a3",
+      "name": "Search files and folders",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "Fu9XdVE4G8qIVwID",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const classString = $('Edit Fields').first().json['Lớp học'];\nif (!classString) {\n  return [];\n}\n\nconst classes = classString.split(',').map(c => c.trim());\nconst gradeNumbers = classes.map(c => (c.match(/^\\d+/) || [])[0]).filter(Boolean);\nconst uniqueGradeNumbers = [...new Set(gradeNumbers)];\n\n// Trả về một mảng các đối tượng, mỗi đối tượng có một tên thư mục\nconst folderItems = uniqueGradeNumbers.map(grade => ({\n  json: {\n    folderName: `Khối ${grade}`\n  }\n}));\n\nreturn folderItems;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        528,
+        96
+      ],
+      "id": "b23815cf-37a0-46f0-bdfa-9598f45f3542",
+      "name": "Code1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "0ab474ef-89bf-4ecb-9170-93861a9cc593",
+              "leftValue": "={{ $json.id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notExists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        944,
+        96
+      ],
+      "id": "2b2d6947-05b2-4bbe-bdd1-d56faef604ee",
+      "name": "If3"
+    },
+    {
+      "parameters": {
+        "resource": "folder",
+        "name": "={{ $('Code1').item.json.folderName }}",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "={{ $('Folder_năm').item.json['Folder_Năm'] }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1136,
+        16
+      ],
+      "id": "119dfe2a-1289-4066-9561-aba0349b64eb",
+      "name": "Create folder1",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "Fu9XdVE4G8qIVwID",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4a855fc3-2e6a-4f16-93a1-38fcd4f9f4e8",
+              "name": "Folder_Năm",
+              "value": "={{ $json.id || $('Search files and folders7').item.json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -624,
+        96
+      ],
+      "id": "add4b21a-760c-4bd1-b4e4-94b275e03679",
+      "name": "Folder_năm"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4a855fc3-2e6a-4f16-93a1-38fcd4f9f4e8",
+              "name": "Folder_Khối",
+              "value": "={{ $json.id || $('Search files and folders').item.json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1312,
+        112
+      ],
+      "id": "e891c897-a312-4275-8699-bd0d6e925d96",
+      "name": "Folder_Khối"
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "={{ $('Edit Fields').item.json['Lớp học'] }}",
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "={{ $json['Folder_Khối'] }}",
+            "mode": "id"
+          },
+          "whatToSearch": "folders"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1536,
+        112
+      ],
+      "id": "a5c3523c-6398-4f2d-82a2-8755f2b76c07",
+      "name": "Search files and folders2",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "Fu9XdVE4G8qIVwID",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "0ab474ef-89bf-4ecb-9170-93861a9cc593",
+              "leftValue": "={{ $json.id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notExists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1744,
+        112
+      ],
+      "id": "6bca5f00-1df0-442a-a2ba-350fa43d1839",
+      "name": "If4"
+    },
+    {
+      "parameters": {
+        "resource": "folder",
+        "name": "={{ $('Edit Fields').item.json['Lớp học'] }}",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "={{ $('Folder_Khối').item.json['Folder_Khối'] }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1936,
+        16
+      ],
+      "id": "ba7e1da0-6b93-47bf-9f70-1837eb12662e",
+      "name": "Create folder2",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "Fu9XdVE4G8qIVwID",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4a855fc3-2e6a-4f16-93a1-38fcd4f9f4e8",
+              "name": "Folder_Lớp",
+              "value": "={{ $json.id || $('Search files and folders2').item.json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2128,
+        128
+      ],
+      "id": "3c5444ff-b83f-4e04-9859-69a8fd60ff30",
+      "name": "Folder_Lớp"
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "=Danh sách học sinh lớp  {{ $('Edit Fields').item.json['Lớp học'] }}",
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "={{ $('Folder_Lớp').item.json['Folder_Lớp'] }}",
+            "mode": "id"
+          },
+          "whatToSearch": "files",
+          "fileTypes": [
+            "application/vnd.google-apps.spreadsheet"
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        2352,
+        128
+      ],
+      "id": "3f0d3535-5a8b-4c95-8fe5-89a20e46f7f0",
+      "name": "Search files and folders4",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "Fu9XdVE4G8qIVwID",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "200df760-d69e-4cfd-8824-44c4e8154f75",
+              "leftValue": "={{ $json.id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notExists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2560,
+        128
+      ],
+      "id": "b10cc4e7-a8ac-48a9-8c7b-0f5939466b43",
+      "name": "If5"
+    },
+    {
+      "parameters": {
+        "resource": "spreadsheet",
+        "title": "=Danh sách học sinh lớp {{ $('Edit Fields').item.json['Lớp học'] }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2784,
+        16
+      ],
+      "id": "71d348ca-a710-4cd8-bc3d-7feb56ab3da8",
+      "name": "Create spreadsheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Kc5JFDPfTGzxNbNi",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "be0f1a24-d22f-4ac6-b6c4-7ca6f39e6d00",
+              "name": "StudentID",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "3ddabecd-353b-4980-833b-5d0a58b6c076",
+              "name": "Họ và Tên",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "e8cf7684-67ea-43f2-a411-d7422dec0249",
+              "name": "Giới tính",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "ef7b2e98-fbc7-4c28-9fb7-ae2a64e83a79",
+              "name": "Ngày tháng năm sinh",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "3fd41131-300e-4b37-acc7-44f93a832bf0",
+              "name": "Lớp học",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "82f34bc6-7de3-4682-8920-149593b37d5a",
+              "name": "Tên trường học",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "610de59c-1688-4f39-a35a-2f8bd1f1f28e",
+              "name": "Email",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "4b6db733-1231-4583-8ea5-44289474f3b5",
+              "name": "Số điện thoại",
+              "value": {},
+              "type": "string"
+            },
+            {
+              "id": "c6a8deae-1fe0-4743-bf93-cd72424110d3",
+              "name": "FolderID",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2992,
+        16
+      ],
+      "id": "fc68cb8b-a69c-4f05-b32f-2dd8046f9fc0",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Create spreadsheet').item.json.spreadsheetId }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Trang tính1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1cRUJYaEtYDQeNfB6fqGUHAn7WEQhqezjsDYfQ0fg5K4/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "StudentID",
+              "displayName": "StudentID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Họ và Tên",
+              "displayName": "Họ và Tên",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Giới tính",
+              "displayName": "Giới tính",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Ngày tháng năm sinh",
+              "displayName": "Ngày tháng năm sinh",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Lớp học",
+              "displayName": "Lớp học",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Tên trường học",
+              "displayName": "Tên trường học",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Số điện thoại",
+              "displayName": "Số điện thoại",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        3200,
+        16
+      ],
+      "id": "a831ac02-9d71-4026-95a4-2b899797ddd1",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Kc5JFDPfTGzxNbNi",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "move",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $('Create spreadsheet').item.json.spreadsheetId }}",
+          "mode": "id"
+        },
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "={{ $('Folder_Lớp').item.json['Folder_Lớp'] }}",
+          "mode": "id"
+        }
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        3408,
+        16
+      ],
+      "id": "0fdd3bcc-93bb-4a72-ba1e-dacc3b81530b",
+      "name": "Move file1",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "Fu9XdVE4G8qIVwID",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "96376d60-33a6-4b05-a5df-69205cd09c0c",
+              "name": "GoogleSheet_Lớp",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3632,
+        144
+      ],
+      "id": "e3b62d9c-a666-4548-84c7-246ad7d221a6",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "={{ $('Edit Fields').item.json['Mã học sinh'] }} - {{ $('Edit Fields').item.json['Họ và tên'] }}",
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "={{ $('Folder_Lớp').item.json.Folder_Lớp }}",
+            "mode": "id"
+          },
+          "whatToSearch": "folders"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        4096,
+        -16
+      ],
+      "id": "f4dee533-9ac0-4333-b7ac-e348c835db6f",
+      "name": "Search files and folders1",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "Fu9XdVE4G8qIVwID",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "68e56e1f-b509-483d-8c58-c7c92e5c3fe8",
+              "leftValue": "={{ $json.id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notExists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        4304,
+        -16
+      ],
+      "id": "59de0dec-1bec-41d5-baf7-537165ab6c09",
+      "name": "If6"
+    },
+    {
+      "parameters": {
+        "resource": "folder",
+        "name": "={{ $('Edit Fields').item.json['Mã học sinh'] }} - {{ $('Edit Fields').item.json['Họ và tên'] }}",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "={{ $('Folder_Lớp').item.json['Folder_Lớp'] }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        4496,
+        -96
+      ],
+      "id": "ac4c4133-095d-484d-83f8-223765cbcc62",
+      "name": "Create folder3",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "Fu9XdVE4G8qIVwID",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d4ec3c1f-c372-46ae-a143-4f0ef55f1d4d",
+              "name": "FOLDER_Học_sinh",
+              "value": "={{ $json.id || $('Search files and folders1').item.json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        4672,
+        0
+      ],
+      "id": "4e1b4533-188d-411b-8b13-9215ea6c5123",
+      "name": "Edit Fields3"
+    },
+    {
+      "parameters": {
+        "resource": "folder",
+        "operation": "share",
+        "folderNoRootId": {
+          "__rl": true,
+          "value": "={{ $('Edit Fields3').first().json['FOLDER_Học_sinh'] }}",
+          "mode": "id"
+        },
+        "permissionsUi": {
+          "permissionsValues": {
+            "role": "reader",
+            "type": "user",
+            "emailAddress": "={{ $('Edit Fields').first().json.Gmail }}"
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        10704,
+        64
+      ],
+      "id": "4ccae491-c54f-4f94-a2e6-279e2f6adb82",
+      "name": "Share folder",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "Fu9XdVE4G8qIVwID",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "ebeb5cc1-fbee-4e20-ae1b-d6262bafdcdf",
+              "leftValue": "={{ $('Edit Fields').item.json['StudentId_cập_nhật'] }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        3840,
+        144
+      ],
+      "id": "3c13d7fe-2ceb-45eb-8dff-e9d86311e6bb",
+      "name": "If7"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Edit Fields').first().json.Gmail }}",
+        "subject": "Xác nhận thông tin đã tồn tại",
+        "message": "=<!DOCTYPE html>\n<html lang=\"vi\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Xác nhận Thông tin Học sinh</title>\n</head>\n<body style=\"margin: 0; padding: 0; background-color: #f4f4f4; font-family: Arial, sans-serif;\">\n    <table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" style=\"background-color: #f4f4f4;\">\n        <tr>\n            <td align=\"center\">\n                <div style=\"max-width: 600px; margin: 20px auto; background-color: #ffffff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);\">\n                    <h1 style=\"color: #333333; text-align: center; border-bottom: 2px solid #eeeeee; padding-bottom: 20px; margin-top: 0;\">\n                        Xác nhận Thông tin Học sinh\n                    </h1>\n                    <p style=\"font-size: 16px; color: #555555; line-height: 1.6;\">\n                        Chào em <strong>{{ $('Edit Fields').first().json[\"Họ và tên\"] }}</strong>,\n                    </p>\n                    <p style=\"font-size: 16px; color: #555555; line-height: 1.6;\">\n                        Cảm ơn em đã đăng ký. Hệ thống của chúng tôi tìm thấy một hồ sơ đã tồn tại với thông tin tương tự. Em vui lòng xem và xác nhận đây có phải là thông tin của mình không nhé:\n                    </p>\n                    \n                    <div style=\"background-color: #f9f9f9; border: 1px solid #e0e0e0; border-radius: 8px; margin: 25px 0; padding: 20px;\">\n                        <h3 style=\"color: #4285f4; margin-top: 0; text-align: center; margin-bottom: 20px;\">Thông tin chúng tôi tìm thấy</h3>\n                        <p style=\"font-size: 16px; color: #333; line-height: 1.8; margin: 10px 0;\">\n                            <strong>Họ và tên:</strong> {{ $('Code in JavaScript9').first().json.fullName }}\n                        </p>\n                        <p style=\"font-size: 16px; color: #333; line-height: 1.8; margin: 10px 0;\">\n                            <strong>Email:</strong> {{ $('Code in JavaScript9').first().json.email }}\n                        </p>\n                        <p style=\"font-size: 16px; color: #333; line-height: 1.8; margin: 10px 0;\">\n                            <strong>Mã học sinh:</strong>\n                            <strong style=\"color: #d9534f;\">{{ $('Code in JavaScript9').first().json.StudentID }}</strong>\n                        </p>\n                    </div>\n\n                    <p style=\"font-size: 16px; color: #555555; line-height: 1.6;\">\n                        - Nếu thông tin trên <strong>đúng là của em</strong>, em có thể bỏ qua email này và hãy sử dụng <strong>Mã học sinh</strong> đã được cung cấp cho các hoạt động sau này.\n                    </p>\n                    <p style=\"font-size: 16px; color: #555555; line-height: 1.6;\">\n                        - Nếu đây <strong>không phải là thông tin của em</strong> hoặc có sai sót, vui lòng liên hệ giáo viên hoặc bộ phận hỗ trợ để được xử lý.\n                    </p>\n                    \n                    <p style=\"font-size: 14px; color: #888888; line-height: 1.6; margin-top: 30px; text-align: center; border-top: 1px solid #eeeeee; padding-top: 20px;\">\n                        Đây là email tự động, vui lòng không trả lời trực tiếp.\n                    </p>\n                </div>\n            </td>\n        </tr>\n    </table>\n</body>\n</html>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        720,
+        -304
+      ],
+      "id": "0d537f3f-efb0-4114-af28-74ae80f6571d",
+      "name": "Send a message3",
+      "webhookId": "e57cf627-15d0-4b3f-b887-1f0d6f351e86",
+      "executeOnce": true,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "kngvm6WXlbqXMFKV",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Edit Fields').item.json.Gmail }}",
+        "subject": "Thông báo: Dữ liệu Mã Học Sinh không trùng khớp",
+        "message": "=<!DOCTYPE html>\n<html lang=\"vi\">\n<head>\n    <meta charset=\"UTF-8\">\n    <title>Thông báo Lỗi Dữ liệu</title>\n</head>\n<body style=\"font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px;\">\n    <div style=\"max-width: 600px; margin: auto; background-color: #ffffff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);\">\n        <h1 style=\"color: #d9534f; text-align: center; border-bottom: 2px solid #eeeeee; padding-bottom: 20px;\">\n            ⚠️ Dữ liệu không hợp lệ\n        </h1>\n        <p style=\"font-size: 16px; color: #555555; line-height: 1.6;\">\n            Chào em <strong>{{ $('Edit Fields').item.json[\"Họ và tên\"] }}</strong>,\n        </p>\n        <p style=\"font-size: 16px; color: #555555; line-height: 1.6;\">\n            Hệ thống nhận được yêu cầu cập nhật thông tin của em. Tuy nhiên, chúng tôi phát hiện có sự không trùng khớp giữa thông tin em cung cấp.\n        </p>\n        <div style=\"background-color: #fcf8e3; border-left: 5px solid #f0ad4e; margin: 20px 0; padding: 15px 20px;\">\n            <p style=\"margin: 0; font-size: 16px; color: #8a6d3b;\">\n                Mã học sinh <strong>{{ $('Get row(s) in sheet1').item.json.StudentID }}</strong> mà em cung cấp không khớp với thông tin cá nhân của em trong hệ thống của chúng tôi.\n            </p>\n        </div>\n        <p style=\"font-size: 16px; color: #555555; line-height: 1.6;\">\n            Vui lòng thực hiện một trong các thao tác sau:\n        </p>\n        <ul style=\"font-size: 16px; color: #555555; line-height: 1.8; padding-left: 20px;\">\n            <li><strong>Kiểm tra lại</strong> và nhập chính xác Mã học sinh đã được cấp cho em.</li>\n            <li>Nếu em là <strong>học sinh mới</strong>, vui lòng <strong>bỏ trống</strong> ô Mã học sinh khi điền form để được hệ thống cấp mã mới.</li>\n        </ul>\n        <div style=\"text-align: center; margin-top: 30px;\">\n            <a href=\"https://docs.google.com/forms/d/{{ $('Edit Fields').item.json.googleFormId }}/viewform\" target=\"_blank\" style=\"background-color: #4285f4; color: #ffffff; padding: 15px 30px; text-decoration: none; border-radius: 5px; font-size: 16px; font-weight: bold;\">\n                Thử lại\n            </a>\n        </div>\n        <p style=\"font-size: 14px; color: #888888; text-align: center; margin-top: 30px; border-top: 1px solid #eeeeee; padding-top: 20px;\">\n            Nếu em tin rằng đây là một sự nhầm lẫn, vui lòng liên hệ với giáo viên hoặc bộ phận hỗ trợ.\n        </p>\n    </div>\n</body>\n</html>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        336,
+        -416
+      ],
+      "id": "e8960368-c8fc-479c-aefd-1bea7167eef3",
+      "name": "Send a message4",
+      "webhookId": "13b7c630-d5df-4102-b58e-dcb031825a6f",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "kngvm6WXlbqXMFKV",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Edit Fields').item.json.Gmail }}",
+        "subject": "=Cập nhật thông tin thành công cho học sinh {{ $('Edit Fields').item.json['Họ và tên'] }} - {{ $('Edit Fields').item.json['Mã học sinh'] }}",
+        "message": "=<div style=\"font-family: Arial, sans-serif; color: #333; line-height: 1.6; max-width: 600px; margin: 0 auto; border: 1px solid #ddd;\">\n  \n  <span style=\"display:none; font-size:1px; color:#ffffff; line-height:1px; max-height:0px; max-width:0px; opacity:0; overflow:hidden;\">\n    Xác nhận đăng ký thành công! Chào mừng em đến với hệ thống.\n  </span>\n\n  <div style=\"background-color: #0056d6; color: white; padding: 20px; text-align: center;\">\n    <h2 style=\"margin: 0;\">Hệ thống Trợ lý học tập ảo</h2>\n  </div>\n\n  <div style=\"padding: 20px;\">\n    <p>Chào em <strong>{{ $('Edit Fields').item.json['Họ và tên'] }}</strong>,</p>\n    <p>Cảm ơn em đã đăng ký thông tin với Hệ thống Trợ lý học tập ảo. Dưới đây là thông tin hệ thống đã ghi nhận. Em vui lòng kiểm tra lại để đảm bảo mọi thứ đều chính xác nhé.</p>\n    \n    <h3 style=\"color:#0056d6; border-bottom: 2px solid #0056d6; padding-bottom: 5px;\">Thông tin của em</h3>\n    <table style=\"width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 15px;\">\n      <tr style=\"border-bottom: 1px solid #eee;\">\n        <td style=\"padding: 10px; width: 150px; background-color: #f9f9f9;\"><strong>Họ và tên:</strong></td>\n        <td style=\"padding: 10px;\">{{ $('Edit Fields').item.json['Họ và tên'] }}</td>\n      </tr>\n      <tr style=\"border-bottom: 1px solid #eee;\">\n        <td style=\"padding: 10px; background-color: #f9f9f9;\"><strong>Mã học sinh:</strong></td>\n        <td style=\"padding: 10px;\"><strong>{{ $('Edit Fields').item.json['Mã học sinh'] }}</strong></td>\n      </tr>\n      <tr style=\"border-bottom: 1px solid #eee;\">\n        <td style=\"padding: 10px; background-color: #f9f9f9;\"><strong>Trường:</strong></td>\n        <td style=\"padding: 10px;\">{{ $('Edit Fields').item.json['Tên trường'] }}</td>\n      </tr>\n       <tr style=\"border-bottom: 1px solid #eee;\">\n        <td style=\"padding: 10px; background-color: #f9f9f9;\"><strong>Lớp:</strong></td>\n        <td style=\"padding: 10px;\">{{ $('Edit Fields').item.json['Lớp học'] }}</td>\n      </tr>\n      <tr style=\"border-bottom: 1px solid #eee;\">\n        <td style=\"padding: 10px; background-color: #f9f9f9;\"><strong>Ngày sinh:</strong></td>\n        <td style=\"padding: 10px;\">{{ $('Edit Fields').item.json['Ngày tháng năm sinh'] }}</td>\n      </tr>\n      <tr style=\"border-bottom: 1px solid #eee;\">\n        <td style=\"padding: 10px; background-color: #f9f9f9;\"><strong>Giới tính:</strong></td>\n        <td style=\"padding: 10px;\">{{ $('Edit Fields').item.json['Giới tính'] }}</td>\n      </tr>\n      <tr style=\"border-bottom: 1px solid #eee;\">\n        <td style=\"padding: 10px; background-color: #f9f9f9;\"><strong>Email:</strong></td>\n        <td style=\"padding: 10px;\">{{ $('Edit Fields').item.json.Gmail }}</td>\n      </tr>\n      <tr>\n        <td style=\"padding: 10px; background-color: #f9f9f9;\"><strong>Số điện thoại:</strong></td>\n        <td style=\"padding: 10px;\">{{ $('Edit Fields').item.json['Số điện thoại'] }}</td>\n      </tr>\n    </table>\n    \n    <div style=\"margin-top: 25px; padding: 15px; text-align: center; background-color: #f0f5ff; border-radius: 4px; border-left: 4px solid #0056d6;\">\n      <p style=\"margin: 0; font-size: 16px;\">💡 Em hãy lưu lại <strong>Mã học sinh</strong> của mình để sử dụng cho các hoạt động sau này nhé!</p>\n    </div>\n\n    <div style=\"margin-top: 30px;\">\n        <h3 style=\"color:#0056d6; border-bottom: 2px solid #0056d6; padding-bottom: 5px;\">Không gian học tập cá nhân</h3>\n        <p>Hệ thống đã tạo một thư mục riêng trên Google Drive để lưu trữ tất cả tài liệu, bài giảng và bài tập của em. Em hãy truy cập ngay để bắt đầu nhé!</p>\n        <div style=\"text-align: center; margin: 20px 0;\">\n            <a href=\"https://drive.google.com/drive/folders/{{ $('Edit Fields6').item.json.FOLDER_Học_sinh }}\" target=\"_blank\" style=\"display: inline-block; background-color: #0056d6; color: #ffffff; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold;\">\n                TRUY CẬP THƯ MỤC HỌC TẬP\n            </a>\n        </div>\n        <p style=\"text-align: center; font-size: 14px; color: #666; margin-top: 10px;\">\n            <strong>Lưu ý:</strong> Em hãy tìm thư mục này trong mục <strong>\"Được chia sẻ với tôi\" (Shared with me)</strong> trên Google Drive của mình.\n        </p>\n    </div>\n\n    <div style=\"margin-top: 25px; padding: 15px; text-align: center; background-color: #fffbe6; border: 1px solid #fdec9a; border-radius: 5px;\">\n        <p style=\"margin-top: 0;\">Nếu phát hiện có thông tin chưa chính xác, em vui lòng nhấn vào nút bên dưới để điền lại Form.</p>\n        <a href=\"https://docs.google.com/forms/d/{{ $('Edit Fields').item.json.FormId }}/viewform\" target=\"_blank\" style=\"display: inline-block; background-color: #ffc107; color: #212529; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; margin-top: 5px;\">\n          BÁO CÁO SAI SÓT\n        </a>\n    </div>\n    \n    <br>\n    <p>Chúc em có những trải nghiệm học tập thật hiệu quả!</p>\n    <p><strong>Hệ thống Trợ lý học tập ảo</strong></p>\n  </div>\n\n  <div style=\"background-color: #f4f4f4; padding: 10px; text-align: center; font-size: 12px; color: #666;\">\n    <p>Đây là email được gửi tự động, em không cần trả lời lại email này.</p>\n  </div>\n</div>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        4496,
+        272
+      ],
+      "id": "cb06f77e-6054-44ff-a5ef-14a3429525c5",
+      "name": "Send a message1",
+      "webhookId": "9ae1a4e7-1a7d-4591-92f8-f044c489bdaa",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "kngvm6WXlbqXMFKV",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "[ADMIN] Master Control Sheet",
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "={{ $('Search files and folders3').item.json.id }}",
+            "mode": "id"
+          },
+          "whatToSearch": "files",
+          "fileTypes": [
+            "application/vnd.google-apps.spreadsheet"
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        5104,
+        0
+      ],
+      "id": "cdea7942-247d-4200-bf79-7defeafbd864",
+      "name": "Search files and folders9",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "Fu9XdVE4G8qIVwID",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "SchoolYears",
+          "mode": "name"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        5312,
+        0
+      ],
+      "id": "05f09e59-578f-4075-8643-01effb0c1192",
+      "name": "Get row(s) in sheet3",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Kc5JFDPfTGzxNbNi",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "cec262d7-1937-47fa-be04-3e9780b4468a",
+              "leftValue": "={{ $json.exists }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        5728,
+        0
+      ],
+      "id": "9de35bcc-1d0b-446b-9060-1f1ca85feabe",
+      "name": "If11"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Search files and folders9').first().json.id }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "SchoolYears",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "YearID": "={{ $json.YearID }}",
+            "YearName": "={{ $json.YearName }}",
+            "YearFolderID": "={{ $json.YearFolderID }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "YearID",
+              "displayName": "YearID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "YearName",
+              "displayName": "YearName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "YearFolderID",
+              "displayName": "YearFolderID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ParentYearID",
+              "displayName": "ParentYearID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        6160,
+        -96
+      ],
+      "id": "63f09187-49c0-4982-bfaf-602be728746a",
+      "name": "Append row in sheet5",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Kc5JFDPfTGzxNbNi",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// ===== 1. LẤY ID CỦA FOLDER NĂM TỪ NODE TRƯỚC =====\n// Đảm bảo tên node 'Folder_năm' là chính xác\nconst yearFolderId = $('Folder_năm').first().json.Folder_Năm;\n\n// ===== 2. TÍNH TOÁN TÊN NĂM HỌC HIỆN TẠI =====\nconst now = new Date();\n// Năm học mới bắt đầu từ tháng 8 (getMonth() trả về 7 cho tháng 8)\nconst startYear = now.getMonth() >= 7 ? now.getFullYear() : now.getFullYear() - 1;\nconst endYear = startYear + 1;\nconst yearName = `${startYear} - ${endYear}`;\n\n// ===== 3. TẠO MÃ NĂM HỌC (YEAR ID) TỰ ĐỘNG =====\n// Ví dụ: Năm học 2025-2026 sẽ có ID là \"SY2526\"\nconst yearId = `SY${startYear.toString().slice(-2)}${endYear.toString().slice(-2)}`;\n\n// ===== 4. GOM TẤT CẢ THÔNG TIN LẠI THÀNH MỘT ĐỐI TƯỢNG HOÀN CHỈNH =====\nconst newRow = {\n  YearID: yearId,\n  YearName: yearName,\n  YearFolderID: yearFolderId\n};\n\n// ===== 5. TRẢ VỀ KẾT QUẢ ĐÃ ĐƯỢC CHUẨN HÓA =====\nreturn [{\n  json: newRow\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5952,
+        -96
+      ],
+      "id": "a2c2873e-d97e-4419-b5e6-6c5ab889236e",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Search files and folders9').first().json.id }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Grades",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "GradeID": "={{ $('Code in JavaScript1').item.json.expected_GradeID }}",
+            "GradeName": "={{ $('Code in JavaScript1').item.json.expected_GradeName }}",
+            "GradeFolderID": "={{ $('Code in JavaScript1').item.json.expected_GradeFolderID }}",
+            "ParentYearID": "={{ $('Code in JavaScript1').item.json.expected_ParentYearID }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "GradeID",
+              "displayName": "GradeID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "GradeName",
+              "displayName": "GradeName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "GradeFolderID",
+              "displayName": "GradeFolderID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ParentYearID",
+              "displayName": "ParentYearID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        7952,
+        160
+      ],
+      "id": "0cde9e5d-411c-4322-bd47-655155d21848",
+      "name": "Append row in sheet6",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Kc5JFDPfTGzxNbNi",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "={{ $('Folder_năm').first().json['Folder_Năm'] }}",
+            "mode": "id"
+          },
+          "whatToSearch": "folders"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        7072,
+        16
+      ],
+      "id": "1c38e366-0d38-4cf3-87ad-07594bf1665c",
+      "name": "Search files and folders12",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "Fu9XdVE4G8qIVwID",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Search files and folders9').first().json.id }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Grades",
+          "mode": "name"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        7280,
+        16
+      ],
+      "id": "f2b6513a-735c-4a8a-ae92-fad6d9af6f10",
+      "name": "Get row(s) in sheet4",
+      "alwaysOutputData": true,
+      "executeOnce": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Kc5JFDPfTGzxNbNi",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// ===== 1. LẤY DỮ LIỆU VÀ XÁC ĐỊNH NĂM HỌC CHUẨN =====\nconst driveFolders = $('Search files and folders12').all();\nconst sheetRows = $('Get row(s) in sheet4').all();\n\nconst now = new Date();\nconst startYear = now.getMonth() >= 7 ? now.getFullYear() : now.getFullYear() - 1;\nconst endYear = startYear + 1;\nconst parentYearId = `SY${startYear.toString().slice(-2)}${endYear.toString().slice(-2)}`;\n\n// ===== 2. SO SÁNH VÀ PHÂN LOẠI LỖI =====\nconst allErrors = [];\n\n// Lặp qua từng thư mục chuẩn trên Google Drive\nfor (const driveItem of driveFolders) {\n  const driveFolder = driveItem.json;\n  const expectedGradeID = `G_${driveFolder.name.replace(/\\s+/g, '')}`;\n\n  // NÂNG CẤP LOGIC TÌM KIẾM:\n  // Tìm một dòng trong Sheet khớp với GradeID CHUẨN hoặc GradeName CHUẨN\n  const sheetRowObject = sheetRows.find(item => \n    item.json.GradeID === expectedGradeID || item.json.GradeName === driveFolder.name\n  );\n\n  // TRƯỜNG HỢP 1: HOÀN TOÀN KHÔNG TÌM THẤY DÒNG NÀO -> Báo \"THIẾU\"\n  if (!sheetRowObject) {\n    allErrors.push({\n      status: 'THIẾU',\n      expected_GradeID: expectedGradeID,\n      expected_GradeName: driveFolder.name,\n      expected_GradeFolderID: driveFolder.id,\n      expected_ParentYearID: parentYearId\n    });\n    continue; // Chuyển sang kiểm tra thư mục tiếp theo\n  }\n  \n  // TRƯỜNG HỢP 2: TÌM THẤY DÒNG, TIẾN HÀNH KIỂM TRA TOÀN DIỆN -> Báo \"SAI\" nếu cần\n  const sheetItem = sheetRowObject.json;\n\n  // Kiểm tra từng trường xem có bị sai hoặc trống không\n  const isGradeIdInvalid = !sheetItem.GradeID || sheetItem.GradeID !== expectedGradeID;\n  const isGradeNameInvalid = !sheetItem.GradeName || sheetItem.GradeName !== driveFolder.name;\n  const isFolderIdInvalid = !sheetItem.GradeFolderID || sheetItem.GradeFolderID !== driveFolder.id;\n  const isParentIdInvalid = !sheetItem.ParentYearID || sheetItem.ParentYearID !== parentYearId;\n\n  // Nếu có BẤT KỲ lỗi nào, ghi nhận là \"SAI\"\n  if (isGradeIdInvalid || isGradeNameInvalid || isFolderIdInvalid || isParentIdInvalid) {\n    allErrors.push({\n      status: 'SAI',\n      row_number: sheetItem.row_number,\n      // Dữ liệu mong muốn (Expected)\n      expected_GradeID: expectedGradeID,\n      expected_GradeName: driveFolder.name,\n      expected_GradeFolderID: driveFolder.id,\n      expected_ParentYearID: parentYearId,\n      // Dữ liệu thực tế (Actual)\n      actual_GradeID: sheetItem.GradeID,\n      actual_GradeName: sheetItem.GradeName,\n      actual_GradeFolderID: sheetItem.GradeFolderID,\n      actual_ParentYearID: sheetItem.ParentYearID\n    });\n  }\n}\n\n// ===== 3. TRẢ VỀ KẾT QUẢ CUỐI CÙNG =====\n\n// Nếu có lỗi, trả về mỗi lỗi là một item riêng biệt\nif (allErrors.length > 0) {\n  return allErrors.map(item => ({ json: item }));\n}\n\n// Nếu không có lỗi nào, trả về trạng thái \"OK\"\nreturn [{\n  json: {\n    status: 'OK',\n    message: 'Dữ liệu Khối học đã được đồng bộ chính xác.'\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        7488,
+        16
+      ],
+      "id": "f6b0ae07-2982-4cd5-a85f-880cc4bd393c",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.status }}",
+                    "rightValue": "SAI",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "cae88292-b98f-4284-8966-479b77f31987"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "43668a36-afe9-4d3b-adea-faceb9eafe46",
+                    "leftValue": "={{ $json.status }}",
+                    "rightValue": "OK",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "5a78695b-499e-4d57-99b0-6ec8177d4525",
+                    "leftValue": "={{ $json.status }}",
+                    "rightValue": "THIẾU",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        7728,
+        0
+      ],
+      "id": "9c8f35b0-6e03-45f2-9de0-5add9c049a2c",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Search files and folders9').first().json.id }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Grades",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": "={{ $json.row_number }}",
+            "GradeID": "={{ $json.expected_GradeID }}",
+            "GradeName": "={{ $json.expected_GradeName }}",
+            "GradeFolderID": "={{ $json.expected_GradeFolderID }}",
+            "ParentYearID": "={{ $json.expected_ParentYearID }}"
+          },
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "id": "GradeID",
+              "displayName": "GradeID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "GradeName",
+              "displayName": "GradeName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "GradeFolderID",
+              "displayName": "GradeFolderID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "ParentYearID",
+              "displayName": "ParentYearID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        7952,
+        -80
+      ],
+      "id": "bfd45ab7-e6e0-42c5-a17d-fb83339b1e26",
+      "name": "Update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Kc5JFDPfTGzxNbNi",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// ===== 1. TÍNH TOÁN DỮ LIỆU CHUẨN CỦA NĂM HỌC HIỆN TẠI =====\nconst now = new Date();\nconst startYear = now.getMonth() >= 7 ? now.getFullYear() : now.getFullYear() - 1;\nconst endYear = startYear + 1;\nconst expectedYearName = `${startYear} - ${endYear}`;\nconst expectedYearId = `SY${startYear.toString().slice(-2)}${endYear.toString().slice(-2)}`;\n\n// Lấy ID thư mục thực tế từ Google Drive\nconst driveFolder = $('Folder_năm').first().json;\nconst expectedFolderId = driveFolder ? driveFolder.Folder_Năm : null;\n\n\n// ===== 2. LẤY DỮ LIỆU TỪ INPUT VÀ TÌM ĐÚNG DÒNG TRONG SHEET =====\n\n// Lấy row_number từ đầu vào (INPUT) của node này\nconst inputRowNumber = $input.item.json.row_number;\n\n// Lấy toàn bộ danh sách các dòng từ node \"Get row(s)\" ban đầu\nconst allSheetRows = $('Get row(s) in sheet3').all();\n\n// Dùng row_number từ INPUT để tìm chính xác dòng dữ liệu cần kiểm tra\nconst foundYearRow = allSheetRows.find(item => item.json.row_number === inputRowNumber);\n\n\n// ===== 3. TIẾN HÀNH \"CHẨN ĐOÁN\" VÀ TRẢ VỀ KẾT LUẬN =====\n\n// Trường hợp không mong muốn: không tìm thấy dòng, dù đã có row_number\nif (!foundYearRow) {\n  return [{ json: { status: 'LỖI', message: `Không tìm thấy dữ liệu cho dòng số ${inputRowNumber}` } }];\n}\n\n// Lấy dữ liệu của dòng đã tìm thấy\nconst sheetItem = foundYearRow.json;\n\n// So sánh dữ liệu thực tế với dữ liệu chuẩn\nconst isNameMismatched = sheetItem.YearName !== expectedYearName;\nconst isFolderIdMismatched = !sheetItem.YearFolderID || sheetItem.YearFolderID !== expectedFolderId;\n\n// Nếu có sai lệch\nif (isNameMismatched || isFolderIdMismatched) {\n  return [{\n    json: {\n      status: 'SAI LỆCH',\n      row_number: inputRowNumber, // Sử dụng row_number từ INPUT\n      // Dữ liệu mong muốn (Expected)\n      expected_YearID: expectedYearId,\n      expected_YearName: expectedYearName,\n      expected_YearFolderID: expectedFolderId,\n      // Dữ liệu thực tế (Actual)\n      actual_YearID: sheetItem.YearID,\n      actual_YearName: sheetItem.YearName,\n      actual_YearFolderID: sheetItem.YearFolderID\n    }\n  }];\n}\n\n// Nếu mọi thứ HOÀN HẢO\nreturn [{\n  json: {\n    status: 'HOÀN HẢO',\n    message: 'Dữ liệu năm học đã được cấu hình chính xác.'\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5952,
+        96
+      ],
+      "id": "b71c1d1b-6b89-4420-97d6-55b55a92b67b",
+      "name": "Code in JavaScript2"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Search files and folders9').first().json.id }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "SchoolYears",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": "={{ $json.row_number }}",
+            "YearID": "={{ $json.expected_YearID }}",
+            "YearName": "={{ $json.expected_YearName }}",
+            "YearFolderID": "={{ $json.expected_YearFolderID }}"
+          },
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "id": "YearID",
+              "displayName": "YearID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "YearName",
+              "displayName": "YearName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "YearFolderID",
+              "displayName": "YearFolderID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ParentYearID",
+              "displayName": "ParentYearID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        6384,
+        16
+      ],
+      "id": "7b2a90bd-bb3d-430e-b23b-6ab897b39064",
+      "name": "Update row in sheet2",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Kc5JFDPfTGzxNbNi",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// ===== 1. TÍNH TOÁN MÃ NĂM HỌC HIỆN TẠI (CHUẨN) =====\nconst now = new Date();\nconst startYear = now.getMonth() >= 7 ? now.getFullYear() : now.getFullYear() - 1;\nconst endYear = startYear + 1;\nconst currentYearId = `SY${startYear.toString().slice(-2)}${endYear.toString().slice(-2)}`;\n\n// ===== 2. LẤY DANH SÁCH CÁC NĂM HỌC ĐÃ CÓ TỪ SHEET =====\nconst existingYears = $input.all();\n\n// ===== 3. TÌM DÒNG DỮ LIỆU CỦA NĂM HỌC HIỆN TẠI =====\n// Dùng .find() để tìm và lấy ra toàn bộ item khớp\nconst foundYearRow = existingYears.find(item => item.json.YearID === currentYearId);\n\n// ===== 4. TRẢ VỀ KẾT QUẢ DỰA TRÊN VIỆC TÌM KIẾM =====\n\n// TRƯỜNG HỢP 1: Nếu TÌM THẤY năm học (foundYearRow không rỗng)\nif (foundYearRow) {\n  return [{\n    json: {\n      exists: true,\n      row_number: foundYearRow.json.row_number // <-- Trả về row_number của dòng đã tìm thấy\n    }\n  }];\n}\n\n// TRƯỜNG HỢP 2: Nếu KHÔNG TÌM THẤY năm học\nreturn [{\n  json: {\n    exists: false\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5520,
+        0
+      ],
+      "id": "99aa0f8d-fa9a-4956-a433-e940de99b20f",
+      "name": "Code in JavaScript3"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "17b84c01-78e5-457b-a30b-6ae5818d08ee",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "SAI LỆCH",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        6160,
+        96
+      ],
+      "id": "f05e319c-7aa2-4136-bc78-9236b2e0d7f9",
+      "name": "If12"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Search files and folders9').first().json.id }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Classes",
+          "mode": "name"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "ClassName",
+              "lookupValue": "={{ $('Edit Fields').first().json['Lớp học'] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        8384,
+        96
+      ],
+      "id": "8ef4a48c-986f-49d8-9c24-a27b3978a5d1",
+      "name": "Get row(s) in sheet5",
+      "executeOnce": true,
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Kc5JFDPfTGzxNbNi",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "clear",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Search files and folders9').first().json.id }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "name",
+          "value": "=Grades"
+        },
+        "clear": "specificRange",
+        "range": "A2:Z"
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        6384,
+        -96
+      ],
+      "id": "7393b291-7e78-4cc0-b2ee-63c7e988efe1",
+      "name": "Clear sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Kc5JFDPfTGzxNbNi",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "clear",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Search files and folders9').first().json.id }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "=Classes",
+          "mode": "name"
+        },
+        "clear": "specificRange",
+        "range": "A2:Z"
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        6592,
+        -96
+      ],
+      "id": "362bf5a6-7f73-4c19-8d56-8aa2e443f4ac",
+      "name": "Clear sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Kc5JFDPfTGzxNbNi",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "clear",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Search files and folders9').first().json.id }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "=Students",
+          "mode": "name"
+        },
+        "clear": "specificRange",
+        "range": "A2:Z"
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        6816,
+        -96
+      ],
+      "id": "a1d4f757-8639-469c-8038-2c523651a412",
+      "name": "Clear sheet2",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Kc5JFDPfTGzxNbNi",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// ===== 1. LẤY TẤT CẢ CÁC ITEM ĐÃ ĐƯỢC XỬ LÝ TỪ TRƯỚC =====\n// $input.all() sẽ gom tất cả các item đi vào thành một danh sách.\nconst processedItems = $input.all();\n\n// ===== 2. TẠO MỘT ĐỐI TƯỢNG TÓM TẮT DUY NHẤT =====\n// Đối tượng này báo hiệu rằng quá trình lặp đã hoàn tất.\nconst summaryOutput = {\n  status: 'Completed',\n  itemsProcessed: processedItems.length,\n  message: `Đã hoàn tất xử lý ${processedItems.length} mục.`\n};\n\n// ===== 3. TRẢ VỀ MỘT ITEM DUY NHẤT =====\n// Bằng cách đặt đối tượng tóm tắt vào trong một mảng [ ... ],\n// chúng ta đảm bảo node này chỉ có MỘT đầu ra duy nhất.\nreturn [{\n  json: summaryOutput\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        8176,
+        96
+      ],
+      "id": "54bc81a9-6577-4611-84ef-0a650960d890",
+      "name": "Code in JavaScript4"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Search files and folders9').first().json.id }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Classes",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ClassID": "={{ $json.ClassID }}",
+            "ClassName": "={{ $json.ClassName }}",
+            "ClassFolderID": "={{ $json.ClassFolderID }}",
+            "ParentGradeID": "={{ $json.ParentGradeID }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "ClassID",
+              "displayName": "ClassID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "ClassName",
+              "displayName": "ClassName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "ClassFolderID",
+              "displayName": "ClassFolderID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "ParentGradeID",
+              "displayName": "ParentGradeID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        9440,
+        192
+      ],
+      "id": "adb2fa47-28e8-4236-8855-0f1580f591cb",
+      "name": "Append row in sheet7",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Kc5JFDPfTGzxNbNi",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// ===== 1. LẤY DỮ LIỆU TỪ CÁC NGUỒN =====\n\n// Lấy thông tin chi tiết của học sinh từ node 'Edit Fields'\nconst studentInfo = $('Edit Fields').first().json;\nconst className = studentInfo['Lớp học']; // Ví dụ: \"5A\"\n\n// Lấy ID của thư mục Lớp vừa được tạo ở bước trước\nconst classFolderID = $('Folder_Lớp').first().json['Folder_Lớp'];\n\n// Lấy danh sách các Khối từ ĐẦU VÀO TRỰC TIẾP của node này\nconst gradeList = $input.first().json.danhSachData;\n\n\n// ===== 2. TÌM KIẾM THÔNG TIN KHỐI CHA (PARENT GRADE) =====\n\n// Trích xuất số từ tên lớp để tìm kiếm (ví dụ: \"5A\" -> \"5\")\nconst classNumberMatch = className.match(/\\d+/);\nlet parentGradeID = null; // Khởi tạo là null để xử lý nếu không tìm thấy\n\n// Chỉ thực hiện tìm kiếm nếu trích xuất được số từ tên lớp\nif (classNumberMatch) {\n  const classNumber = classNumberMatch[0];\n  const targetGradeName = `Khối ${classNumber}`; // Ví dụ: \"Khối 5\"\n\n  // Dùng hàm .find() để tìm đối tượng Khối phù hợp trong danh sách\n  const parentGradeInfo = gradeList.find(grade => grade.GradeName === targetGradeName);\n\n  // Nếu tìm thấy, lấy GradeID của khối đó\n  if (parentGradeInfo) {\n    parentGradeID = parentGradeInfo.GradeID; // Ví dụ: \"G_Khối5\"\n  }\n}\n\n\n// ===== 3. TẠO MÃ LỚP HỌC (CLASS ID) TỰ ĐỘNG =====\n// Tạo ra một ID duy nhất và có hệ thống, ví dụ: \"C_5A_G_Khối5\"\nconst classId = `C_${className.replace(/\\s+/g, '')}_${parentGradeID}`;\n\n\n// ===== 4. GOM TẤT CẢ THÔNG TIN LẠI =====\n// Các tên trường phải khớp chính xác với tên cột trong Sheet\nconst newRow = {\n  ClassID: classId,\n  ClassName: className,\n  ClassFolderID: classFolderID,\n  ParentGradeID: parentGradeID\n};\n\n\n// ===== 5. TRẢ VỀ KẾT QUẢ ĐÃ ĐƯỢC CHUẨN HÓA =====\nreturn [{\n  json: newRow\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        9232,
+        192
+      ],
+      "id": "a3b95405-b200-4bbd-93b0-3e9d027ed290",
+      "name": "Code in JavaScript5"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Search files and folders9').first().json.id }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Grades",
+          "mode": "name"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        8800,
+        192
+      ],
+      "id": "645bec4d-f3eb-4e67-b426-713a691823db",
+      "name": "Get row(s) in sheet6",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Kc5JFDPfTGzxNbNi",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "b72d4544-d5d9-4d51-a899-5a18d7f8d669",
+              "leftValue": "={{ $json.ClassName }}",
+              "rightValue": "={{ $('Edit Fields').first().json['Lớp học'] }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        8592,
+        96
+      ],
+      "id": "99853059-731d-463e-92cf-d256b624b4d1",
+      "name": "If13"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Lấy toàn bộ danh sách các item từ đầu vào.\nconst allItems = $input.all();\n\n// Dùng .map() để trích xuất chỉ phần `json` (dữ liệu chính) từ mỗi item.\n// Kết quả là một mảng sạch chỉ chứa 4 object dữ liệu của Anh.\nconst allData = allItems.map(item => item.json);\n\n// QUAN TRỌNG: Gói toàn bộ mảng 'allData' vào bên trong MỘT item duy nhất.\n// Cấu trúc `[{ json: { ... } }]` chính là cú pháp để tạo ra một output có đúng 1 item.\nreturn [{\n  json: {\n    danhSachData: allData // Anh có thể đổi tên key 'danhSachData' thành bất cứ gì Anh muốn\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        9008,
+        192
+      ],
+      "id": "fa2f890b-b927-4845-aaa0-45b1b4ffb4d4",
+      "name": "Code in JavaScript6"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Search files and folders9').first().json.id }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Students",
+          "mode": "name"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "StudentID",
+              "lookupValue": "={{ $('Edit Fields').first().json['Mã học sinh'] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        9872,
+        80
+      ],
+      "id": "6cb6be29-3fbe-4e94-aabc-10f02cd048bf",
+      "name": "Get row(s) in sheet7",
+      "executeOnce": true,
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Kc5JFDPfTGzxNbNi",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Search files and folders9').first().json.id }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Classes",
+          "mode": "name"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "ClassName",
+              "lookupValue": "={{ $('Edit Fields').first().json['Lớp học'] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        9664,
+        80
+      ],
+      "id": "0e9f4ad0-f304-43c8-b817-77c899ff383f",
+      "name": "Get row(s) in sheet8",
+      "executeOnce": true,
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Kc5JFDPfTGzxNbNi",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "b72d4544-d5d9-4d51-a899-5a18d7f8d669",
+              "leftValue": "={{ $json.ClassName }}",
+              "rightValue": "={{ $('Edit Fields').first().json['Lớp học'] }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        10080,
+        80
+      ],
+      "id": "c0a648b2-6ed3-4951-b2b0-942a9e961974",
+      "name": "If14"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Search files and folders9').first().json.id }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Students",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "StudentID": "={{ $json.StudentID }}",
+            "StudentName": "={{ $json.StudentName }}",
+            "StudentFolderID": "={{ $json.StudentFolderID }}",
+            "ParentClassID": "={{ $json.ParentClassID }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "StudentID",
+              "displayName": "StudentID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "StudentName",
+              "displayName": "StudentName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "StudentFolderID",
+              "displayName": "StudentFolderID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "ParentClassID",
+              "displayName": "ParentClassID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        10496,
+        160
+      ],
+      "id": "cdab4b26-f86e-4cb6-a079-d3792cbfac4e",
+      "name": "Append row in sheet8",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Kc5JFDPfTGzxNbNi",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// ===== 1. LẤY DỮ LIỆU TỪ CÁC NGUỒN ĐẦU VÀO =====\n\n// Lấy thông tin chi tiết của học sinh từ node 'Edit Fields'.\nconst studentInfo = $('Edit Fields').first().json;\n\n// Lấy thông tin chi tiết của lớp học từ node 'Get row(s) in sheet8'.\nconst classInfo = $('Get row(s) in sheet8').first().json;\n\n// Lấy ID thư mục của học sinh.\nconst studentFolderId = $('Edit Fields3').first().json['FOLDER_Học_sinh'];\n\n\n// ===== 2. TẠO ĐỐI TƯỢNG DỮ LIỆU MỚI THEO ĐÚNG CẤU TRÚC SHEET =====\n\n// !!! THAY ĐỔI Ở ĐÂY: Kết hợp tên và email để tạo StudentName mới\n// Giả định trường email trong node 'Edit Fields' có tên là 'Gmail'.\nconst newStudentName = `${studentInfo['Họ và tên']} - ${studentInfo['Gmail']}`;\n\nconst newRow = {\n  StudentID: studentInfo['Mã học sinh'],\n  StudentName: newStudentName, // <-- Sử dụng giá trị mới đã được kết hợp\n  StudentFolderID: studentFolderId,\n  ParentClassID: classInfo.ClassID\n};\n\n\n// ===== 3. TRẢ VỀ KẾT QUẢ =====\n// Trả về một item duy nhất chứa đối tượng 'newRow', sẵn sàng cho node 'Append row'.\nreturn [{\n  json: newRow\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        10288,
+        160
+      ],
+      "id": "d9b2f875-a76f-419b-9be4-2b9e4b7d11a0",
+      "name": "Code in JavaScript7"
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "[ADMIN] Master Control Sheet",
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "={{ $('Search files and folders3').item.json.id }}",
+            "mode": "id"
+          },
+          "whatToSearch": "files",
+          "fileTypes": [
+            "application/vnd.google-apps.spreadsheet"
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -176,
+        112
+      ],
+      "id": "b3a12a3c-6ad4-4eb8-8cd2-11eef0d48d28",
+      "name": "Search files and folders5",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "Fu9XdVE4G8qIVwID",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Students",
+          "mode": "name"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "StudentName",
+              "lookupValue": "={{ $('Edit Fields').item.json['Họ và tên'] }} - {{ $('Edit Fields').item.json.Gmail }}"
+            }
+          ]
+        },
+        "combineFilters": "OR",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        256,
+        -144
+      ],
+      "id": "4bfe3481-1f70-42dc-91ad-7de8161016f9",
+      "name": "Get row(s) in sheet",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Kc5JFDPfTGzxNbNi",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// ===== 1. LẤY DỮ LIỆU NHẬP VÀO TỪ NODE 'EDIT FIELDS' =====\n// Lấy thông tin người dùng mới nhập và chuẩn hóa về chữ thường ngay lập tức.\nconst userInput = $('Edit Fields').first().json;\nconst inputName = userInput['Họ và tên'].toLowerCase();\nconst inputGmail = userInput['Gmail'].toLowerCase();\n\n// ===== 2. LẤY DANH SÁCH HỌC SINH HIỆN CÓ TỪ GOOGLE SHEET =====\n// Lấy tất cả các hàng dữ liệu từ đầu vào trực tiếp (node 'Get row(s) in sheet').\nconst existingStudents = $input.all();\n\n// ===== 3. TÌM KIẾM HỌC SINH TRÙNG KHỚP =====\n// !!! THAY ĐỔI: Dùng .find() thay vì .some()\n// .find() sẽ trả về TOÀN BỘ item đầu tiên khớp điều kiện, hoặc 'undefined' nếu không tìm thấy.\nconst matchedStudent = existingStudents.find(studentItem => {\n  // Lấy trường 'StudentName' từ mỗi hàng trong sheet.\n  const studentNameFromSheet = studentItem.json.StudentName;\n\n  // Kiểm tra an toàn, nếu không có StudentName thì bỏ qua.\n  if (!studentNameFromSheet) {\n    return false;\n  }\n\n  // Tách chuỗi \"Tên - Gmail\" thành một mảng gồm 2 phần.\n  const parts = studentNameFromSheet.split(' - ');\n\n  // Nếu dữ liệu trong sheet không đúng định dạng (ví dụ thiếu email), bỏ qua.\n  if (parts.length < 2) {\n    return false;\n  }\n\n  // Lấy ra tên và email từ dữ liệu sheet và chuẩn hóa.\n  const existingName = parts[0].trim().toLowerCase();\n  const existingEmail = parts[1].trim().toLowerCase();\n\n  // So sánh các giá trị đã được chuẩn hóa hoàn toàn.\n  return existingName === inputName && existingEmail === inputGmail;\n});\n\n// ===== 4. TRẢ VỀ KẾT QUẢ DỰA TRÊN VIỆC TÌM KIẾM =====\n// Kiểm tra xem chúng ta có tìm thấy học sinh nào không.\nif (matchedStudent) {\n  // TRƯỜNG HỢP 1: TÌM THẤY\n  // Trả về match: true và cả StudentID của học sinh đó.\n  return [{\n    json: {\n      match: true,\n      StudentID: matchedStudent.json.StudentID\n    }\n  }];\n} else {\n  // TRƯỜNG HỢP 2: KHÔNG TÌM THẤY\n  // Trả về match: false như cũ.\n  return [{\n    json: {\n      match: false\n    }\n  }];\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -112,
+        -432
+      ],
+      "id": "07849635-69ed-4543-9e91-47ed1bde0a47",
+      "name": "Code in JavaScript8"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "51004b9e-5c44-4da2-9f7d-33c6378d326a",
+              "leftValue": "={{ $json.match }}",
+              "rightValue": "false",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        96,
+        -464
+      ],
+      "id": "010951bc-193f-4023-9791-958348efae01",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "bc9d85e6-096e-41bf-b537-a10ccd550537",
+              "leftValue": "={{ $('Edit Fields').item.json['StudentId_cập_nhật'] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -416,
+        96
+      ],
+      "id": "4de82fb1-c848-44a0-9b18-5bbcc54deaf1",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "content": "nhánh if kiểm tra xem đây là người dùng cập nhật thông tin hay đăng ký thông tin mới"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -368,
+        -672
+      ],
+      "id": "0d74a882-e1f5-4154-b2e5-0f46fc71debe",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "kiểm tra nếu id không tồn tại trong dữ liệu nếu cập nhật thông tin"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        176,
+        -672
+      ],
+      "id": "f46289d2-cc16-44e6-ba70-70626213c29e",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        640,
+        -672
+      ],
+      "id": "f6b496b1-6a13-4436-bc96-69616986a0bc",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "1b79b463-ae8d-4a0a-9570-6f6e07866b46",
+              "leftValue": "={{ Object.keys($json).length }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        480,
+        -144
+      ],
+      "id": "2f9f47e1-ba08-49ee-831e-bcc1939cd014",
+      "name": "If8"
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "[ADMIN] Master Control Sheet",
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "={{ $('Search files and folders3').item.json.id }}",
+            "mode": "id"
+          },
+          "whatToSearch": "files",
+          "fileTypes": [
+            "application/vnd.google-apps.spreadsheet"
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -176,
+        -144
+      ],
+      "id": "7ed0e106-5da9-4f19-92d3-da7611e5c004",
+      "name": "Search files and folders8",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "Fu9XdVE4G8qIVwID",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Students",
+          "mode": "name"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "StudentID",
+              "lookupValue": "={{ $('Edit Fields').item.json['StudentId_cập_nhật'] }}"
+            },
+            {
+              "lookupColumn": "StudentName",
+              "lookupValue": "={{ $('Edit Fields').item.json['Họ và tên'] }} - {{ $('Edit Fields').item.json.Gmail }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        48,
+        112
+      ],
+      "id": "60e1a5b4-2b8a-4155-856b-31b72c5e5443",
+      "name": "Get row(s) in sheet1",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Kc5JFDPfTGzxNbNi",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "1b79b463-ae8d-4a0a-9570-6f6e07866b46",
+              "leftValue": "={{ Object.keys($json).length }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        272,
+        112
+      ],
+      "id": "87804941-6d7e-42cb-9861-4ebe82a3b432",
+      "name": "If9"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Edit Fields').first().json.Gmail }}",
+        "subject": "Xác nhận thông tin đã tồn tại",
+        "message": "=<!DOCTYPE html>\n<html lang=\"vi\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Lỗi Cập nhật - Không tìm thấy Thông tin</title>\n</head>\n<body style=\"margin: 0; padding: 0; background-color: #f4f4f4; font-family: Arial, sans-serif;\">\n    <table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" style=\"background-color: #f4f4f4;\">\n        <tr>\n            <td align=\"center\">\n                <div style=\"max-width: 600px; margin: 20px auto; background-color: #ffffff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);\">\n                    <h1 style=\"color: #d9534f; text-align: center; border-bottom: 2px solid #eeeeee; padding-bottom: 20px; margin-top: 0;\">\n                        Lỗi: Không Tìm Thấy Thông Tin\n                    </h1>\n                    <p style=\"font-size: 16px; color: #555555; line-height: 1.6;\">\n                        Chào Anh/Chị,\n                    </p>\n                    <p style=\"font-size: 16px; color: #555555; line-height: 1.6;\">\n                        Hệ thống đã nhận được yêu cầu nhưng không thể tìm thấy hồ sơ nào khớp với các tiêu chí Anh/Chị đã cung cấp.\n                    </p>\n                    \n                    <div style=\"background-color: #f9f9f9; border: 1px solid #e0e0e0; border-radius: 8px; margin: 25px 0; padding: 20px;\">\n                        <h3 style=\"color: #4285f4; margin-top: 0; text-align: center; margin-bottom: 20px;\">Thông tin đã được dùng để tìm kiếm</h3>\n                        <p style=\"font-size: 16px; color: #333; line-height: 1.8; margin: 10px 0;\">\n                            <strong>Mã học sinh:</strong> {{ $('Edit Fields').first().json[\"Mã học sinh\"] }}\n                        </p>\n                        <p style=\"font-size: 16px; color: #333; line-height: 1.8; margin: 10px 0;\">\n                            <strong>Gmail:</strong> {{ $('Edit Fields').first().json.Gmail }}\n                        </p>\n                    </div>\n\n                    <p style=\"font-size: 16px; color: #555555; line-height: 1.6;\">\n                        <strong>Vui lòng thực hiện các bước sau:</strong>\n                    </p>\n                    <p style=\"font-size: 16px; color: #555555; line-height: 1.6; margin-left: 20px;\">\n                        1. <strong>Kiểm tra lại thông tin:</strong> Đảm bảo rằng các thông tin đã nhập là chính xác và không có lỗi chính tả.\n                    </p>\n                    <p style=\"font-size: 16px; color: #555555; line-height: 1.6; margin-left: 20px;\">\n                        2. <strong>Thêm mới:</strong> Nếu đây là một hồ sơ chưa có trong hệ thống, vui lòng không nhập vào ô \"Mã học sinh\".\n                    </p>\n                    \n                    <p style=\"font-size: 14px; color: #888888; line-height: 1.6; margin-top: 30px; text-align: center; border-top: 1px solid #eeeeee; padding-top: 20px;\">\n                        Nếu Anh/Chị cần hỗ trợ thêm, vui lòng liên hệ bộ phận kỹ thuật.\n                    </p>\n                </div>\n            </td>\n        </tr>\n    </table>\n</body>\n</html>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        528,
+        320
+      ],
+      "id": "4700e576-33f7-496f-85fc-84b8fa893705",
+      "name": "Send a message5",
+      "webhookId": "e57cf627-15d0-4b3f-b887-1f0d6f351e86",
+      "executeOnce": true,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "kngvm6WXlbqXMFKV",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Search files and folders5').item.json.id }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "=Students",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "StudentID": "={{ $('Edit Fields').item.json['StudentId_cập_nhật'] }}",
+            "StudentName": "={{ $json.StudentName }}",
+            "StudentFolderID": "={{ $json.StudentFolderID }}",
+            "ParentClassID": "={{ $json.ParentClassID }}"
+          },
+          "matchingColumns": [
+            "StudentID"
+          ],
+          "schema": [
+            {
+              "id": "StudentID",
+              "displayName": "StudentID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "StudentName",
+              "displayName": "StudentName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "StudentFolderID",
+              "displayName": "StudentFolderID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ParentClassID",
+              "displayName": "ParentClassID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        4304,
+        272
+      ],
+      "id": "704a2d7a-f97f-45a5-a364-a64daa25d472",
+      "name": "Update row in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Kc5JFDPfTGzxNbNi",
+          "name": "duong.na.2719@aptechlearning.edu.vn"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// ===== 1. LẤY DỮ LIỆU TỪ CÁC NGUỒN ĐẦU VÀO =====\n\n// Lấy thông tin chi tiết của học sinh từ node 'Edit Fields'.\nconst studentInfo = $('Edit Fields').first().json;\n\n// Lấy ID thư mục của học sinh từ node 'Search files and folders3'.\nconst studentFolderId = $('Folder_Lớp').first().json['Folder_Lớp'];\n\n\n// ===== 2. XỬ LÝ VÀ TẠO DỮ LIỆU MỚI =====\n\n// 2.1. Kết hợp tên và email để tạo StudentName\nconst newStudentName = `${studentInfo['Họ và tên']} - ${studentInfo['Gmail']}`;\n\n// 2.2. TẠO ParentClassID THEO CẤU TRÚC - ĐÃ SỬA LỖI\n// Lấy tên lớp, ví dụ: \"5A\"\nconst className = studentInfo['Lớp học']; \n// Tự động suy luận ra số khối bằng cách lấy ký tự đầu tiên của tên lớp\nconst gradeNumber = className.charAt(0); // Lấy ký tự tại vị trí 0, kết quả là \"5\"\n\n// Ghép chuỗi để tạo ra ID lớp cha hoàn chỉnh\nconst newParentClassID = `C_${className}_G_Khối${gradeNumber}`; // Kết quả mong muốn: \"C_5A_G_Khối5\"\n\n\n// ===== 3. TẠO ĐỐI TƯỢNG DỮ LIỆU MỚI THEO ĐÚNG CẤU TRÚC SHEET =====\n\nconst newRow = {\n  StudentID: studentInfo['Mã học sinh'],\n  StudentName: newStudentName,\n  StudentFolderID: studentFolderId,\n  ParentClassID: newParentClassID // <-- Sử dụng giá trị mới vừa được tạo chính xác\n};\n\n\n// ===== 4. TRẢ VỀ KẾT QUẢ =====\nreturn [{\n  json: newRow\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4096,
+        272
+      ],
+      "id": "c0013d0a-7ea0-4a78-a701-b7c8795561fe",
+      "name": "Code in JavaScript11"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        48,
+        -144
+      ],
+      "id": "b859595d-5304-46c5-8d7c-60a74cfb746b",
+      "name": "Code in JavaScript9"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet1": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Create folder",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Folder_năm",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create folder": {
+      "main": [
+        [
+          {
+            "node": "Folder_năm",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders3": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders6": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders7": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code1": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If3": {
+      "main": [
+        [
+          {
+            "node": "Create folder1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Folder_Khối",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create folder1": {
+      "main": [
+        [
+          {
+            "node": "Folder_Khối",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders": {
+      "main": [
+        [
+          {
+            "node": "If3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Folder_năm": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders2": {
+      "main": [
+        [
+          {
+            "node": "If4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If4": {
+      "main": [
+        [
+          {
+            "node": "Create folder2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Folder_Lớp",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create folder2": {
+      "main": [
+        [
+          {
+            "node": "Folder_Lớp",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Folder_Khối": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Folder_Lớp": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders4": {
+      "main": [
+        [
+          {
+            "node": "If5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If5": {
+      "main": [
+        [
+          {
+            "node": "Create spreadsheet",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create spreadsheet": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Move file1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Move file1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "If7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders1": {
+      "main": [
+        [
+          {
+            "node": "If6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If6": {
+      "main": [
+        [
+          {
+            "node": "Create folder3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create folder3": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Share folder": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If7": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code in JavaScript11",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders9": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet3": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If11": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code in JavaScript2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet5": {
+      "main": [
+        [
+          {
+            "node": "Clear sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders12": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet4": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code in JavaScript4",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Append row in sheet6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet6": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript2": {
+      "main": [
+        [
+          {
+            "node": "If12",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript3": {
+      "main": [
+        [
+          {
+            "node": "If11",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If12": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code in JavaScript4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row in sheet2": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders12",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet5": {
+      "main": [
+        [
+          {
+            "node": "If13",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clear sheet": {
+      "main": [
+        [
+          {
+            "node": "Clear sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clear sheet1": {
+      "main": [
+        [
+          {
+            "node": "Clear sheet2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clear sheet2": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders12",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript4": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript5": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet6": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If13": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet8",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get row(s) in sheet6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript6": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet7": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet8": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet7": {
+      "main": [
+        [
+          {
+            "node": "If14",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript7": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If14": {
+      "main": [
+        [
+          {
+            "node": "Share folder",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code in JavaScript7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet8": {
+      "main": [
+        [
+          {
+            "node": "Share folder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders5": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "If8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript8": {
+      "main": [
+        []
+      ]
+    },
+    "If1": {
+      "main": [
+        [],
+        []
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders8",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Search files and folders5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If8": {
+      "main": [
+        [
+          {
+            "node": "Send a message3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Send a message3": {
+      "main": [
+        []
+      ]
+    },
+    "Search files and folders8": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet1": {
+      "main": [
+        [
+          {
+            "node": "If9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If9": {
+      "main": [
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a message5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript11": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row in sheet1": {
+      "main": [
+        [
+          {
+            "node": "Send a message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript9": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "c7e55804-f4e5-418f-ad29-0a82bc490e1c",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "df75f6d19da9532b87ea5a84541b4ccc1d0dd5baf896242962b0dfcbc492bcf4"
+  },
+  "id": "IH3rXBSQlLpA8wV2",
+  "tags": []
+}

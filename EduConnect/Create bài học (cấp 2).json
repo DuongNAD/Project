@@ -1,0 +1,1462 @@
+{
+  "name": "Create bài học (cấp 2)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "20ffdc83-e13f-4c9f-ac61-40d22f4725bf",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -2528,
+        -16
+      ],
+      "id": "8e16fa10-600c-47ad-a6fd-5718e9ae23fc",
+      "name": "Webhook",
+      "webhookId": "20ffdc83-e13f-4c9f-ac61-40d22f4725bf"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Lấy đối tượng body từ dữ liệu đầu vào\nconst body = items[0].json.body;\n\n// Trả về trực tiếp đối tượng body này\n// vì nó đã chứa sẵn 3 trường Anh cần rồi\nreturn body;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2336,
+        -16
+      ],
+      "id": "ca227a89-1bc3-4d2e-b778-7d5efa509b83",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "Admin_Registry",
+        "filter": {
+          "whatToSearch": "folders"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -2144,
+        -16
+      ],
+      "id": "4bdc07a1-999f-4f85-adb9-d71bc12554c8",
+      "name": "Search files and folders",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "xWyXN2JATmgJ7CPw",
+          "name": "Hoàng Quốc Việt"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "={{ $('Code in JavaScript').item.json.lopHoc }}",
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "={{ $json.id }}",
+            "mode": ""
+          },
+          "whatToSearch": "folders"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        2208,
+        0
+      ],
+      "id": "34c1037a-f262-4623-a9eb-2e70f380c14b",
+      "name": "Search files and folders1",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "xWyXN2JATmgJ7CPw",
+          "name": "Hoàng Quốc Việt"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "=Danh sách học sinh {{ $('Code in JavaScript').item.json.lopHoc }}",
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "={{ $json.id }}",
+            "mode": ""
+          },
+          "whatToSearch": "files"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        2432,
+        0
+      ],
+      "id": "d2b65baa-e4c2-4d9d-adb4-395103f8fc05",
+      "name": "Search files and folders2",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "xWyXN2JATmgJ7CPw",
+          "name": "Hoàng Quốc Việt"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Bước 1: Lấy dữ liệu 'lopHoc' trực tiếp từ node \"Code in JavaScript\"\n// Nó sẽ bỏ qua dữ liệu đầu vào hiện tại của node này (là dữ liệu từ Search files and folders)\nconst lopHoc = $('Code in JavaScript').first()?.json?.lopHoc || '';\n\n// Bước 2: Dùng biểu thức chính quy để tìm phần số\nconst match = lopHoc.match(/^\\d+/);\n\nlet khoiHoc;\n\n// Bước 3: Kiểm tra và tạo ra giá trị cuối cùng\nif (match && match[0]) {\n  khoiHoc = `Khối ${match[0]}`;\n} else {\n  khoiHoc = 'Không xác định';\n}\n\n// Bước 4: Chỉ trả về một đối tượng duy nhất chứa kết quả đã xử lý\nreturn {\n  khoiHoc: khoiHoc\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1792,
+        0
+      ],
+      "id": "9f7ad9da-7b27-4db5-bfc8-577366a7a7db",
+      "name": "Code1"
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "={{ $json.khoiHoc }}",
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "={{ $('Search files and folders3').item.json.id }}",
+            "mode": "id"
+          },
+          "whatToSearch": "folders"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        2000,
+        0
+      ],
+      "id": "2f93557b-3cd2-4c52-8c8f-9fad24f5e336",
+      "name": "Search files and folders6",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "xWyXN2JATmgJ7CPw",
+          "name": "Hoàng Quốc Việt"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "={{ (()=> {   const now = DateTime.now();   const startYear = now.month >= 8 ? now.year : now.year - 1;   const endYear = startYear + 1;   return startYear + \" - \" + endYear; })() }}",
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "={{ $json.id }}",
+            "mode": ""
+          },
+          "whatToSearch": "folders"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1568,
+        0
+      ],
+      "id": "247260f0-3f80-43ec-b730-81ac98c1daf2",
+      "name": "Search files and folders3",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "xWyXN2JATmgJ7CPw",
+          "name": "Hoàng Quốc Việt"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "FOLDER_Students",
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "={{ $('Search files and folders').item.json.id }}",
+            "mode": "id"
+          },
+          "whatToSearch": "folders"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1328,
+        0
+      ],
+      "id": "2863ebcf-5ac5-435d-a8f7-24ec8454f2c9",
+      "name": "Search files and folders5",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "xWyXN2JATmgJ7CPw",
+          "name": "Hoàng Quốc Việt"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Trang tính1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/11jkicaS5yPQaN62G4_wi5JkRc99ODRyZQvCh33BH2Eo/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2640,
+        0
+      ],
+      "id": "b17b9c53-b976-49be-b31b-3563a9925bf3",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "8s2aVNtUE42gqLis",
+          "name": "Hoàng Quốc Việt"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=BẠN LÀ: Một chuyên gia thiết kế học liệu với khả năng biên soạn nội dung thô thành các bài giảng có cấu trúc chặt chẽ, sư phạm và hấp dẫn cho học sinh tự học.\n\nNHIỆM VỤ: Dựa vào các biến dữ liệu được cung cấp, hãy điền vào mẫu bài giảng dưới đây. TUYỆT ĐỐI không được thêm bất kỳ lời chào hay câu chữ nào nằm ngoài cấu trúc đã cho. Bắt đầu câu trả lời trực tiếp với ## BÀI GIẢNG....\n\nBÀI GIẢNG: {{ $('Code in JavaScript').item.json.tenBaiHoc }}\nMôn học: {{ $('Code in JavaScript').item.json.monHoc }}\nLớp: {{ $('Code in JavaScript').item.json.lopHoc }}\n\nI. MỤC TIÊU BÀI HỌC\nDựa vào nội dung chi tiết của bài học, hãy nêu ra 2-3 gạch đầu dòng về kiến thức hoặc kỹ năng cốt lõi mà học sinh cần đạt được sau khi học xong.\n\nII. NỘI DUNG BÀI HỌC CHI TIẾT\nDưới đây là nội dung thô. Hãy biên soạn lại một cách khoa học, dùng giọng văn sư phạm rõ ràng, thêm các câu chữ chuyển tiếp để tạo sự mạch lạc, và làm nổi bật các đề mục quan trọng (ví dụ: 1. Phần một, 2. Phần hai...). Đảm bảo giữ nguyên toàn bộ kiến thức gốc.\n\n{{ $('Code in JavaScript').item.json.chiTietBaiHoc }}\n\nIII. TÓM TẮT KIẾN THỨC CỐT LÕI\nTóm tắt lại toàn bộ nội dung bài học trong 3-4 gạch đầu dòng ngắn gọn nhất có thể.\n\nIV. BÀI TẬP VỀ NHÀ\nCác em học sinh thân mến, sau khi đã nắm vững kiến thức, đây là lúc để chúng ta thực hành và củng cố lại những gì đã học. Hãy truy cập vào đường link dưới đây để hoàn thành bài tập về nhà nhé!\n\n[Nhấn vào đây để làm bài tập]({{ $('Code in JavaScript').item.json.linkBaiTap }})\n\n[KẾT THÚC PROMPT MỚI]\n\nTại sao prompt mới này hiệu quả hơn?\nChỉ thị trực tiếp: Câu lệnh \"Bắt đầu câu trả lời trực tiếp với ## BÀI GIẢNG...\" loại bỏ hoàn toàn các lời chào hỏi không cần thiết.\n\nCấu trúc khuôn mẫu: Toàn bộ prompt là một cái sườn bài giảng. AI sẽ hiểu nhiệm vụ của nó là \"lấp đầy\" các phần còn thiếu chứ không phải \"trò chuyện\" về cách làm.\n\nHướng dẫn trong vai trò: Các chỉ dẫn được in nghiêng đóng vai trò là \"lời tự dặn dò\" của một chuyên gia, giúp AI định hướng cách tạo ra nội dung cho từng phần một cách tự nhiên hơn.\n\nLink thân thiện hơn: Tôi đã đổi link bài tập thành dạng [Text](URL) trong Markdown để nó chuyên nghiệp và thân thiện hơn với học sinh.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -512,
+        0
+      ],
+      "id": "7b47ff08-d49c-4461-8698-f0dbe2916475",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -512,
+        160
+      ],
+      "id": "43725c5d-8a82-4870-91c7-9cfc0a8d9cc6",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "eBGKSpovbaSFm4jk",
+          "name": "render_googleform2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Lấy dữ liệu đầu vào từ node AI Agent\n// Sửa ở đây: Lấy dữ liệu từ trường \"output\" thay vì \"text\"\nconst rawLecture = items[0].json.output || '';\n\n// --- Bắt đầu quá trình làm cho văn bản \"chỉnh chu\" hơn ---\n\n// 1. Xóa các khoảng trắng thừa ở đầu và cuối toàn bộ bài giảng\nlet polishedLecture = rawLecture.trim();\n\n// 2. Đảm bảo giữa các đoạn văn chỉ có tối đa một dòng trống (xóa các dòng trống liên tiếp)\npolishedLecture = polishedLecture.replace(/\\n{3,}/g, '\\n\\n');\n\n// 3. Tự động thêm một dấu cách sau các tiêu đề Markdown (ví dụ: ##Tiêu đề -> ## Tiêu đề)\npolishedLecture = polishedLecture.replace(/^(#+)(\\S)/gm, '$1 $2');\n\n// 4. Tự động thêm một dấu cách sau các gạch đầu dòng (ví dụ: *Mục1 -> * Mục1)\npolishedLecture = polishedLecture.replace(/^(\\*|-)(\\S)/gm, '$1 $2');\n\n// 5. Tự động thêm một dấu cách sau các mục danh sách số (ví dụ: 1.Mục1 -> 1. Mục1)\npolishedLecture = polishedLecture.replace(/^(\\d+\\.)(\\S)/gm, '$1 $2');\n\n\n// Trả về đối tượng chứa bài giảng đã được làm bóng\nreturn {\n  finalLecture: polishedLecture\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -160,
+        0
+      ],
+      "id": "549f38a8-206b-4a57-a878-60e2c731bdde",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "[Admin] Teacher Resources",
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "={{ $json.id }}",
+            "mode": "id"
+          },
+          "whatToSearch": "folders"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -1936,
+        -16
+      ],
+      "id": "102c9e94-d5b3-44fa-b245-7f5987c18171",
+      "name": "Search files and folders4",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "xWyXN2JATmgJ7CPw",
+          "name": "Hoàng Quốc Việt"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "Danh sách Giáo viên",
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "={{ $json.id }}",
+            "mode": "id"
+          },
+          "whatToSearch": "files",
+          "fileTypes": [
+            "application/vnd.google-apps.spreadsheet"
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -1728,
+        -16
+      ],
+      "id": "954dd70f-c06d-43f5-b3da-7475e7db6f25",
+      "name": "Search files and folders7",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "xWyXN2JATmgJ7CPw",
+          "name": "Hoàng Quốc Việt"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Trang tính1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1EUoCixELpOS8X8RNM1XAOC2abn6Ul_FdxTZqOU4GPU8/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Địa chỉ Gmail",
+              "lookupValue": "={{ $('Code in JavaScript').item.json.Gmail }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -1520,
+        -16
+      ],
+      "id": "a9769acd-f61d-43fb-8238-9d7c548907aa",
+      "name": "Get row(s) in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "8s2aVNtUE42gqLis",
+          "name": "Hoàng Quốc Việt"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "Bài giảng",
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "={{ $json.FolderId }}",
+            "mode": "id"
+          },
+          "whatToSearch": "folders"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -1312,
+        -16
+      ],
+      "id": "52f311d9-4779-435f-a693-c799f6490e44",
+      "name": "Search files and folders8",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "xWyXN2JATmgJ7CPw",
+          "name": "Hoàng Quốc Việt"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "d441ae44-bdd9-49f7-82f0-163a13a33f58",
+              "leftValue": "={{ $('Search files and folders8').first().json.id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notExists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -1104,
+        -16
+      ],
+      "id": "3e7adc5c-b5a1-4e43-9155-4a8d0d3d68f4",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "resource": "folder",
+        "name": "Bài giảng",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "={{ $('Get row(s) in sheet1').item.json.FolderId }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -896,
+        -112
+      ],
+      "id": "66e5dd40-b18d-4efc-90ea-03578f1f5319",
+      "name": "Create folder",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "xWyXN2JATmgJ7CPw",
+          "name": "Hoàng Quốc Việt"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "bcb6b169-d5b4-451d-90d6-cd998be35416",
+              "name": "Bài giảng",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -704,
+        0
+      ],
+      "id": "0c30e71d-10aa-4c4d-a861-170555b6224b",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "folderId": "={{ $('Edit Fields').item.json['Bài giảng'] }}",
+        "title": "={{ $('Code in JavaScript').item.json.tenBaiHoc }}"
+      },
+      "type": "n8n-nodes-base.googleDocs",
+      "typeVersion": 2,
+      "position": [
+        80,
+        0
+      ],
+      "id": "f82806aa-ad29-4765-b830-bc69ea8211c5",
+      "name": "Create a document",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "7MvGqSisr4fJHX63",
+          "name": "duonganhdn2000@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentURL": "={{ $('Create a document').first().json.id }}",
+        "actionsUi": {
+          "actionFields": [
+            {
+              "action": "insert",
+              "text": "={{ $('Code in JavaScript1').first().json.finalLecture }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.googleDocs",
+      "typeVersion": 2,
+      "position": [
+        288,
+        0
+      ],
+      "id": "2ca9320f-22f5-48aa-8ab7-51b01a426882",
+      "name": "Update a document",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "7MvGqSisr4fJHX63",
+          "name": "duonganhdn2000@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        2848,
+        0
+      ],
+      "id": "d4ceccdb-ef4d-4b3d-8847-472a87713fed",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "name": "Replace Me",
+      "typeVersion": 1,
+      "position": [
+        3936,
+        16
+      ],
+      "id": "82bcb4da-b0df-4bd6-94b3-788eca9b3cef"
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "={{ $('Code in JavaScript').item.json.monHoc }}",
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "={{ $('Get row(s) in sheet').item.json.FolderID }}",
+            "mode": "id"
+          },
+          "whatToSearch": "files",
+          "fileTypes": [
+            "application/vnd.google-apps.spreadsheet"
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        3312,
+        16
+      ],
+      "id": "4f3abde8-0e0f-49b0-bc7b-ceec623525c5",
+      "name": "Search files and folders9",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "xWyXN2JATmgJ7CPw",
+          "name": "Hoàng Quốc Việt"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Trang tính1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1jg1DKlK9GWHffTj_dtw8VqT9APXP9a9BMXhVxU9_X2s/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Link bài tập": "={{ $('Code in JavaScript').item.json.linkBaiTap }}",
+            "Link bài học ": "=https://docs.google.com/document/d/{{ $('Create a document').item.json.id }}/view"
+          },
+          "matchingColumns": [
+            "Link bài tập"
+          ],
+          "schema": [
+            {
+              "id": "Ngày giao bài tập",
+              "displayName": "Ngày giao bài tập",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Hạn bài tập",
+              "displayName": "Hạn bài tập",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Tên bài học",
+              "displayName": "Tên bài học",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Link bài tập",
+              "displayName": "Link bài tập",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Link bài học ",
+              "displayName": "Link bài học ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Link ôn tập",
+              "displayName": "Link ôn tập",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Link tìm hiểu trước bài mới",
+              "displayName": "Link tìm hiểu trước bài mới",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Học kì",
+              "displayName": "Học kì",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        3520,
+        16
+      ],
+      "id": "63b83598-3161-4ca4-af8b-f8cf5a5b1a8d",
+      "name": "Update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "8s2aVNtUE42gqLis",
+          "name": "Hoàng Quốc Việt"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "share",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $('Create a document').item.json.id }}",
+          "mode": "id"
+        },
+        "permissionsUi": {
+          "permissionsValues": {
+            "role": "reader",
+            "type": "user",
+            "emailAddress": "={{ $('Edit Fields1').item.json.Email }}"
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        3744,
+        16
+      ],
+      "id": "93dfd64c-e534-4287-a922-2cf0ae4cd818",
+      "name": "Share file1",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "xWyXN2JATmgJ7CPw",
+          "name": "Hoàng Quốc Việt"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "75adca04-b076-42c8-8821-e286f8bbd3a1",
+              "name": "StudentID",
+              "value": "={{ $json.StudentID }}",
+              "type": "string"
+            },
+            {
+              "id": "a47b5fea-c45b-46ae-b3d3-c9b045d75699",
+              "name": "Họ và Tên",
+              "value": "={{ $json['Họ và Tên'] }}",
+              "type": "string"
+            },
+            {
+              "id": "cffb89bd-b44f-4e34-9339-476dc9e809f9",
+              "name": "Giới tính",
+              "value": "={{ $json['Giới tính'] }}",
+              "type": "string"
+            },
+            {
+              "id": "9428deac-5611-4898-995f-ad870f946d38",
+              "name": "Ngày tháng năm sinh",
+              "value": "={{ $json['Ngày tháng năm sinh'] }}",
+              "type": "string"
+            },
+            {
+              "id": "59e5a401-c98f-40bc-8152-36de5102f534",
+              "name": "Lớp học",
+              "value": "={{ $json['Lớp học'] }}",
+              "type": "string"
+            },
+            {
+              "id": "969ae849-8f3d-49a3-a80e-2ba2ba5f9714",
+              "name": "Tên trường học",
+              "value": "={{ $json['Tên trường học'] }}",
+              "type": "string"
+            },
+            {
+              "id": "70b35011-a5dc-44ea-895a-f1db179d784b",
+              "name": "Email",
+              "value": "={{ $json.Email }}",
+              "type": "string"
+            },
+            {
+              "id": "60ab5f83-47c4-4668-b086-6a36250105c5",
+              "name": "Số điện thoại",
+              "value": "={{ $json['Số điện thoại'] }}",
+              "type": "string"
+            },
+            {
+              "id": "1f5e969c-567d-4c34-9d4a-1e7db6e90d9d",
+              "name": "FolderID",
+              "value": "={{ $json.FolderID }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3072,
+        16
+      ],
+      "id": "d5a1d32c-c6f7-4a0e-9872-c03b16db71fc",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "content": "chia sẻ với giáo viên "
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        288
+      ],
+      "id": "76faf303-c450-4447-b6bb-1cfd9847a61c",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "operation": "share",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.documentId }}",
+          "mode": "id"
+        },
+        "permissionsUi": {
+          "permissionsValues": {
+            "role": "writer",
+            "type": "user",
+            "emailAddress": "={{ $('Webhook').item.json.body.Gmail }}"
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        496,
+        0
+      ],
+      "id": "c17bd236-303a-4fa8-a83f-7dc3b43656e5",
+      "name": "Share file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "xWyXN2JATmgJ7CPw",
+          "name": "Hoàng Quốc Việt"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "={{ $('Code in JavaScript').item.json.lopHoc }}",
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "={{ $json.id }}",
+            "mode": "id"
+          },
+          "whatToSearch": "files",
+          "fileTypes": [
+            "application/vnd.google-apps.spreadsheet"
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        896,
+        0
+      ],
+      "id": "4eb2e2d5-03ad-4c04-8d9e-26cba6819fa4",
+      "name": "Search files and folders10",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "xWyXN2JATmgJ7CPw",
+          "name": "Hoàng Quốc Việt"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Trang tính1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1tg8PU7YzYQdkRRgYYFDrppLZ2eAsUawTabIgjnSQn1U/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Tên bài học": "={{ $('Code in JavaScript').item.json.tenBaiHoc }}",
+            "Link bài học": "=https://docs.google.com/document/d/{{ $('Update a document').item.json.documentId }}/edit"
+          },
+          "matchingColumns": [
+            "Tên bài học"
+          ],
+          "schema": [
+            {
+              "id": "Ngày giao bài tập",
+              "displayName": "Ngày giao bài tập",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Lớp học",
+              "displayName": "Lớp học",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Môn học",
+              "displayName": "Môn học",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Hạn bài tập",
+              "displayName": "Hạn bài tập",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Tên bài học",
+              "displayName": "Tên bài học",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Link bài tập",
+              "displayName": "Link bài tập",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Link bài học",
+              "displayName": "Link bài học",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Số lượng học sinh đã làm bài tập",
+              "displayName": "Số lượng học sinh đã làm bài tập",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1120,
+        0
+      ],
+      "id": "318364f1-da2f-4a9f-82a1-321b300e8872",
+      "name": "Update row in sheet3",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "8s2aVNtUE42gqLis",
+          "name": "Hoàng Quốc Việt"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "={{ (()=> {   const now = DateTime.now();   const startYear = now.month >= 8 ? now.year : now.year - 1;   const endYear = startYear + 1;   return startYear + \" - \" + endYear; })() }}",
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "={{ $('Get row(s) in sheet1').first().json.FolderId }}",
+            "mode": "id"
+          },
+          "whatToSearch": "folders"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        688,
+        0
+      ],
+      "id": "6ec95431-4ac4-4262-8616-c4b1265948fe",
+      "name": "Search files and folders11",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "xWyXN2JATmgJ7CPw",
+          "name": "Hoàng Quốc Việt"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders1": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code1": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders6": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders3": {
+      "main": [
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders5": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders2": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Create a document",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders4": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders7": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet1": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders8": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Create folder",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create folder": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a document": {
+      "main": [
+        [
+          {
+            "node": "Update a document",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update a document": {
+      "main": [
+        [
+          {
+            "node": "Share file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replace Me": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders9": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Share file1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Share file1": {
+      "main": [
+        [
+          {
+            "node": "Replace Me",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Share file": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders11",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders10": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders11": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row in sheet3": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "0cc23efc-a398-4ab8-ae88-31b3e57dbb7a",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "df75f6d19da9532b87ea5a84541b4ccc1d0dd5baf896242962b0dfcbc492bcf4"
+  },
+  "id": "9p1NV5yxqnDcAslf",
+  "tags": []
+}
