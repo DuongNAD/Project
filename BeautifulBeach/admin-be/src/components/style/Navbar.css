@@ -1,0 +1,297 @@
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 40px;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-logo {
+    display: flex;
+    align-items: center;
+    font-family: "Playfair Display", serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #f9a825;
+}
+
+.nav-center {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo-icon {
+    font-size: 28px;
+    margin-right: 6px;
+}
+
+.logo-text {
+    color: #0097a7;
+}
+
+.navbar-links {
+    display: flex;
+    gap: 22px;
+    list-style: none;
+}
+
+.navbar-links a {
+    text-decoration: none;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 500;
+    color: #555;
+    transition: color 0.3s;
+}
+
+.navbar-links a:hover,
+.navbar-links a.active {
+    color: #f9a825;
+}
+
+/* Dropdown */
+.dropdown {
+    position: relative;
+}
+
+.dropdown-title {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 500;
+    color: #555;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.dropdown-title:hover {
+    color: #f9a825;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 140%;
+    left: 0;
+    background: #222;
+    border-radius: 6px;
+    min-width: 160px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    padding: 8px 0;
+    z-index: 999;
+}
+
+.dropdown-menu li {
+    padding: 10px 16px;
+    color: #fff;
+    transition: background 0.2s;
+    cursor: pointer;
+}
+
+.dropdown-menu li:hover {
+    background: #444;
+}
+
+/* Call Us */
+.navbar-call {
+    display: flex;
+    align-items: center;
+    margin-left: 30px;
+    margin-right: 30px;
+    font-family: "Montserrat", sans-serif;
+    font-size: 14px;
+}
+
+.call-icon {
+    color: #f9a825;
+    font-size: 18px;
+    margin-right: 6px;
+}
+
+.call-text {
+    margin-right: 5px;
+    color: #555;
+}
+
+.call-number {
+    color: #f9a825;
+    font-weight: 600;
+}
+
+/* Thanh tìm kiếm */
+.navbar-search {
+    display: flex;
+    align-items: center;
+    background: #f1f1f1;
+    border-radius: 25px;
+    padding: 5px 10px;
+}
+
+.navbar-search input {
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 6px 10px;
+    font-family: "Montserrat", sans-serif;
+    font-size: 14px;
+}
+
+.navbar-search button {
+    background: #0097a7;
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 20px;
+    margin-left: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s;
+}
+
+.navbar-search button:hover {
+    background: #007c8c;
+}
+
+/* Dark Mode */
+body.dark {
+    background: #121212;
+    color: #eee;
+}
+
+body.dark .navbar {
+    background: #1e1e1e;
+    box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
+}
+
+body.dark .navbar-links a,
+body.dark .dropdown-title,
+body.dark .call-text {
+    color: #ddd;
+}
+
+body.dark .navbar-links a:hover,
+body.dark .dropdown-title:hover {
+    color: #f9a825;
+}
+
+body.dark .dropdown-menu {
+    background: #333;
+}
+
+body.dark .dropdown-menu li {
+    color: #eee;
+}
+
+body.dark .dropdown-menu li:hover {
+    background: #555;
+}
+
+body.dark .navbar-search {
+    background: #2a2a2a;
+}
+
+body.dark .navbar-search input {
+    color: #fff;
+}
+
+body.dark .navbar-search button {
+    background: #00a0a0;
+}
+
+body.dark .call-number {
+    color: #ffcc66;
+}
+
+/* Toggle button */
+.toggle-btn {
+    margin-left: 15px;
+    font-size: 18px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.toggle-btn:hover {
+    transform: rotate(20deg);
+}
+
+
+/* Hamburger Icon */
+.navbar-toggle {
+    display: none;
+    font-size: 26px;
+    cursor: pointer;
+    color: #0097a7;
+    border: none;
+    background: none;
+}
+
+/* ====================== */
+/* 📱 RESPONSIVE          */
+/* ====================== */
+
+/* xs: <576px */
+@media (max-width: 575px) {
+    .navbar {
+        flex-wrap: wrap;
+        padding: 10px 20px;
+    }
+
+    /* Hamburger xuất hiện */
+    .navbar-toggle {
+        display: block;
+    }
+
+    /* Menu mặc định ẩn */
+    .navbar-links {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        background: #fff;
+        margin-top: 10px;
+        border-top: 1px solid #eee;
+    }
+
+    /* Khi bật active → hiện menu dọc */
+    .navbar-links.active {
+        display: flex;
+        gap: 12px;
+        padding: 10px 0;
+    }
+
+    .navbar-links a,
+    .dropdown-title {
+        padding: 10px;
+        font-size: 15px;
+        border-bottom: 1px solid #eee;
+        color: #555;
+    }
+
+    /* Dropdown menu trong mobile */
+    .dropdown-menu {
+        position: static;
+        background: #f9f9f9;
+        box-shadow: none;
+        border-radius: 0;
+    }
+
+    .dropdown-menu li {
+        color: #333;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .navbar-call {
+        margin: 10px 0;
+        font-size: 13px;
+    }
+
+    .navbar-search {
+        width: 100%;
+        margin-top: 8px;
+        justify-content: space-between;
+    }
+
+    .navbar-search input {
+        width: 70%;
+        font-size: 13px;
+    }
+}

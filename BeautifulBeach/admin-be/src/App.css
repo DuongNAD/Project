@@ -1,0 +1,329 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+:root {
+  --primary-color: #00A7B5;
+  /* Màu xanh ngọc của biển */
+  --secondary-color: #007C85;
+  /* Màu xanh biển sâu */
+  --accent-color: #FF8A5B;
+  /* Màu cam hoàng hôn */
+  --text-color: #34495e;
+  /* Màu chữ xám đậm */
+  --light-bg: #fdfdfd;
+  /* Màu nền trắng ngà */
+  --border-color: #e0e0e0;
+  /* Màu viền nhạt */
+}
+
+.submit-btn:disabled {
+  background-color: #a5b4fc;
+  /* màu khi disabled */
+  cursor: not-allowed;
+  opacity: 0.7;
+  /* có thể chỉnh để nhạt hơn hoặc giữ nguyên */
+}
+
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: var(--text-color);
+  background-color: #f4f7f6;
+}
+.swiper-pagination {
+    bottom: 0 !important; 
+}
+
+/* 2. Màu của dấu chấm (mặc định là xám, khi active là xanh) */
+.swiper-pagination-bullet {
+    background-color: #ccc;
+    opacity: 1;
+    width: 10px;
+    height: 10px;
+}
+
+.swiper-pagination-bullet-active {
+    background-color: #2563eb !important; /* Màu xanh khớp với theme */
+    width: 20px; /* Kéo dài ra một chút cho đẹp */
+    border-radius: 5px;
+}
+
+/* 3. Chỉnh lại nút mũi tên trái phải */
+.swiper-button-next,
+.swiper-button-prev {
+    color: #2563eb !important; /* Đổi màu mũi tên thành xanh */
+    background-color: rgba(255, 255, 255, 0.8); /* Thêm nền trắng mờ cho dễ nhìn */
+    width: 40px;
+    height: 40px;
+    border-radius: 50%; /* Bo tròn nút */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Đổ bóng nhẹ */
+}
+
+/* Giảm kích thước icon mũi tên cho tinh tế */
+.swiper-button-next:after,
+.swiper-button-prev:after {
+    font-size: 18px !important; 
+    font-weight: bold;
+}
+/* --- Fix lỗi nút Slider Swiper --- */
+
+/* 1. Đưa nút lên lớp cao nhất (z-index: 50) để không bị Card che */
+.swiper-button-next,
+.swiper-button-prev {
+    z-index: 50 !important; 
+    
+    /* Trang trí thêm cho nút đẹp hơn (tùy chọn) */
+    background-color: rgba(255, 255, 255, 0.9); /* Nền trắng mờ */
+    width: 45px;
+    height: 45px;
+    border-radius: 50%; /* Bo tròn */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2); /* Đổ bóng */
+    transition: all 0.3s ease;
+}
+
+/* 2. Hiệu ứng khi di chuột vào nút */
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+    background-color: #fff;
+    transform: scale(1.1); /* Phóng to nhẹ */
+}
+
+/* 3. Chỉnh màu và kích thước mũi tên bên trong */
+.swiper-button-next:after,
+.swiper-button-prev:after {
+    font-size: 20px !important;
+    font-weight: bold;
+    color: #2563eb; /* Màu xanh chủ đạo */
+}
+
+/* 4. Điều chỉnh vị trí nếu cần (để không dính sát lề) */
+.swiper-button-prev {
+    left: 20px !important;
+}
+.swiper-button-next {
+    right: 20px !important;
+}
+
+/* --- 2. BACKGROUND ĐỘNG --- */
+.app-container {
+  /* Đường dẫn đến ảnh của bạn */
+  background-image: url('/public/beach-2562563.jpg');
+  background-size: cover;
+  background-position: center;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+
+  /* Hiệu ứng zoom chậm cho background */
+  animation: zoomInBackground 40s infinite alternate;
+}
+
+/* Keyframe cho hiệu ứng zoom background */
+@keyframes zoomInBackground {
+  from {
+    background-size: 100%;
+  }
+
+  to {
+    background-size: 115%;
+  }
+}
+
+/* --- 3. FORM CONTAINER (THẺ TRẮNG) --- */
+.auth-container,
+.welcome-container {
+  background-color: rgba(255, 255, 255, 0.9);
+  /* Tăng độ trong suốt một chút */
+  padding: 35px 45px;
+  border-radius: 16px;
+  /* Bo tròn nhiều hơn cho cảm giác mềm mại */
+  box-shadow: 0 15px 35px rgba(50, 50, 93, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07);
+  width: 100%;
+  max-width: 420px;
+  text-align: center;
+  animation: floatIn 0.6s ease-out;
+  backdrop-filter: blur(5px);
+  /* Tăng hiệu ứng kính mờ */
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Keyframe cho hiệu ứng form nổi lên */
+@keyframes floatIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --- 4. CÁC THÀNH PHẦN CỦA FORM --- */
+.form {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.form h2 {
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 25px;
+  color: var(--secondary-color);
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.form label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: var(--text-color);
+  font-size: 14px;
+}
+
+.form input,
+.form select {
+  width: 100%;
+  padding: 14px 18px;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  box-sizing: border-box;
+  font-size: 16px;
+  font-family: 'Poppins', sans-serif;
+  transition: all 0.3s ease;
+}
+
+/* Hiệu ứng focus tinh tế hơn */
+.form input:focus,
+.form select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 4px rgba(0, 167, 181, 0.15);
+  transform: translateY(-2px);
+  /* Nhấc nhẹ input lên */
+}
+
+/* --- 5. NÚT BẤM (BUTTONS) --- */
+.submit-btn {
+  width: 100%;
+  padding: 14px;
+  /* Gradient màu biển đẹp mắt */
+  background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: 15px;
+  transition: all 0.3s ease;
+  letter-spacing: 0.8px;
+  box-shadow: 0 4px 15px rgba(0, 124, 133, 0.2);
+}
+
+/* Hiệu ứng hover cho nút bấm */
+.submit-btn:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 124, 133, 0.3);
+  background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
+}
+
+.toggle-link {
+  background: none;
+  border: none;
+  color: var(--primary-color);
+  text-decoration: none;
+  cursor: pointer;
+  padding: 8px;
+  margin-top: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.toggle-link:hover {
+  color: var(--accent-color);
+  /* Đổi sang màu cam khi hover */
+  text-decoration: none;
+}
+
+.fade-enter {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+/* Trạng thái component mới đang trong quá trình vào */
+.fade-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 300ms ease-out, transform 300ms ease-out;
+}
+
+/* Trạng thái bắt đầu của component cũ (chuẩn bị thoát) */
+.fade-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Trạng thái component cũ đang trong quá trình thoát */
+.fade-exit-active {
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 300ms ease-in, transform 300ms ease-in;
+}
+
+@media (max-width: 768px) {
+
+  .auth-container,
+  .welcome-container {
+    padding: 30px 35px;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-container {
+    padding: 15px;
+    animation: none;
+    background-size: cover;
+  }
+
+  .auth-container,
+  .welcome-container {
+    padding: 25px 20px;
+    box-shadow: 0 10px 25px rgba(50, 50, 93, 0.08), 0 4px 10px rgba(0, 0, 0, 0.05);
+  }
+
+  .form h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+
+  .form input,
+  .form select {
+    font-size: 15px;
+    padding: 12px 15px;
+  }
+
+  .submit-btn:hover {
+    transform: translateY(0);
+    box-shadow: 0 4px 15px rgba(0, 124, 133, 0.2);
+  }
+
+  .toggle-link {
+    font-size: 13px;
+    margin-top: 15px;
+  }
+}

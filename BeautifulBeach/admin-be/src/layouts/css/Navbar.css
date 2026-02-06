@@ -1,0 +1,240 @@
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 40px;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .navbar-logo {
+    display: flex;
+    align-items: center;
+    font-family: "Playfair Display", serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #f9a825;
+  }
+  
+  .logo-icon {
+    font-size: 28px;
+    margin-right: 6px;
+  }
+  
+  .logo-text {
+    color: #0097a7;
+  }
+  
+  .navbar-links {
+    display: flex;
+    gap: 22px;
+    list-style: none;
+  }
+  
+  .navbar-links a {
+    text-decoration: none;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 500;
+    color: #555;
+    transition: color 0.3s;
+  }
+  
+  .navbar-links a:hover,
+  .navbar-links a.active {
+    color: #f9a825;
+  }
+  
+  /* Call Us */
+  .navbar-call {
+    display: flex;
+    align-items: center;
+    margin-left: 30px;
+    margin-right: 30px;
+    font-family: "Montserrat", sans-serif;
+    font-size: 14px;
+  }
+  
+  .call-icon {
+    color: #f9a825;
+    font-size: 18px;
+    margin-right: 6px;
+  }
+  
+  .call-text {
+    margin-right: 5px;
+    color: #555;
+  }
+  
+  .call-number {
+    color: #f9a825;
+    font-weight: 600;
+  }
+  
+  /* Thanh tìm kiếm */
+  .navbar-search {
+    display: flex;
+    align-items: center;
+    background: #f1f1f1;
+    border-radius: 25px;
+    padding: 5px 10px;
+  }
+  
+  .navbar-search input {
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 6px 10px;
+    font-family: "Montserrat", sans-serif;
+    font-size: 14px;
+  }
+  
+  .navbar-search button {
+    background: #0097a7;
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 20px;
+    margin-left: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s;
+  }
+  
+  .navbar-search button:hover {
+    background: #007c8c;
+  }
+  
+  /* ====================== */
+  /* 📱 RESPONSIVE          */
+  /* ====================== */
+  
+  /* xs: <576px */
+ /* ===== HAMBURGER ICON ===== */
+.navbar-toggle {
+    display: none;
+    font-size: 26px;
+    cursor: pointer;
+    color: #0097a7;
+    border: none;
+    background: none;
+  }
+  
+  /* ====================== */
+  /* 📱 RESPONSIVE          */
+  /* ====================== */
+  
+  /* xs: <576px */
+  @media (max-width: 575px) {
+    .navbar {
+      flex-wrap: wrap;
+      padding: 10px 20px;
+    }
+  
+    /* Hamburger xuất hiện */
+    .navbar-toggle {
+      display: block;
+    }
+  
+    /* Menu mặc định ẩn */
+    .navbar-links {
+      display: none;
+      flex-direction: column;
+      width: 100%;
+      background: #fff;
+      margin-top: 10px;
+      border-top: 1px solid #eee;
+    }
+  
+    /* Khi bật active → hiện menu dọc */
+    .navbar-links.active {
+      display: flex;
+      gap: 12px;
+      padding: 10px 0;
+    }
+  
+    .navbar-links a {
+      padding: 10px;
+      font-size: 15px;
+      border-bottom: 1px solid #eee;
+    }
+  
+    .navbar-call {
+      margin: 10px 0;
+      font-size: 13px;
+    }
+  
+    .navbar-search {
+      width: 100%;
+      margin-top: 8px;
+      justify-content: space-between;
+    }
+  
+    .navbar-search input {
+      width: 70%;
+      font-size: 13px;
+    }
+  }
+  
+  /* sm: 576px – 767px */
+  @media (min-width: 576px) and (max-width: 767px) {
+    .navbar {
+      padding: 12px 25px;
+    }
+  
+    .navbar-links {
+      gap: 12px;
+    }
+  
+    .navbar-links a {
+      font-size: 14px;
+    }
+  
+    .navbar-search input {
+      width: 120px;
+    }
+  }
+  
+  /* md: 768px – 991px */
+  @media (min-width: 768px) and (max-width: 991px) {
+    .navbar-links {
+      gap: 16px;
+    }
+  
+    .navbar-search input {
+      width: 150px;
+    }
+  }
+  
+  /* lg: 992px – 1199px */
+  @media (min-width: 992px) and (max-width: 1199px) {
+    .navbar-links {
+      gap: 20px;
+    }
+  
+    .navbar-search input {
+      width: 180px;
+    }
+  }
+  
+  /* xl: 1200px – 1399px */
+  @media (min-width: 1200px) and (max-width: 1399px) {
+    .navbar-links a {
+      font-size: 17px;
+    }
+  
+    .navbar-search input {
+      width: 200px;
+    }
+  }
+  
+  /* xxl: ≥1400px */
+  @media (min-width: 1400px) {
+    .navbar-links a {
+      font-size: 18px;
+    }
+  
+    .navbar-search input {
+      width: 250px;
+    }
+  }
+  

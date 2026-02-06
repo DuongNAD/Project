@@ -1,0 +1,133 @@
+.hero {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    /* bạn chỉnh tùy ý */
+    overflow: hidden;
+    /* border-radius: 20px; */
+}
+
+.hero-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity 1s ease-in-out;
+    /* hiệu ứng mượt */
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.3);
+    color: #fff;
+    text-align: center;
+}
+
+.hero-overlay h1 {
+    font-size: 48px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.hero-overlay p {
+    font-size: 20px;
+}
+
+/* ---------------- RESPONSIVE ---------------- */
+
+/* Điện thoại nhỏ <576px (xs) */
+@media (max-width: 575.98px) {
+    .hero {
+        height: 250px;
+    }
+
+    .hero-overlay h1 {
+        font-size: 22px;
+    }
+
+    .hero-overlay p {
+        font-size: 14px;
+    }
+}
+
+/* Điện thoại lớn 576px–767px (sm) */
+@media (min-width: 576px) and (max-width: 767.98px) {
+    .hero {
+        height: 300px;
+    }
+
+    .hero-overlay h1 {
+        font-size: 26px;
+    }
+
+    .hero-overlay p {
+        font-size: 16px;
+    }
+}
+
+/* Máy tính bảng 768px–991px (md) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .hero {
+        height: 350px;
+    }
+
+    .hero-overlay h1 {
+        font-size: 32px;
+    }
+
+    .hero-overlay p {
+        font-size: 18px;
+    }
+}
+
+/* Laptop nhỏ 992px–1199px (lg) */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+    .hero {
+        height: 400px;
+    }
+
+    .hero-overlay h1 {
+        font-size: 40px;
+    }
+
+    .hero-overlay p {
+        font-size: 19px;
+    }
+}
+
+/* Laptop lớn / Desktop 1200px–1399px (xl) */
+@media (min-width: 1200px) and (max-width: 1399.98px) {
+    .hero {
+        height: 450px;
+    }
+
+    .hero-overlay h1 {
+        font-size: 46px;
+    }
+
+    .hero-overlay p {
+        font-size: 20px;
+    }
+}
+
+/* Màn hình rất lớn ≥1400px (xxl) */
+@media (min-width: 1400px) {
+    .hero {
+        height: 600px;
+    }
+
+    .hero-overlay h1 {
+        font-size: 56px;
+    }
+
+    .hero-overlay p {
+        font-size: 22px;
+    }
+}

@@ -1,0 +1,121 @@
+.beach-card {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 16px 20px;
+    margin: 15px;
+    max-width: 300px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+}
+
+.beach-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.beach-card h2 {
+    font-size: 1.3rem;
+    color: #0077b6;
+    /* xanh biển */
+    margin-bottom: 10px;
+}
+
+.beach-card p {
+    font-size: 0.95rem;
+    color: #555;
+    margin: 5px 0;
+}
+
+.beach-card p b {
+    color: #333;
+}
+
+.beach-card img {
+    width: 100%;
+    max-height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.beach-card {
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 16px;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+    cursor: pointer;
+}
+
+.beach-card:hover {
+    transform: scale(1.02);
+}
+
+.beach-thumbnail {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 10px;
+}
+
+.map-btn {
+    margin-top: 10px;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 8px;
+    background: #10b981;
+    color: white;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.2s;
+}
+
+.map-btn:hover {
+    background: #059669;
+}
+
+/* style/BeachCard.css */
+/* style/BeachCard.css (hoặc style.css cha) */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    /* full chiều ngang */
+    height: 100vh;
+    /* full chiều cao */
+    background: rgba(0, 0, 0, 0.6);
+    /* nền tối mờ */
+    display: flex;
+    justify-content: center;
+    /* căn giữa ngang */
+    align-items: center;
+    /* căn giữa dọc */
+    z-index: 9999;
+}
+
+.modal-content {
+    background: #fff;
+    padding: 1rem;
+    border-radius: 12px;
+    max-width: 800px;
+    width: 90%;
+    /* responsive */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    position: relative;
+}
+
+.close-btn {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    border: none;
+    background: transparent;
+    font-size: 20px;
+    cursor: pointer;
+}

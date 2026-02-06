@@ -1,0 +1,154 @@
+.region-container {
+    max-width: 2000px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.title {
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+    color: #222;
+}
+
+/* Dropdown styles */
+.dropdown {
+    position: relative;
+    width: 220px;
+    margin: 0 auto 2rem auto;
+}
+
+.dropdown-btn {
+    width: 100%;
+    padding: 12px 16px;
+    background: linear-gradient(to right, #222, #333);
+    color: #fff;
+    font-weight: 500;
+    border: none;
+    border-radius: 6px;
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dropdown-btn:hover {
+    background: linear-gradient(to right, #333, #444);
+}
+
+.arrow {
+    font-size: 0.8rem;
+    margin-left: 10px;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 110%;
+    left: 0;
+    width: 100%;
+    background: #222;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+}
+
+.dropdown-item {
+    padding: 12px 16px;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.dropdown-item:hover {
+    background: #444;
+}
+
+/* Grid card layout */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.card-wrapper {
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card-wrapper:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.empty {
+    text-align: center;
+    color: #777;
+    font-size: 1rem;
+    grid-column: span 3;
+}
+
+/* Overlay che toàn màn hình */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.6);
+    /* nền mờ */
+    display: flex;
+    align-items: center;
+    /* căn giữa dọc */
+    justify-content: center;
+    /* căn giữa ngang */
+    z-index: 1000;
+}
+
+/* Hộp nội dung modal */
+.modal-content {
+    background: #fff;
+    border-radius: 12px;
+    padding: 16px;
+    width: 90%;
+    max-width: 700px;
+    max-height: 80vh;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
+    animation: fadeInUp 0.3s ease;
+}
+
+/* Nút đóng */
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    background: #f44336;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.close-btn:hover {
+    background: #d32f2f;
+}
+
+/* Hiệu ứng xuất hiện */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
